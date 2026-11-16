@@ -16,6 +16,7 @@
       --brass: #d7b07a;
       --danger: #c94a4a;
     }
+
     * { box-sizing: border-box; }
 
     html, body {
@@ -516,7 +517,7 @@
 
   <main>
     <div class="toolbar">
-      <p class="count" id="contador">A ler el álbum…</p>
+      <p class="count" id="contador">A ler o álbum…</p>
     </div>
 
     <!-- TRABALHO EM CURSO & UPLOAD -->
@@ -697,8 +698,6 @@
     function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
     function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
     function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
-    
-    // Atualizado para verificar "indicador_administrador" em minúsculas (mantendo compatibilidade com variações antigas)
     function isAdmin(u) { 
       return u.indicador_administrador === true || u.Indicador_Administrador === true || u.admin === true; 
     }
@@ -715,7 +714,7 @@
           const nome = getNome(u);
           const opt = document.createElement("option");
           opt.value = cod;
-          opt.textContent = `${nome} (${cod})`;
+          opt.textContent = nome; // Apenas o nome
           loginUserSelect.append(opt);
         });
       } catch (err) {
@@ -748,7 +747,7 @@
 
       usuarioAtual = userRecord;
       loginModal.style.display = "none";
-      currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)} (${getCod(usuarioAtual)})`;
+      currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)}`;
       btnConfig.style.display = "inline-block";
 
       await carregarDadosSistema();
@@ -780,7 +779,7 @@
         const nome = getNome(u);
         const opt = document.createElement("option");
         opt.value = cod;
-        opt.textContent = `${nome} (${cod})`;
+        opt.textContent = nome; // Apenas o nome
         configSelectUser.append(opt);
       });
       configSelectUser.value = getCod(usuarioAtual);
@@ -804,7 +803,7 @@
         editPw.value = getPw(u);
         editEmail.value = getEmail(u);
         editTel.value = getTel(u);
-        btnSaveUser.textContent = isAdmin(usuarioAtual) && !configSelectUser.value ? "Criar Novo Utilizador" : `Atualizar Dados (${getCod(u)})`;
+        btnSaveUser.textContent = isAdmin(usuarioAtual) && !configSelectUser.value ? "Criar Novo Utilizador" : `Atualizar Dados (${getNome(u)})`;
       } else {
         editCodUser.value = "";
         editNome.value = "";
@@ -840,7 +839,7 @@
             usuarioAtual.pw_utilizador = pw;
             usuarioAtual.email = emailVal;
             usuarioAtual.telefone = telVal;
-            currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)} (${getCod(usuarioAtual)})`;
+            currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)}`;
           }
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
@@ -885,7 +884,7 @@
         if (error) {
           alert("Erro ao criar utilizador: " + error.message);
         } else {
-          alert(`Utilizador criado com sucesso! coduser gerado: ${userCode}`);
+          alert(`Utilizador criado com sucesso!`);
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
           carregarSelectutilizadoresAdmin();
@@ -1040,7 +1039,8 @@
         const nomeUser = getNome(u);
         const lbl = document.createElement("label");
         const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" checked> ${nomeUser} (${codigoUser})${badge}`;
+        // Apresentar apenas o nome do utilizador (removido o código entre parênteses)
+        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" checked> ${nomeUser}${badge}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-utilizadores").checked = false;
@@ -1186,9 +1186,14 @@
           metaTop.textContent = nomeCurto(foto.trabalho, 12);
 
           const dataFmt = foto.created_at.split("T")[0];
+          
+          // Mostrar o nome do autor em vez do código no cartão da galeria
+          const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
+          const nomeAutorCard = userObj ? getNome(userObj) : foto.user;
+
           const metaBottom = document.createElement("span");
           metaBottom.className = "card-meta-bottom";
-          metaBottom.textContent = `${nomeCurto(foto.user, 8)} · ${dataFmt}`;
+          metaBottom.textContent = `${nomeCurto(nomeAutorCard, 10)} · ${dataFmt}`;
 
           const isAdm = isAdmin(usuarioAtual);
           const isOwner = foto.user === getCod(usuarioAtual);
@@ -1332,8 +1337,11 @@
       slide.src = foto.url;
       slide.alt = nomeVisivel(foto.path);
       
+      const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
+      const nomeAutorProj = userObj ? getNome(userObj) : foto.user;
+
       document.getElementById("projetor-header").textContent = `Trabalho: ${foto.trabalho}`;
-      document.getElementById("projetor-bottom-right").textContent = `${nomeCurto(foto.trabalho, 15)} · ${foto.created_at.split("T")[0]} · ${nomeCurto(foto.user, 10)}`;
+      document.getElementById("projetor-bottom-right").textContent = `${nomeCurto(foto.trabalho, 15)} · ${foto.created_at.split("T")[0]} · ${nomeCurto(nomeAutorProj, 10)}`;
       legenda.textContent = `${indice + 1} / ${fotosFiltradas.length}  ·  ${nomeVisivel(foto.path)}`;
       
       const seguinte = fotosFiltradas[(indice + 1) % fotosFiltradas.length];
