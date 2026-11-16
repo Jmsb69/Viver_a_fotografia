@@ -188,7 +188,9 @@
       border: 1px solid var(--line);
       border-radius: 12px;
       padding: 1.2rem;
+      padding-bottom: 4.2rem;
       margin-bottom: 1.6rem;
+      position: relative;
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
@@ -470,6 +472,7 @@
     @media (max-width: 700px) {
       .drop { flex-direction: column; align-items: flex-start; }
       .hero-copy, main { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .filters-panel { padding-bottom: 5.2rem; }
     }
   </style>
 </head>
@@ -514,10 +517,7 @@
 
   <main>
     <div class="toolbar">
-      <p class="count" id="contador">A ler o álbum…</p>
-      <div class="actions">
-        <button class="btn btn-solid" id="projetor-btn" type="button" disabled>Modo Projetor</button>
-      </div>
+      <p class="count" id="contador">A ler el álbum…</p>
     </div>
 
     <!-- TRABALHO EM CURSO & UPLOAD -->
@@ -565,6 +565,9 @@
           <div id="list-utilizadores-checkboxes"></div>
         </div>
       </div>
+      
+      <!-- BOTÃO MODO PROJETOR NO CANTO INFERIOR DIREITO DA BOX -->
+      <button class="btn btn-solid" id="projetor-btn" type="button" disabled style="position: absolute; bottom: 1.2rem; right: 1.2rem;">Modo Projetor</button>
     </div>
 
     <p class="status" id="estado" role="status"></p>
@@ -695,7 +698,11 @@
     function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
     function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
     function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
-    function isAdmin(u) { return u.Indicador_Administrador === true || u.indicador_administrador === true || u.admin === true; }
+    
+    // Atualizado para verificar "indicador_administrador" em minúsculas (mantendo compatibilidade com variações antigas)
+    function isAdmin(u) { 
+      return u.indicador_administrador === true || u.Indicador_Administrador === true || u.admin === true; 
+    }
 
     async function init() {
       try {
@@ -873,7 +880,7 @@
           nome_utilizador: nomeCompleto,
           email: emailVal,
           telefone: telVal,
-          Indicador_Administrador: false
+          indicador_administrador: false
         }]);
 
         if (error) {
@@ -953,7 +960,6 @@
       }
     }
 
-    // MONTAGEM DA SECÇÃO "TRABALHO EM CURSO"
     function montarTrabalhosEmCurso() {
       trabalhoCursoContainer.replaceChildren();
       const ativos = cacheTrabalhos.filter(t => t.ativo === true || t.Ativo === true);
@@ -1045,7 +1051,6 @@
       });
     }
 
-    // Comportamentos "Selecionar Todos"
     document.getElementById("check-all-trabalhos").addEventListener("change", (e) => {
       const checked = e.target.checked;
       document.querySelectorAll(".filtro-trab-item").forEach(cb => cb.checked = checked);
@@ -1056,7 +1061,6 @@
       document.querySelectorAll(".filtro-user-item").forEach(cb => cb.checked = checked);
     });
 
-    // Botão Aplicar Seleção
     document.getElementById("btn-aplicar-filtros").addEventListener("click", () => {
       aplicarFiltrosEGeral();
     });
