@@ -636,8 +636,8 @@
     const uploadTrabalhoSelect = document.getElementById("upload-trabalho");
     const galeriaContainer = document.getElementById("galeria-container");
 
-    // Funções auxiliares seguras atualizadas com pw_utilizador
-    function getCod(u) { return u.CodUser || u.coduser || u.id || ""; }
+    // Funções auxiliares seguras atualizadas com coduser e pw_utilizador
+    function getCod(u) { return u.coduser || u.CodUser || u.id || ""; }
     function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
     function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
     function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
@@ -770,7 +770,7 @@
           pw_utilizador: pw,
           email: emailVal,
           telefone: telVal
-        }).eq("CodUser", codUserVal);
+        }).eq("coduser", codUserVal);
 
         if (error) {
           alert("Erro ao atualizar dados: " + error.message);
@@ -815,7 +815,7 @@
         const userCode = prefixo + (maxNum + 1);
 
         const { error } = await supabase.from("utilizadores").insert([{
-          CodUser: userCode,
+          coduser: userCode,
           pw_utilizador: pw,
           nome_utilizador: nomeCompleto,
           email: emailVal,
@@ -826,7 +826,7 @@
         if (error) {
           alert("Erro ao criar utilizador: " + error.message);
         } else {
-          alert(`Utilizador criado com sucesso! CodUser gerado: ${userCode}`);
+          alert(`Utilizador criado com sucesso! coduser gerado: ${userCode}`);
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
           carregarSelectutilizadoresAdmin();
@@ -960,7 +960,7 @@
           path: item.name,
           url: url,
           trabalho: metadadosCodigo(metadados),
-          user: metadados.CodUser || metadados.coduser || metadados.user || metadados.User || metadados.Utilizador || "desconhecido",
+          user: metadados.coduser || metadados.CodUser || metadados.user || metadados.User || metadados.Utilizador || "desconhecido",
           created_at: item.created_at || metadados.created_at || new Date().toISOString()
         };
       }));
@@ -1190,7 +1190,7 @@
         await supabase.from("fotografias").insert([{
           file_name: fileNameSafe,
           codigo_trabalho: trabalhoSelecionado,
-          CodUser: getCod(usuarioAtual)
+          coduser: getCod(usuarioAtual)
         }]);
 
         enviadas += 1;
@@ -1309,7 +1309,7 @@
       }
     });
 
-    document.addEventListener("keydown", (evento) => {
+    document.addEventListener("keydown", (evento) =>  {
       if (!projetor.classList.contains("aberto")) return;
       if (evento.key === "ArrowRight") mostrar(indice + 1);
       if (evento.key === "ArrowLeft") mostrar(indice - 1);
