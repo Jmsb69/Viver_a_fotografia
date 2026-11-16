@@ -29,7 +29,6 @@
 
     button, input, select { font: inherit; color: inherit; }
 
-    /* Correção de legibilidade para selects e opções */
     select, option {
       background-color: #1c1916;
       color: var(--paper);
@@ -39,7 +38,6 @@
       padding: 0.5rem;
     }
 
-    /* Modal de Login */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -82,7 +80,6 @@
       color: var(--paper);
     }
 
-    /* Top Bar / Config button */
     .top-bar {
       position: absolute;
       top: 1.5rem;
@@ -182,7 +179,6 @@
     .btn-solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
     .btn-solid:hover { background: var(--brass); color: var(--ink); border-color: var(--brass); }
 
-    /* Painel de Filtros Avançados */
     .filters-panel {
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--line);
@@ -226,7 +222,6 @@
       letter-spacing: normal;
     }
 
-    /* Secção Trabalho em Curso & Upload */
     .upload-section-box {
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--line);
@@ -378,7 +373,6 @@
       padding: 2rem 0;
     }
 
-    /* Projetor */
     .projetor {
       display: none;
       position: fixed;
@@ -403,3 +397,233 @@
       left: 0;
       right: 0;
       bottom: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 1.4rem 1.4rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.72), transparent);
+      z-index: 5;
+    }
+
+    .projetor-header {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1.2rem 1.4rem;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.72), transparent);
+      color: var(--brass);
+      font-size: 1rem;
+      z-index: 5;
+    }
+
+    .projetor-bottom-right {
+      position: absolute;
+      bottom: 5rem;
+      right: 1.5rem;
+      background: rgba(0,0,0,0.8);
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--paper);
+      z-index: 5;
+    }
+
+    .hit {
+      position: absolute;
+      top: 0;
+      bottom: 5rem;
+      width: 28%;
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      z-index: 4;
+    }
+
+    .hit-prev { left: 0; }
+    .hit-next { right: 0; }
+
+    .config-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 18, 16, 0.95);
+      z-index: 50;
+      padding: 3vw;
+      overflow-y: auto;
+    }
+    .config-content {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #1c1916;
+      border: 1px solid var(--line);
+      padding: 2rem;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 700px) {
+      .drop { flex-direction: column; align-items: flex-start; }
+      .hero-copy, main { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .filters-panel { padding-bottom: 5.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <h2>Autenticação</h2>
+      <p style="color: var(--muted); font-size: 0.9rem; margin-top: 0;">Selecione o seu utilizador e insira a palavra-passe para aceder.</p>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-user-select">Utilizador</label>
+          <select id="login-user-select" required>
+            <option value="">A carregar utilizadores...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="login-pw">Palavra-passe</label>
+          <input type="password" id="login-pw" placeholder="Palavra-passe">
+        </div>
+        <p id="login-error" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 1rem;"></p>
+        <button type="submit" class="btn btn-solid" style="width: 100%;">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span class="user-badge" id="current-user-display"></span>
+    <button class="btn" id="btn-config" type="button" style="display: none;">Configurações</button>
+  </div>
+
+  <header class="hero">
+    <img src="capa.jpg" alt="Pessoa de chapéu, em silhueta, debaixo de uma estrutura com uma grade">
+    <div class="hero-copy">
+      <p class="eyebrow">Álbum</p>
+      <h1>Viver a Fotografia</h1>
+      <p class="lede">Envia as tuas fotografias associadas a um trabalho e vê-as em ecrã inteiro.</p>
+    </div>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <p class="count" id="contador">A ler o álbum…</p>
+    </div>
+
+    <div class="upload-section-box">
+      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">TRABALHO EM CURSO - selecionar para carregar fotografias</label>
+      <div class="trabalhos-curso-lista" id="trabalho-curso-container"></div>
+      <input type="hidden" id="upload-trabalho-val" value="">
+
+      <label class="drop" id="drop" style="display: none;">
+        <div>
+          <strong id="drop-label-text">Escolha um trabalho acima</strong>
+          <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias».</p>
+        </div>
+        <span class="btn">Escolher Fotografias</span>
+        <input id="ficheiro" type="file" accept="image/*" multiple hidden>
+      </label>
+    </div>
+
+    <div class="filters-panel">
+      <div class="filter-box">
+        <label>Trabalhos (Exibir)</label>
+        <div class="scroll-select-box" id="filter-trabalhos-container">
+          <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar Todos</label>
+          <div id="list-trabalhos-checkboxes"></div>
+        </div>
+        <button class="btn btn-solid" id="btn-aplicar-filtros" style="margin-top: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.8rem; width: 100%;">Aplicar Seleção</button>
+      </div>
+      <div class="filter-box">
+        <label>Seleção Temporal</label>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <input type="date" id="filter-data-inicio" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
+          <span style="color: var(--muted);">-</span>
+          <input type="date" id="filter-data-fim" style="padding: 0.4rem; background: #1c1916
+
+
+              <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.81.1/+esm";
+    const SUPABASE_URL = "https://fzhtckqsysvsxqfriizg.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6aHRja3FzeXN2c3hxZnJpaXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQzNTYzNDQsImV4cCI6MjEwOTkzMjM0NH0.aJto0t-G6aWIQpLmOXSRG31I-mY4YJnFMJZdMoZBu6M";
+    const BUCKET = "fotografias";
+    const INTERVALO = 5000;
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY); 
+
+    let usuarioAtual = null;
+    let cacheutilizadores = [];
+    let cacheTrabalhos = [];
+    let cacheFotos = [];
+    let fotosFiltradas = [];
+    let indice = 0;
+    let temporizador = null;
+    let emPausa = false;
+
+    const loginModal = document.getElementById("login-modal");
+    const loginForm = document.getElementById("login-form");
+    const loginUserSelect = document.getElementById("login-user-select");
+    const loginPw = document.getElementById("login-pw");
+    const loginError = document.getElementById("login-error");
+    const currentUserDisplay = document.getElementById("current-user-display");
+    const btnConfig = document.getElementById("btn-config");
+    const configModal = document.getElementById("config-modal");
+    const closeConfig = document.getElementById("close-config");
+    
+    const adminUserSelectorContainer = document.getElementById("admin-user-selector-container");
+    const adminTrabalhosSection = document.getElementById("admin-trabalhos-section");
+    const configSelectUser = document.getElementById("config-select-user");
+    const editCodUser = document.getElementById("edit-cod-user");
+    const editNome = document.getElementById("edit-nome");
+    const editPw = document.getElementById("edit-pw");
+    const editEmail = document.getElementById("edit-email");
+    const editTel = document.getElementById("edit-tel");
+    const btnSaveUser = document.getElementById("btn-save-user");
+
+    const contador = document.getElementById("contador");
+    const estado = document.getElementById("estado");
+    const ficheiro = document.getElementById("ficheiro");
+    const drop = document.getElementById("drop");
+    const dropLabelText = document.getElementById("drop-label-text");
+    const projetorBtn = document.getElementById("projetor-btn");
+    const projetor = document.getElementById("projetor");
+    const slide = document.getElementById("slide");
+    const legenda = document.getElementById("legenda");
+    const pausaBtn = document.getElementById("pausa");
+    const galeriaContainer = document.getElementById("galeria-container");
+    const trabalhoCursoContainer = document.getElementById("trabalho-curso-container");
+    const uploadTrabalhoVal = document.getElementById("upload-trabalho-val");
+
+    function getCod(u) { return u.coduser || u.CodUser || u.id || ""; }
+    function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
+    function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
+    function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
+    function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
+    function isAdmin(u) { 
+      return u.indicador_administrador === true || u.Indicador_Administrador === true || u.admin === true; 
+    }
+
+    async function init() {
+      try {
+        const { data, error } = await supabase.from("utilizadores").select("*");
+        if (error) throw error;
+        cacheutilizadores = data || [];
+
+        loginUserSelect.innerHTML = '<option value="">Selecione o seu utilizador...</option>';
+        cacheutilizadores.forEach(u => {
+          const cod = getCod(u);
+          const nome = getNome(u);
+          const opt = document.createElement("option");
+          opt.value = cod;
+          opt.textContent = nome;
+          loginUserSelect.append(opt);
+        });
+      } catch (err) {
+        console.error("Erro ao carregar utilizadores:", err);
+        loginUserSelect.innerHTML = '<option value="">Erro ao carregar utilizadores da BD</option>';
+      }
+    }
+
+    loginForm.addEventListener("submit", async (e) => {
+      
+
