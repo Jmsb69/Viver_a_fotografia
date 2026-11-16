@@ -29,6 +29,16 @@
 
     button, input, select { font: inherit; color: inherit; }
 
+    /* Correção de legibilidade para selects e opções */
+    select, option {
+      background-color: #1c1916;
+      color: var(--paper);
+    }
+
+    select option {
+      padding: 0.5rem;
+    }
+
     /* Modal de Login */
     .modal-overlay {
       position: fixed;
@@ -66,7 +76,7 @@
     .form-group select, .form-group input {
       width: 100%;
       padding: 0.75rem;
-      background: rgba(255,255,255,0.05);
+      background: #1c1916;
       border: 1px solid var(--line);
       border-radius: 6px;
       color: var(--paper);
@@ -464,7 +474,7 @@
     <!-- SELEÇÃO DE TRABALHO PARA UPLOAD -->
     <div class="form-group" style="max-width: 400px; margin-bottom: 1rem;">
       <label for="upload-trabalho" style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.3rem; display:block;">Trabalho de Destino para Upload</label>
-      <select id="upload-trabalho" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 6px; color: var(--paper);">
+      <select id="upload-trabalho" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 6px; color: var(--paper);">
         <option value="">Selecione um trabalho ativo...</option>
       </select>
     </div>
@@ -481,9 +491,9 @@
       <div class="filter-box">
         <label>Intervalo de Datas</label>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
-          <input type="date" id="filter-data-inicio" style="padding: 0.4rem; background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
+          <input type="date" id="filter-data-inicio" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
           <span style="color: var(--muted);">-</span>
-          <input type="date" id="filter-data-fim" style="padding: 0.4rem; background: rgba(0,0,0,0.2); border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
+          <input type="date" id="filter-data-fim" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
         </div>
         <button class="btn" id="btn-limpar-datas" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top:0.3rem;">Limpar Datas</button>
       </div>
@@ -498,7 +508,7 @@
     <label class="drop" id="drop">
       <div>
         <strong>Largar fotografias aqui</strong>
-        <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «Viver a Fotografia» (requer trabalho selecionado acima).</p>
+        <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias» (requer trabalho selecionado acima).</p>
       </div>
       <span class="btn">Escolher ficheiros</span>
       <input id="ficheiro" type="file" accept="image/*" multiple hidden>
@@ -526,17 +536,17 @@
           <!-- Seletor visível apenas para administradores -->
           <div class="form-group" id="admin-user-selector-container" style="display: none; margin-bottom: 1rem;">
             <label for="config-select-user">Selecionar Utilizador</label>
-            <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
+            <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
               <option value="">-- Criar Novo Utilizador --</option>
             </select>
           </div>
 
           <form id="form-user-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 1fr 1fr;">
             <input type="hidden" id="edit-cod-user">
-            <input type="text" id="edit-nome" placeholder="Nome Completo (Obrigatório)" required style="padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
-            <input type="password" id="edit-pw" placeholder="Palavra-passe (Obrigatório)" required style="padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
-            <input type="email" id="edit-email" placeholder="Endereço de Mail (Opcional)" style="padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
-            <input type="text" id="edit-tel" placeholder="Número de Telefone (Opcional)" style="padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            <input type="text" id="edit-nome" placeholder="Nome Completo (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            <input type="password" id="edit-pw" placeholder="Palavra-passe (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            <input type="email" id="edit-email" placeholder="Endereço de Mail (Opcional)" style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            <input type="text" id="edit-tel" placeholder="Número de Telefone (Opcional)" style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
             <button type="submit" class="btn btn-solid" id="btn-save-user" style="grid-column: span 2;">Guardar Alterações</button>
           </form>
         </div>
@@ -545,8 +555,8 @@
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
           <h3 style="margin-top:0; color:var(--brass);">Manutenção de Trabalhos de Fotografia</h3>
           <form id="form-novo-trabalho" style="display: grid; gap: 0.8rem; grid-template-columns: 2fr 1fr auto; margin-bottom: 1.2rem;">
-            <input type="text" id="trabalho-nome" placeholder="Nome do Trabalho" required style="padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
-            <input type="date" id="trabalho-data" required style="padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            <input type="text" id="trabalho-nome" placeholder="Nome do Trabalho" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            <input type="date" id="trabalho-data" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
             <label style="display: flex; align-items: center; gap: 0.5rem; grid-column: span 3;">
               <input type="checkbox" id="trabalho-ativo" checked> Trabalho Ativo
             </label>
@@ -607,7 +617,7 @@
     const adminUserSelectorContainer = document.getElementById("admin-user-selector-container");
     const adminTrabalhosSection = document.getElementById("admin-trabalhos-section");
     const configSelectUser = document.getElementById("config-select-user");
-    const editcoduser = document.getElementById("edit-cod-user");
+    const editCodUser = document.getElementById("edit-cod-user");
     const editNome = document.getElementById("edit-nome");
     const editPw = document.getElementById("edit-pw");
     const editEmail = document.getElementById("edit-email");
@@ -626,6 +636,14 @@
     const uploadTrabalhoSelect = document.getElementById("upload-trabalho");
     const galeriaContainer = document.getElementById("galeria-container");
 
+    // Funções auxiliares utilizando nome_utilizador
+    function getCod(u) { return u.CodUser || u.coduser || u.id || ""; }
+    function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
+    function getPw(u) { return u.Pw_Utilizador || u.pw_utilizador || u.password || ""; }
+    function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
+    function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
+    function isAdmin(u) { return u.Indicador_Administrador === true || u.indicador_administrador === true || u.admin === true; }
+
     async function init() {
       try {
         const { data, error } = await supabase.from("utilizadores").select("*");
@@ -634,9 +652,11 @@
 
         loginUserSelect.innerHTML = '<option value="">Selecione o seu utilizador...</option>';
         cacheutilizadores.forEach(u => {
+          const cod = getCod(u);
+          const nome = getNome(u);
           const opt = document.createElement("option");
-          opt.value = u.coduser;
-          opt.textContent = `${u.Nome_Utilizador} (${u.coduser})`;
+          opt.value = cod;
+          opt.textContent = `${nome} (${cod})`;
           loginUserSelect.append(opt);
         });
       } catch (err) {
@@ -647,28 +667,29 @@
 
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const selectedcoduser = loginUserSelect.value;
+      const selectedCodUser = loginUserSelect.value;
       const pwEntered = loginPw.value;
 
-      if (!selectedcoduser) {
+      if (!selectedCodUser) {
         loginError.textContent = "Por favor, selecione um utilizador.";
         return;
       }
 
-      const userRecord = cacheutilizadores.find(u => u.coduser === selectedcoduser);
+      const userRecord = cacheutilizadores.find(u => getCod(u) === selectedCodUser);
       if (!userRecord) {
         loginError.textContent = "Utilizador não encontrado.";
         return;
       }
 
-      if (userRecord.Pw_Utilizador && userRecord.Pw_Utilizador !== pwEntered) {
+      const realPw = getPw(userRecord);
+      if (realPw && realPw !== pwEntered) {
         loginError.textContent = "Palavra-passe incorreta.";
         return;
       }
 
       usuarioAtual = userRecord;
       loginModal.style.display = "none";
-      currentUserDisplay.textContent = `Utilizador: ${usuarioAtual.Nome_Utilizador} (${usuarioAtual.coduser})`;
+      currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)} (${getCod(usuarioAtual)})`;
       btnConfig.style.display = "inline-block";
 
       await carregarDadosSistema();
@@ -676,7 +697,7 @@
 
     btnConfig.addEventListener("click", () => {
       configModal.style.display = "block";
-      if (usuarioAtual.Indicador_Administrador) {
+      if (isAdmin(usuarioAtual)) {
         adminUserSelectorContainer.style.display = "block";
         adminTrabalhosSection.style.display = "block";
         carregarSelectutilizadoresAdmin();
@@ -696,12 +717,14 @@
     function carregarSelectutilizadoresAdmin() {
       configSelectUser.innerHTML = '<option value="">-- Criar Novo Utilizador --</option>';
       cacheutilizadores.forEach(u => {
+        const cod = getCod(u);
+        const nome = getNome(u);
         const opt = document.createElement("option");
-        opt.value = u.coduser;
-        opt.textContent = `${u.Nome_Utilizador} (${u.coduser})`;
+        opt.value = cod;
+        opt.textContent = `${nome} (${cod})`;
         configSelectUser.append(opt);
       });
-      configSelectUser.value = usuarioAtual.coduser;
+      configSelectUser.value = getCod(usuarioAtual);
       preencherFormularioUtilizador(usuarioAtual);
     }
 
@@ -710,21 +733,21 @@
       if (!selectedCod) {
         preencherFormularioUtilizador(null);
       } else {
-        const u = cacheutilizadores.find(x => x.coduser === selectedCod);
+        const u = cacheutilizadores.find(x => getCod(x) === selectedCod);
         preencherFormularioUtilizador(u);
       }
     });
 
     function preencherFormularioUtilizador(u) {
       if (u) {
-        editcoduser.value = u.coduser;
-        editNome.value = u.Nome_Utilizador || "";
-        editPw.value = u.Pw_Utilizador || "";
-        editEmail.value = u.Endwreço_Mail || "";
-        editTel.value = u.Número_Telefone || "";
-        btnSaveUser.textContent = usuarioAtual.Indicador_Administrador && !configSelectUser.value ? "Criar Novo Utilizador" : `Atualizar Dados (${u.coduser})`;
+        editCodUser.value = getCod(u);
+        editNome.value = getNome(u) !== "Utilizador" ? getNome(u) : "";
+        editPw.value = getPw(u);
+        editEmail.value = getEmail(u);
+        editTel.value = getTel(u);
+        btnSaveUser.textContent = isAdmin(usuarioAtual) && !configSelectUser.value ? "Criar Novo Utilizador" : `Atualizar Dados (${getCod(u)})`;
       } else {
-        editcoduser.value = "";
+        editCodUser.value = "";
         editNome.value = "";
         editPw.value = "";
         editEmail.value = "";
@@ -735,37 +758,37 @@
 
     document.getElementById("form-user-edit").addEventListener("submit", async (e) => {
       e.preventDefault();
-      const codUserVal = editcoduser.value;
+      const codUserVal = editCodUser.value;
       const nomeCompleto = editNome.value.trim();
       const pw = editPw.value;
-      const email = editEmail.value || null;
-      const tel = editTel.value || null;
+      const emailVal = editEmail.value.trim() || null;
+      const telVal = editTel.value.trim() || null;
 
       if (codUserVal) {
         const { error } = await supabase.from("utilizadores").update({
-          Nome_Utilizador: nomeCompleto,
+          nome_utilizador: nomeCompleto,
           Pw_Utilizador: pw,
-          Endwreço_Mail: email,
-          Número_Telefone: tel
-        }).eq("coduser", codUserVal);
+          email: emailVal,
+          telefone: telVal
+        }).eq("CodUser", codUserVal);
 
         if (error) {
           alert("Erro ao atualizar dados: " + error.message);
         } else {
           alert("Dados atualizados com sucesso!");
-          if (usuarioAtual.coduser === codUserVal) {
-            usuarioAtual.Nome_Utilizador = nomeCompleto;
+          if (getCod(usuarioAtual) === codUserVal) {
+            usuarioAtual.nome_utilizador = nomeCompleto;
             usuarioAtual.Pw_Utilizador = pw;
-            usuarioAtual.Endwreço_Mail = email;
-            usuarioAtual.Número_Telefone = tel;
-            currentUserDisplay.textContent = `Utilizador: ${usuarioAtual.Nome_Utilizador} (${usuarioAtual.coduser})`;
+            usuarioAtual.email = emailVal;
+            usuarioAtual.telefone = telVal;
+            currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)} (${getCod(usuarioAtual)})`;
           }
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
-          if (usuarioAtual.Indicador_Administrador) carregarSelectutilizadoresAdmin();
+          if (isAdmin(usuarioAtual)) carregarSelectutilizadoresAdmin();
         }
       } else {
-        if (!usuarioAtual.Indicador_Administrador) {
+        if (!isAdmin(usuarioAtual)) {
           alert("Apenas administradores podem criar novos utilizadores.");
           return;
         }
@@ -779,28 +802,31 @@
         const p2 = partes[partes.length - 1][0].toLowerCase();
         const prefixo = p1 + p2;
 
-        const reaisExistentes = cacheutilizadores.filter(u => u.coduser && u.coduser.startsWith(prefixo));
+        const reaisExistentes = cacheutilizadores.filter(u => {
+          const c = getCod(u);
+          return c && c.startsWith(prefixo);
+        });
         let maxNum = 0;
         reaisExistentes.forEach(u => {
-          const numStr = u.coduser.replace(prefixo, "");
+          const numStr = getCod(u).replace(prefixo, "");
           const n = parseInt(numStr, 10);
           if (!isNaN(n) && n > maxNum) maxNum = n;
         });
         const userCode = prefixo + (maxNum + 1);
 
         const { error } = await supabase.from("utilizadores").insert([{
-          coduser: userCode,
+          CodUser: userCode,
           Pw_Utilizador: pw,
-          Nome_Utilizador: nomeCompleto,
-          Endwreço_Mail: email,
-          Número_Telefone: tel,
+          nome_utilizador: nomeCompleto,
+          email: emailVal,
+          telefone: telVal,
           Indicador_Administrador: false
         }]);
 
         if (error) {
           alert("Erro ao criar utilizador: " + error.message);
         } else {
-          alert(`Utilizador criado com sucesso! coduser gerado: ${userCode}`);
+          alert(`Utilizador criado com sucesso! CodUser gerado: ${userCode}`);
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
           carregarSelectutilizadoresAdmin();
@@ -892,9 +918,10 @@
       const container = document.getElementById("list-utilizadores-checkboxes");
       container.innerHTML = "";
       cacheutilizadores.forEach(u => {
-        const codigoUser = u.coduser;
+        const codigoUser = getCod(u);
+        const nomeUser = getNome(u);
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}"> ${u.Nome_Utilizador} (${codigoUser})`;
+        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}"> ${nomeUser} (${codigoUser})`;
         lbl.querySelector("input").addEventListener("change", aplicarFiltrosEGeral);
         container.append(lbl);
       });
@@ -932,13 +959,17 @@
         return {
           path: item.name,
           url: url,
-          trabalho: metadados.codigo_trabalho || metadados.Trabalho || "Trabalho Geral",
-          user: metadados.coduser || metadados.user || metadados.User || metadados.Utilizador || "desconhecido",
+          trabalho: metadadosCodigo(metadados),
+          user: metadados.CodUser || metadados.coduser || metadados.user || metadados.User || metadados.Utilizador || "desconhecido",
           created_at: item.created_at || metadados.created_at || new Date().toISOString()
         };
       }));
 
       aplicarFiltrosEGeral();
+    }
+
+    function metadadosCodigo(metadados) {
+      return metadados.codigo_trabalho || metadados.Trabalho || metadados.trabalho || "Trabalho Geral";
     }
 
     async function urlDaFoto(path) {
@@ -1040,10 +1071,10 @@
           metaBottom.className = "card-meta-bottom";
           metaBottom.textContent = `${nomeCurto(foto.user, 8)} · ${dataFmt}`;
 
-          const isAdmin = usuarioAtual?.Indicador_Administrador === true;
-          const isOwner = foto.user === usuarioAtual?.coduser;
+          const isAdm = isAdmin(usuarioAtual);
+          const isOwner = foto.user === getCod(usuarioAtual);
 
-          if (isAdmin || isOwner) {
+          if (isAdm || isOwner) {
             const delBtn = document.createElement("button");
             delBtn.className = "delete-btn";
             delBtn.textContent = "🗑️";
@@ -1067,7 +1098,7 @@
     async function apagarFotografia(path) {
       if (!confirm("Tem a certeza que pretende apagar esta fotografia?")) return;
       const { error } = await supabase.storage.from(BUCKET).remove([path]);
-      await supabase.from("Fotografias").delete().eq("file_name", path);
+      await supabase.from("fotografias").delete().eq("file_name", path);
       if (error) {
         alert("Erro ao apagar: " + error.message);
       } else {
@@ -1156,10 +1187,10 @@
           break;
         }
 
-        await supabase.from("Fotografias").insert([{
+        await supabase.from("fotografias").insert([{
           file_name: fileNameSafe,
           codigo_trabalho: trabalhoSelecionado,
-          coduser: usuarioAtual.coduser
+          CodUser: getCod(usuarioAtual)
         }]);
 
         enviadas += 1;
