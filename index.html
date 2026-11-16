@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>viver a Fotografia</title>
+  <title>Viver a Fotografia</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
@@ -510,7 +510,7 @@
     <img src="capa.jpg" alt="Pessoa de chapéu, em silhueta, debaixo de uma estrutura com uma grade">
     <div class="hero-copy">
       <p class="eyebrow">Álbum</p>
-      <h1>viver a Fotografia</h1>
+      <h1>Viver a Fotografia</h1>
       <p class="lede">Envia as tuas fotografias associadas a um trabalho e vê-as em ecrã inteiro.</p>
     </div>
   </header>
@@ -522,7 +522,7 @@
 
     <!-- TRABALHO EM CURSO & UPLOAD -->
     <div class="upload-section-box">
-      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">Trabalho em Curso</label>
+      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">TRABALHO EM CURSO - selecionar para carregar fotografias</label>
       <div class="trabalhos-curso-lista" id="trabalho-curso-container">
         <!-- Preenchido dinamicamente via JS -->
       </div>
@@ -534,7 +534,7 @@
           <strong id="drop-label-text">Escolha um trabalho acima</strong>
           <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias».</p>
         </div>
-        <span class="btn">Escolher ficheiros</span>
+        <span class="btn">Escolher Fotografias</span>
         <input id="ficheiro" type="file" accept="image/*" multiple hidden>
       </label>
     </div>
@@ -544,7 +544,7 @@
       <div class="filter-box">
         <label>Trabalhos (Exibir)</label>
         <div class="scroll-select-box" id="filter-trabalhos-container">
-          <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar Todos</label>
+          <label><input type="checkbox" id="check-all-trabalhos"> Selecionar Todos</label>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
         <button class="btn btn-solid" id="btn-aplicar-filtros" style="margin-top: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.8rem; width: 100%;">Aplicar Seleção</button>
@@ -561,7 +561,7 @@
       <div class="filter-box">
         <label>Autor Trabalho</label>
         <div class="scroll-select-box" id="filter-utilizadores-container">
-          <label><input type="checkbox" id="check-all-utilizadores" checked> Selecionar Todos</label>
+          <label><input type="checkbox" id="check-all-utilizadores"> Selecionar Todos</label>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
       </div>
@@ -714,7 +714,7 @@
           const nome = getNome(u);
           const opt = document.createElement("option");
           opt.value = cod;
-          opt.textContent = nome; // Apenas o nome
+          opt.textContent = nome;
           loginUserSelect.append(opt);
         });
       } catch (err) {
@@ -779,7 +779,7 @@
         const nome = getNome(u);
         const opt = document.createElement("option");
         opt.value = cod;
-        opt.textContent = nome; // Apenas o nome
+        opt.textContent = nome;
         configSelectUser.append(opt);
       });
       configSelectUser.value = getCod(usuarioAtual);
@@ -1020,7 +1020,9 @@
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const lbl = document.createElement("label");
         const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}${badge}`;
+        // Apenas o primeiro trabalho vem selecionado por defeito (idx === 0)
+        const isChecked = idx === 0 ? "checked" : "";
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" ${isChecked}> ${nomeTrab}${badge}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-trabalhos").checked = false;
@@ -1039,8 +1041,9 @@
         const nomeUser = getNome(u);
         const lbl = document.createElement("label");
         const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
-        // Apresentar apenas o nome do utilizador (removido o código entre parênteses)
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" checked> ${nomeUser}${badge}`;
+        // Apenas o primeiro utilizador vem selecionado por defeito (idx === 0)
+        const isChecked = idx === 0 ? "checked" : "";
+        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" ${isChecked}> ${nomeUser}${badge}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-utilizadores").checked = false;
@@ -1127,8 +1130,8 @@
       const dataFim = document.getElementById("filter-data-fim").value;
 
       fotosFiltradas = cacheFotos.filter(f => {
-        const matchTrab = trabsSelecionados.length === 0 || trabsSelecionados.length === cacheTrabalhos.length || trabsSelecionados.includes(f.trabalho);
-        const matchUser = usersSelecionados.length === 0 || usersSelecionados.length === cacheutilizadores.length || usersSelecionados.includes(f.user);
+        const matchTrab = trabsSelecionados.length === 0 || trabsSelecionados.includes(f.trabalho);
+        const matchUser = usersSelecionados.length === 0 || usersSelecionados.includes(f.user);
 
         let matchData = true;
         const fData = f.created_at.split("T")[0];
@@ -1187,7 +1190,6 @@
 
           const dataFmt = foto.created_at.split("T")[0];
           
-          // Mostrar o nome do autor em vez do código no cartão da galeria
           const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
           const nomeAutorCard = userObj ? getNome(userObj) : foto.user;
 
