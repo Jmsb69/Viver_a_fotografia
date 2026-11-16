@@ -1067,7 +1067,7 @@
     async function apagarFotografia(path) {
       if (!confirm("Tem a certeza que pretende apagar esta fotografia?")) return;
       const { error } = await supabase.storage.from(BUCKET).remove([path]);
-      await supabase.from("fotografias").delete().eq("file_name", path);
+      await supabase.from("Fotografias").delete().eq("file_name", path);
       if (error) {
         alert("Erro ao apagar: " + error.message);
       } else {
@@ -1156,7 +1156,7 @@
           break;
         }
 
-        await supabase.from("fotografias").insert([{
+        await supabase.from("Fotografias").insert([{
           file_name: fileNameSafe,
           codigo_trabalho: trabalhoSelecionado,
           CodUser: usuarioAtual.CodUser
