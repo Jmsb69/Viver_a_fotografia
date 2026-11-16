@@ -636,10 +636,10 @@
     const uploadTrabalhoSelect = document.getElementById("upload-trabalho");
     const galeriaContainer = document.getElementById("galeria-container");
 
-    // Funções auxiliares utilizando nome_utilizador
+    // Funções auxiliares seguras atualizadas com pw_utilizadores
     function getCod(u) { return u.CodUser || u.coduser || u.id || ""; }
     function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
-    function getPw(u) { return u.Pw_Utilizador || u.pw_utilizador || u.password || ""; }
+    function getPw(u) { return u.pw_utilizadores || u.Pw_Utilizador || u.pw_utilizador || u.password || ""; }
     function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
     function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
     function isAdmin(u) { return u.Indicador_Administrador === true || u.indicador_administrador === true || u.admin === true; }
@@ -767,7 +767,7 @@
       if (codUserVal) {
         const { error } = await supabase.from("utilizadores").update({
           nome_utilizador: nomeCompleto,
-          Pw_Utilizador: pw,
+          pw_utilizadores: pw,
           email: emailVal,
           telefone: telVal
         }).eq("CodUser", codUserVal);
@@ -778,7 +778,7 @@
           alert("Dados atualizados com sucesso!");
           if (getCod(usuarioAtual) === codUserVal) {
             usuarioAtual.nome_utilizador = nomeCompleto;
-            usuarioAtual.Pw_Utilizador = pw;
+            usuarioAtual.pw_utilizadores = pw;
             usuarioAtual.email = emailVal;
             usuarioAtual.telefone = telVal;
             currentUserDisplay.textContent = `Utilizador: ${getNome(usuarioAtual)} (${getCod(usuarioAtual)})`;
@@ -816,7 +816,7 @@
 
         const { error } = await supabase.from("utilizadores").insert([{
           CodUser: userCode,
-          Pw_Utilizador: pw,
+          pw_utilizadores: pw,
           nome_utilizador: nomeCompleto,
           email: emailVal,
           telefone: telVal,
