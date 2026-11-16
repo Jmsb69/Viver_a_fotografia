@@ -224,11 +224,61 @@
       letter-spacing: normal;
     }
 
+    /* Secção Trabalho em Curso & Upload */
+    .upload-section-box {
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-bottom: 1.6rem;
+      max-width: 600px;
+    }
+
+    .trabalhos-curso-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 0.8rem;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .trabalho-opcao {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .trabalho-opcao:hover {
+      border-color: var(--brass);
+    }
+
+    .trabalho-opcao.selecionado {
+      border-color: var(--brass);
+      background: rgba(215, 176, 122, 0.1);
+    }
+
+    .trabalho-opcao.destacado {
+      color: var(--paper);
+      font-weight: 500;
+    }
+
+    .trabalho-opcao.atenuado {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
     .drop {
       border: 1px dashed rgba(215, 176, 122, 0.45);
-      border-radius: 18px;
-      padding: 1.4rem 1.3rem;
-      margin-bottom: 1.6rem;
+      border-radius: 12px;
+      padding: 1.2rem 1.3rem;
+      margin-top: 1rem;
       display: flex;
       justify-content: space-between;
       gap: 1rem;
@@ -237,7 +287,7 @@
     }
 
     .drop.over { background: rgba(215, 176, 122, 0.08); }
-    .drop p { margin: 0.25rem 0 0; color: var(--muted); }
+    .drop p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.85rem; }
 
     .count { color: var(--muted); font-size: 0.92rem; }
 
@@ -281,7 +331,6 @@
 
     .card:hover img { transform: scale(1.04); }
 
-    /* Metadados na Fotografia */
     .card-meta-top {
       position: absolute;
       top: 0.5rem;
@@ -471,12 +520,23 @@
       </div>
     </div>
 
-    <!-- SELEÇÃO DE TRABALHO PARA UPLOAD -->
-    <div class="form-group" style="max-width: 400px; margin-bottom: 1rem;">
-      <label for="upload-trabalho" style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.3rem; display:block;">Trabalho de Destino para Upload</label>
-      <select id="upload-trabalho" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 6px; color: var(--paper);">
-        <option value="">Selecione um trabalho ativo...</option>
-      </select>
+    <!-- TRABALHO EM CURSO & UPLOAD -->
+    <div class="upload-section-box">
+      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">Trabalho em Curso</label>
+      <div class="trabalhos-curso-lista" id="trabalho-curso-container">
+        <!-- Preenchido dinamicamente via JS -->
+      </div>
+      <input type="hidden" id="upload-trabalho-val" value="">
+
+      <!-- ZONA DE DROP (aparece apenas quando selecionado) -->
+      <label class="drop" id="drop" style="display: none;">
+        <div>
+          <strong id="drop-label-text">Escolha um trabalho acima</strong>
+          <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias».</p>
+        </div>
+        <span class="btn">Escolher ficheiros</span>
+        <input id="ficheiro" type="file" accept="image/*" multiple hidden>
+      </label>
     </div>
 
     <!-- ZONA DE FILTROS AVANÇADOS -->
@@ -487,9 +547,10 @@
           <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar Todos</label>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
+        <button class="btn btn-solid" id="btn-aplicar-filtros" style="margin-top: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.8rem; width: 100%;">Aplicar Seleção</button>
       </div>
       <div class="filter-box">
-        <label>Intervalo de Datas</label>
+        <label>Seleção Temporal</label>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
           <input type="date" id="filter-data-inicio" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
           <span style="color: var(--muted);">-</span>
@@ -498,21 +559,13 @@
         <button class="btn" id="btn-limpar-datas" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top:0.3rem;">Limpar Datas</button>
       </div>
       <div class="filter-box">
-        <label>utilizadores</label>
+        <label>Autor Trabalho</label>
         <div class="scroll-select-box" id="filter-utilizadores-container">
+          <label><input type="checkbox" id="check-all-utilizadores" checked> Selecionar Todos</label>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
       </div>
     </div>
-
-    <label class="drop" id="drop">
-      <div>
-        <strong>Largar fotografias aqui</strong>
-        <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias» (requer trabalho selecionado acima).</p>
-      </div>
-      <span class="btn">Escolher ficheiros</span>
-      <input id="ficheiro" type="file" accept="image/*" multiple hidden>
-    </label>
 
     <p class="status" id="estado" role="status"></p>
     
@@ -533,7 +586,6 @@
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
           <h3 style="margin-top:0; color:var(--brass);" id="user-section-title">Os Meus Dados</h3>
           
-          <!-- Seletor visível apenas para administradores -->
           <div class="form-group" id="admin-user-selector-container" style="display: none; margin-bottom: 1rem;">
             <label for="config-select-user">Selecionar Utilizador</label>
             <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
@@ -551,7 +603,7 @@
           </form>
         </div>
 
-        <!-- Manutenção de Trabalhos (Apenas para Admins) -->
+        <!-- Manutenção de Trabalhos -->
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
           <h3 style="margin-top:0; color:var(--brass);">Manutenção de Trabalhos de Fotografia</h3>
           <form id="form-novo-trabalho" style="display: grid; gap: 0.8rem; grid-template-columns: 2fr 1fr auto; margin-bottom: 1.2rem;">
@@ -628,15 +680,16 @@
     const estado = document.getElementById("estado");
     const ficheiro = document.getElementById("ficheiro");
     const drop = document.getElementById("drop");
+    const dropLabelText = document.getElementById("drop-label-text");
     const projetorBtn = document.getElementById("projetor-btn");
     const projetor = document.getElementById("projetor");
     const slide = document.getElementById("slide");
     const legenda = document.getElementById("legenda");
     const pausaBtn = document.getElementById("pausa");
-    const uploadTrabalhoSelect = document.getElementById("upload-trabalho");
     const galeriaContainer = document.getElementById("galeria-container");
+    const trabalhoCursoContainer = document.getElementById("trabalho-curso-container");
+    const uploadTrabalhoVal = document.getElementById("upload-trabalho-val");
 
-    // Funções auxiliares seguras
     function getCod(u) { return u.coduser || u.CodUser || u.id || ""; }
     function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
     function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
@@ -891,16 +944,7 @@
         const { data: dataUsers } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = dataUsers || [];
 
-        uploadTrabalhoSelect.innerHTML = '<option value="">Selecione o trabalho ativo...</option>';
-        cacheTrabalhos.filter(t => t.ativo === true || t.Ativo === true).forEach(t => {
-          const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
-          const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
-          const opt = document.createElement("option");
-          opt.value = nomeTrab;
-          opt.textContent = `${nomeTrab} (${dataTrab})`;
-          uploadTrabalhoSelect.append(opt);
-        });
-
+        montarTrabalhosEmCurso();
         montarFiltrosTrabalhos();
         montarFiltrosutilizadores();
         await carregarFotosEfetivas();
@@ -909,14 +953,75 @@
       }
     }
 
+    // MONTAGEM DA SECÇÃO "TRABALHO EM CURSO"
+    function montarTrabalhosEmCurso() {
+      trabalhoCursoContainer.replaceChildren();
+      const ativos = cacheTrabalhos.filter(t => t.ativo === true || t.Ativo === true);
+
+      if (ativos.length === 0) {
+        trabalhoCursoContainer.innerHTML = '<span style="color: var(--muted); font-size: 0.85rem;">Sem trabalhos ativos disponíveis.</span>';
+        return;
+      }
+
+      ativos.forEach((t, idx) => {
+        const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
+        const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
+
+        const div = document.createElement("div");
+        div.className = "trabalho-opcao";
+        if (idx === 0) {
+          div.classList.add("destacado");
+        } else {
+          div.classList.add("atenuado");
+          if (idx > 3) {
+            div.style.display = "none";
+            div.dataset.extra = "true";
+          }
+        }
+
+        div.innerHTML = `
+          <span>${nomeTrab} <span style="font-size: 0.75rem; color: var(--muted);">(${dataTrab})</span></span>
+          <span style="font-size: 0.75rem; color: var(--brass);">${idx === 0 ? '★ Mais recente' : ''}</span>
+        `;
+
+        div.addEventListener("click", () => {
+          document.querySelectorAll(".trabalho-opcao").forEach(el => el.classList.remove("selecionado"));
+          div.classList.add("selecionado");
+          uploadTrabalhoVal.value = nomeTrab;
+          drop.style.display = "flex";
+          dropLabelText.textContent = `Destino: ${nomeTrab}`;
+        });
+
+        trabalhoCursoContainer.append(div);
+      });
+
+      if (ativos.length > 4) {
+        const btnVerTodos = document.createElement("button");
+        btnVerTodos.className = "btn";
+        btnVerTodos.style.cssText = "font-size: 0.75rem; padding: 0.3rem 0.6rem; align-self: flex-start; margin-top: 0.3rem;";
+        btnVerTodos.textContent = "Ver todos os trabalhos ativos...";
+        btnVerTodos.addEventListener("click", () => {
+          document.querySelectorAll(".trabalho-opcao[data-extra='true']").forEach(el => el.style.display = "flex");
+          btnVerTodos.remove();
+        });
+        trabalhoCursoContainer.append(btnVerTodos);
+      }
+    }
+
     function montarFiltrosTrabalhos() {
       const container = document.getElementById("list-trabalhos-checkboxes");
       container.innerHTML = "";
-      cacheTrabalhos.forEach(t => {
+      
+      cacheTrabalhos.forEach((t, idx) => {
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}`;
-        lbl.querySelector("input").addEventListener("change", aplicarFiltrosEGeral);
+        const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}${badge}`;
+        
+        lbl.querySelector("input").addEventListener("change", () => {
+          document.getElementById("check-all-trabalhos").checked = false;
+        });
+
         container.append(lbl);
       });
     }
@@ -924,19 +1029,35 @@
     function montarFiltrosutilizadores() {
       const container = document.getElementById("list-utilizadores-checkboxes");
       container.innerHTML = "";
-      cacheutilizadores.forEach(u => {
+      
+      cacheutilizadores.forEach((u, idx) => {
         const codigoUser = getCod(u);
         const nomeUser = getNome(u);
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}"> ${nomeUser} (${codigoUser})`;
-        lbl.querySelector("input").addEventListener("change", aplicarFiltrosEGeral);
+        const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
+        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" checked> ${nomeUser} (${codigoUser})${badge}`;
+        
+        lbl.querySelector("input").addEventListener("change", () => {
+          document.getElementById("check-all-utilizadores").checked = false;
+        });
+
         container.append(lbl);
       });
     }
 
+    // Comportamentos "Selecionar Todos"
     document.getElementById("check-all-trabalhos").addEventListener("change", (e) => {
       const checked = e.target.checked;
       document.querySelectorAll(".filtro-trab-item").forEach(cb => cb.checked = checked);
+    });
+
+    document.getElementById("check-all-utilizadores").addEventListener("change", (e) => {
+      const checked = e.target.checked;
+      document.querySelectorAll(".filtro-user-item").forEach(cb => cb.checked = checked);
+    });
+
+    // Botão Aplicar Seleção
+    document.getElementById("btn-aplicar-filtros").addEventListener("click", () => {
       aplicarFiltrosEGeral();
     });
 
@@ -945,9 +1066,6 @@
       document.getElementById("filter-data-fim").value = "";
       aplicarFiltrosEGeral();
     });
-
-    document.getElementById("filter-data-inicio").addEventListener("change", aplicarFiltrosEGeral);
-    document.getElementById("filter-data-fim").addEventListener("change", aplicarFiltrosEGeral);
 
     async function carregarFotosEfetivas() {
       const { data: dbFotos } = await supabase.from("fotografias").select("*");
@@ -1006,24 +1124,15 @@
       const dataFim = document.getElementById("filter-data-fim").value;
 
       fotosFiltradas = cacheFotos.filter(f => {
-        const matchTrab = trabsSelecionados.length === 0 || trabsSelecionados.includes(f.trabalho);
-        const matchUser = usersSelecionados.length === 0 || usersSelecionados.includes(f.user);
-
-        let matchPrincipal = true;
-        if (usersSelecionados.length > 0 && trabsSelecionados.length === cacheTrabalhos.length) {
-          matchPrincipal = matchUser;
-        } else if (trabsSelecionados.length > 0 && usersSelecionados.length === 0) {
-          matchPrincipal = matchTrab;
-        } else {
-          matchPrincipal = matchTrab && matchUser;
-        }
+        const matchTrab = trabsSelecionados.length === 0 || trabsSelecionados.length === cacheTrabalhos.length || trabsSelecionados.includes(f.trabalho);
+        const matchUser = usersSelecionados.length === 0 || usersSelecionados.length === cacheutilizadores.length || usersSelecionados.includes(f.user);
 
         let matchData = true;
         const fData = f.created_at.split("T")[0];
         if (dataInicio && fData < dataInicio) matchData = false;
         if (dataFim && fData > dataFim) matchData = false;
 
-        return matchPrincipal && matchData;
+        return matchTrab && matchUser && matchData;
       });
 
       desenharGaleria();
@@ -1165,9 +1274,9 @@
     }
 
     async function enviar(lista) {
-      const trabalhoSelecionado = uploadTrabalhoSelect.value;
+      const trabalhoSelecionado = uploadTrabalhoVal.value;
       if (!trabalhoSelecionado) {
-        estado.textContent = "Aviso: Selecione primeiro o trabalho ativo na caixa acima antes de escolher os ficheiros!";
+        estado.textContent = "Aviso: Selecione primeiro um trabalho em curso na caixa acima!";
         return;
       }
 
@@ -1262,9 +1371,9 @@
     }
 
     drop.addEventListener("click", () => {
-      const trabalhoSelecionado = uploadTrabalhoSelect.value;
+      const trabalhoSelecionado = uploadTrabalhoVal.value;
       if (!trabalhoSelecionado) {
-        estado.textContent = "Aviso: Selecione primeiro o trabalho ativo na caixa acima antes de escolher os ficheiros!";
+        estado.textContent = "Aviso: Selecione primeiro um trabalho em curso!";
         return;
       }
       ficheiro.click();
@@ -1283,9 +1392,9 @@
     drop.addEventListener("drop", (evento) => {
       evento.preventDefault();
       drop.classList.remove("over");
-      const trabalhoSelecionado = uploadTrabalhoSelect.value;
+      const trabalhoSelecionado = uploadTrabalhoVal.value;
       if (!trabalhoSelecionado) {
-        estado.textContent = "Aviso: Selecione primeiro o trabalho ativo na caixa acima antes de largar os ficheiros!";
+        estado.textContent = "Aviso: Selecione primeiro um trabalho em curso!";
         return;
       }
       enviar(evento.dataTransfer.files);
