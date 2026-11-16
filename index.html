@@ -636,7 +636,7 @@
     const uploadTrabalhoSelect = document.getElementById("upload-trabalho");
     const galeriaContainer = document.getElementById("galeria-container");
 
-    // Funções auxiliares seguras atualizadas com coduser e pw_utilizador
+    // Funções auxiliares seguras
     function getCod(u) { return u.coduser || u.CodUser || u.id || ""; }
     function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
     function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
@@ -840,10 +840,10 @@
       const dataTrab = document.getElementById("trabalho-data").value;
       const ativo = document.getElementById("trabalho-ativo").checked;
 
-      const { error } = await supabase.from("Trabalhos_de_Fotografia").insert([{
-        Nome_do_Trabalho: nome,
-        Data_do_trabalho: dataTrab,
-        Ativo: ativo
+      const { error } = await supabase.from("trabalhos_de_fotografia").insert([{
+        nome_do_trabalho: nome,
+        data_do_trabalho: dataTrab,
+        ativo: ativo
       }]);
 
       if (error) {
@@ -858,16 +858,20 @@
     });
 
     async function carregarTrabalhosAdmin() {
-      const { data } = await supabase.from("Trabalhos_de_Fotografia").select("*").order("Data_do_trabalho", { ascending: false });
+      const { data } = await supabase.from("trabalhos_de_fotografia").select("*").order("data_do_trabalho", { ascending: false });
       const container = document.getElementById("lista-trabalhos-admin");
       container.innerHTML = "";
       (data || []).forEach(t => {
+        const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
+        const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
+        const ativoTrab = t.ativo !== undefined ? t.ativo : t.Ativo;
+
         const div = document.createElement("div");
         div.style.cssText = "display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 0.5rem; border-radius: 4px;";
         div.innerHTML = `
-          <span><strong>${t.Nome_do_Trabalho}</strong> (${t.Data_do_trabalho})</span>
+          <span><strong>${nomeTrab}</strong> (${dataTrab})</span>
           <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; cursor: pointer;">
-            <input type="checkbox" ${t.Ativo ? "checked" : ""} onchange="toggleTrabalhoAtivo('${t.id}', this.checked)"> Ativo
+            <input type="checkbox" ${ativoTrab ? "checked" : ""} onchange="toggleTrabalhoAtivo('${t.id}', this.checked)"> Ativo
           </label>
         `;
         container.append(div);
@@ -875,23 +879,25 @@
     }
 
     window.toggleTrabalhoAtivo = async function(id, novoEstado) {
-      await supabase.from("Trabalhos_de_Fotografia").update({ Ativo: novoEstado }).eq("id", id);
+      await supabase.from("trabalhos_de_fotografia").update({ ativo: novoEstado }).eq("id", id);
       carregarTrabalhosAdmin();
     };
 
     async function carregarDadosSistema() {
       try {
-        const resTrab = await supabase.from("Trabalhos_de_Fotografia").select("*").order("Data_do_trabalho", { ascending: false });
+        const resTrab = await supabase.from("trabalhos_de_fotografia").select("*").order("data_do_trabalho", { ascending: false });
         cacheTrabalhos = resTrab.data || [];
 
         const { data: dataUsers } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = dataUsers || [];
 
         uploadTrabalhoSelect.innerHTML = '<option value="">Selecione o trabalho ativo...</option>';
-        cacheTrabalhos.filter(t => t.Ativo).forEach(t => {
+        cacheTrabalhos.filter(t => t.ativo === true || t.Ativo === true).forEach(t => {
+          const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
+          const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
           const opt = document.createElement("option");
-          opt.value = t.Nome_do_Trabalho;
-          opt.textContent = `${t.Nome_do_Trabalho} (${t.Data_do_trabalho})`;
+          opt.value = nomeTrab;
+          opt.textContent = `${nomeTrab} (${dataTrab})`;
           uploadTrabalhoSelect.append(opt);
         });
 
@@ -907,8 +913,9 @@
       const container = document.getElementById("list-trabalhos-checkboxes");
       container.innerHTML = "";
       cacheTrabalhos.forEach(t => {
+        const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${t.Nome_do_Trabalho}" checked> ${t.Nome_do_Trabalho}`;
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}`;
         lbl.querySelector("input").addEventListener("change", aplicarFiltrosEGeral);
         container.append(lbl);
       });
@@ -969,7 +976,7 @@
     }
 
     function metadadosCodigo(metadados) {
-      return metadados.codigo_trabalho || metadados.Trabalho || metadados.trabalho || "Trabalho Geral";
+      return metadados.codigo_trabalho || metadados.Trabalho || metadados.trabalho || metadados.nome_do_trabalho || "Trabalho Geral";
     }
 
     async function urlDaFoto(path) {
@@ -1309,7 +1316,7 @@
       }
     });
 
-    document.addEventListener("keydown", (evento) =>  {
+    document.addEventListener("keydown", (evento) => {
       if (!projetor.classList.contains("aberto")) return;
       if (evento.key === "ArrowRight") mostrar(indice + 1);
       if (evento.key === "ArrowLeft") mostrar(indice - 1);
