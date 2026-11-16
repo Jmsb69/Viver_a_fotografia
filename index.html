@@ -488,7 +488,7 @@
         <button class="btn" id="btn-limpar-datas" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top:0.3rem;">Limpar Datas</button>
       </div>
       <div class="filter-box">
-        <label>Utilizadores</label>
+        <label>utilizadores</label>
         <div class="scroll-select-box" id="filter-utilizadores-container">
           <div id="list-utilizadores-checkboxes"></div>
         </div>
@@ -519,7 +519,7 @@
       </div>
 
       <div style="display: grid; gap: 2rem;">
-        <!-- Gestão / Consulta de Utilizadores -->
+        <!-- Gestão / Consulta de utilizadores -->
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
           <h3 style="margin-top:0; color:var(--brass);" id="user-section-title">Os Meus Dados</h3>
           
@@ -586,7 +586,7 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY); 
 
     let usuarioAtual = null;
-    let cacheUtilizadores = [];
+    let cacheutilizadores = [];
     let cacheTrabalhos = [];
     let cacheFotos = [];
     let fotosFiltradas = [];
@@ -628,12 +628,12 @@
 
     async function init() {
       try {
-        const { data, error } = await supabase.from("Utilizadores").select("*");
+        const { data, error } = await supabase.from("utilizadores").select("*");
         if (error) throw error;
-        cacheUtilizadores = data || [];
+        cacheutilizadores = data || [];
 
         loginUserSelect.innerHTML = '<option value="">Selecione o seu utilizador...</option>';
-        cacheUtilizadores.forEach(u => {
+        cacheutilizadores.forEach(u => {
           const opt = document.createElement("option");
           opt.value = u.CodUser;
           opt.textContent = `${u.Nome_Utilizador} (${u.CodUser})`;
@@ -655,7 +655,7 @@
         return;
       }
 
-      const userRecord = cacheUtilizadores.find(u => u.CodUser === selectedCodUser);
+      const userRecord = cacheutilizadores.find(u => u.CodUser === selectedCodUser);
       if (!userRecord) {
         loginError.textContent = "Utilizador não encontrado.";
         return;
@@ -679,7 +679,7 @@
       if (usuarioAtual.Indicador_Administrador) {
         adminUserSelectorContainer.style.display = "block";
         adminTrabalhosSection.style.display = "block";
-        carregarSelectUtilizadoresAdmin();
+        carregarSelectutilizadoresAdmin();
         carregarTrabalhosAdmin();
       } else {
         adminUserSelectorContainer.style.display = "none";
@@ -693,9 +693,9 @@
       carregarDadosSistema();
     });
 
-    function carregarSelectUtilizadoresAdmin() {
+    function carregarSelectutilizadoresAdmin() {
       configSelectUser.innerHTML = '<option value="">-- Criar Novo Utilizador --</option>';
-      cacheUtilizadores.forEach(u => {
+      cacheutilizadores.forEach(u => {
         const opt = document.createElement("option");
         opt.value = u.CodUser;
         opt.textContent = `${u.Nome_Utilizador} (${u.CodUser})`;
@@ -710,7 +710,7 @@
       if (!selectedCod) {
         preencherFormularioUtilizador(null);
       } else {
-        const u = cacheUtilizadores.find(x => x.CodUser === selectedCod);
+        const u = cacheutilizadores.find(x => x.CodUser === selectedCod);
         preencherFormularioUtilizador(u);
       }
     });
@@ -742,7 +742,7 @@
       const tel = editTel.value || null;
 
       if (codUserVal) {
-        const { error } = await supabase.from("Utilizadores").update({
+        const { error } = await supabase.from("utilizadores").update({
           Nome_Utilizador: nomeCompleto,
           Pw_Utilizador: pw,
           Endwreço_Mail: email,
@@ -760,9 +760,9 @@
             usuarioAtual.Número_Telefone = tel;
             currentUserDisplay.textContent = `Utilizador: ${usuarioAtual.Nome_Utilizador} (${usuarioAtual.CodUser})`;
           }
-          const { data } = await supabase.from("Utilizadores").select("*");
-          cacheUtilizadores = data || [];
-          if (usuarioAtual.Indicador_Administrador) carregarSelectUtilizadoresAdmin();
+          const { data } = await supabase.from("utilizadores").select("*");
+          cacheutilizadores = data || [];
+          if (usuarioAtual.Indicador_Administrador) carregarSelectutilizadoresAdmin();
         }
       } else {
         if (!usuarioAtual.Indicador_Administrador) {
@@ -779,7 +779,7 @@
         const p2 = partes[partes.length - 1][0].toLowerCase();
         const prefixo = p1 + p2;
 
-        const reaisExistentes = cacheUtilizadores.filter(u => u.CodUser && u.CodUser.startsWith(prefixo));
+        const reaisExistentes = cacheutilizadores.filter(u => u.CodUser && u.CodUser.startsWith(prefixo));
         let maxNum = 0;
         reaisExistentes.forEach(u => {
           const numStr = u.CodUser.replace(prefixo, "");
@@ -788,7 +788,7 @@
         });
         const userCode = prefixo + (maxNum + 1);
 
-        const { error } = await supabase.from("Utilizadores").insert([{
+        const { error } = await supabase.from("utilizadores").insert([{
           CodUser: userCode,
           Pw_Utilizador: pw,
           Nome_Utilizador: nomeCompleto,
@@ -801,9 +801,9 @@
           alert("Erro ao criar utilizador: " + error.message);
         } else {
           alert(`Utilizador criado com sucesso! CodUser gerado: ${userCode}`);
-          const { data } = await supabase.from("Utilizadores").select("*");
-          cacheUtilizadores = data || [];
-          carregarSelectUtilizadoresAdmin();
+          const { data } = await supabase.from("utilizadores").select("*");
+          cacheutilizadores = data || [];
+          carregarSelectutilizadoresAdmin();
         }
       }
     });
@@ -858,8 +858,8 @@
         const resTrab = await supabase.from("Trabalhos_de_Fotografia").select("*").order("Data_do_trabalho", { ascending: false });
         cacheTrabalhos = resTrab.data || [];
 
-        const { data: dataUsers } = await supabase.from("Utilizadores").select("*");
-        cacheUtilizadores = dataUsers || [];
+        const { data: dataUsers } = await supabase.from("utilizadores").select("*");
+        cacheutilizadores = dataUsers || [];
 
         uploadTrabalhoSelect.innerHTML = '<option value="">Selecione o trabalho ativo...</option>';
         cacheTrabalhos.filter(t => t.Ativo).forEach(t => {
@@ -870,7 +870,7 @@
         });
 
         montarFiltrosTrabalhos();
-        montarFiltrosUtilizadores();
+        montarFiltrosutilizadores();
         await carregarFotosEfetivas();
       } catch (err) {
         estado.textContent = "Erro ao carregar dados do sistema.";
@@ -888,10 +888,10 @@
       });
     }
 
-    function montarFiltrosUtilizadores() {
+    function montarFiltrosutilizadores() {
       const container = document.getElementById("list-utilizadores-checkboxes");
       container.innerHTML = "";
-      cacheUtilizadores.forEach(u => {
+      cacheutilizadores.forEach(u => {
         const codigoUser = u.CodUser;
         const lbl = document.createElement("label");
         lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}"> ${u.Nome_Utilizador} (${codigoUser})`;
