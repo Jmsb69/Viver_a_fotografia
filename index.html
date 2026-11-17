@@ -1,6 +1,3 @@
-Peço imensa desculpa por insistir no caminho errado. Entendi perfeitamente o teu ponto agora: o problema não está na leitura nem na seleção dos dados (que lê as 7 fotos corretamente), mas sim no momento de desenhar/apresentar a galeria no ecran (desenharGaleria()), onde a estrutura visual entra em conflito e acaba por gerar o erro ou falhar a renderização.
-Vamos analisar diretamente a função de desenho e o ciclo de agrupamento. O erro costuma acontecer quando o código tenta procurar propriedades de data (data_do_trabalho) em objetos que não as trazem formatadas, ou quando tenta aceder a variáveis de cache que quebram a apresentação dos cartões.
-Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, sem dependências de datas nos títulos e sem inventar dados nas fotografias, mantendo a seleção e contagem intactas:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -397,15 +394,7 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
     .card:hover img { transform: scale(1.04); }
 
     .card-meta-top {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.5rem;
-      background: transparent;
-      padding: 0.1rem 0.3rem;
-      font-size: 0.75rem;
-      font-weight: 400;
-      z-index: 2;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      display: none !important;
     }
 
     .card-meta-bottom {
@@ -751,7 +740,7 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
     let fotosFiltradas = [];
     let indice = 0;
     let temporizador = null;
-    let emPausa = false;
+    let emPausa = true; // Por defeito, inicia em pausa quando clicado individualmente
 
     const loginModal = document.getElementById("login-modal");
     const loginForm = document.getElementById("login-form");
@@ -1358,7 +1347,6 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
         };
       }));
 
-      // Mantém a ordenação original estável que tinhas antes
       cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       aplicarFiltrosEGeral();
@@ -1455,17 +1443,6 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
           metaTop.className = "card-meta-top";
           metaTop.textContent = nomeVisivel(foto.path);
 
-          img.addEventListener("load", () => {
-            detetarCorContraste(img, (isLight) => {
-              metaTop.style.color = isLight ? "#000000" : "#ffffff";
-            });
-          });
-          if (img.complete) {
-            detetarCorContraste(img, (isLight) => {
-              metaTop.style.color = isLight ? "#000000" : "#ffffff";
-            });
-          }
-
           const dataFmt = (foto.created_at || "").split("T")[0];
           
           const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
@@ -1491,7 +1468,8 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
           }
 
           figura.append(img, metaTop, metaBottom);
-          figura.addEventListener("click", () => abrirProjetor(originalIndex));
+          // Clicar numa foto abre o visualizador individual em pausa
+          figura.addEventListener("click", () => abrirVisualizadorParado(originalIndex));
           grid.append(figura);
         });
 
@@ -1665,13 +1643,27 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
       temporizador = setInterval(() => mostrar(indice + 1), INTERVALO);
     }
 
-    async function abrirProjetor(i = 0) {
+    // Botão "Modo projetor" (Abre e roda automaticamente)
+    async function abrirProjetorAutomatico(i = 0) {
       if (fotosFiltradas.length === 0) return;
       emPausa = false;
-      pausaBtn.textContent = "Pausa";
+      pausaBtn.textContent = "Retomar";
       projetor.classList.add("aberto");
       mostrar(i);
       retomar();
+      try {
+        await projetor.requestFullscreen();
+      } catch {}
+    }
+
+    // Clicar numa foto individual (Abre em pausa, só avança manualmente)
+    async function abrirVisualizadorParado(i = 0) {
+      if (fotosFiltradas.length === 0) return;
+      emPausa = true;
+      pausaBtn.textContent = "Retomar";
+      parar();
+      projetor.classList.add("aberto");
+      mostrar(i);
       try {
         await projetor.requestFullscreen();
       } catch {}
@@ -1709,16 +1701,20 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
       validarEEnviar(evento.dataTransfer.files);
     });
 
-    projetorBtn.addEventListener("click", () => abrirProjetor(0));
+    projetorBtn.addEventListener("click", () => abrirProjetorAutomatico(0));
+    
     document.getElementById("anterior").addEventListener("click", () => {
       mostrar(indice - 1);
-      retomar();
+      if (!emPausa) retomar();
     });
+    
     document.getElementById("seguinte").addEventListener("click", () => {
       mostrar(indice + 1);
-      retomar();
+      if (!emPausa) retomar();
     });
+
     document.getElementById("sair").addEventListener("click", fecharProjetor);
+    
     pausaBtn.addEventListener("click", () => {
       emPausa = !emPausa;
       pausaBtn.textContent = emPausa ? "Retomar" : "Pausa";
@@ -1736,11 +1732,20 @@ Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, s
 
     document.addEventListener("keydown", (evento) => {
       if (!projetor.classList.contains("aberto")) return;
-      if (evento.key === "ArrowRight") mostrar(indice + 1);
-      if (evento.key === "ArrowLeft") mostrar(indice - 1);
-      if (evento.key === " ") {
+      
+      if (evento.key === "ArrowRight") {
+        mostrar(indice + 1);
+        if (!emPausa) retomar();
+      }
+      if (evento.key === "ArrowLeft") {
+        mostrar(indice - 1);
+        if (!emPausa) retomar();
+      }
+      // Enter ou Espaço avançam para a próxima fotografia mantendo o modo parado
+      if (evento.key === "Enter" || evento.key === " ") {
         evento.preventDefault();
-        pausaBtn.click();
+        mostrar(indice + 1);
+        if (!emPausa) retomar();
       }
       if (evento.key === "Escape" && !document.fullscreenElement) fecharProjetor();
     });
