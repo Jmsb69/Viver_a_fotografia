@@ -156,15 +156,6 @@
       padding: 2.2rem 7vw 5rem;
     }
 
-    .toolbar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.6rem;
-    }
-
     .actions { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; }
 
     .btn {
@@ -195,16 +186,25 @@
       gap: 1rem;
     }
     
-    .filters-main-title {
+    .filters-header-row {
       grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.4rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .filters-main-title {
       font-family: "Cormorant Garamond", serif;
       font-size: 1.5rem;
       color: var(--brass);
-      margin: 0 0 0.4rem 0;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 0.4rem;
+      margin: 0;
       letter-spacing: 0.05em;
     }
+
+    .count { color: var(--muted); font-size: 0.95rem; }
 
     .filter-box {
       display: flex;
@@ -318,8 +318,6 @@
 
     .drop.over { background: rgba(215, 176, 122, 0.08); }
     .drop p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
-
-    .count { color: var(--muted); font-size: 0.95rem; }
 
     .status {
       min-height: 1.4rem;
@@ -544,10 +542,6 @@
   </header>
 
   <main>
-    <div class="toolbar">
-      <p class="count" id="contador">A ler o álbum…</p>
-    </div>
-
     <!-- TRABALHO EM CURSO & UPLOAD -->
     <div class="upload-section-box">
       <h2 class="upload-main-title">CARREGAR FOTOGRAFIAS</h2>
@@ -571,7 +565,10 @@
 
     <!-- ZONA DE FILTROS AVANÇADOS -->
     <div class="filters-panel">
-      <h2 class="filters-main-title">CRITERIOS DE SELEÇÃO DE FOTOGRAFIAS</h2>
+      <div class="filters-header-row">
+        <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS</h2>
+        <span class="count" id="contador">A ler o álbum…</span>
+      </div>
       
       <div class="filter-box">
         <label>Tema dos trabalhos</label>
