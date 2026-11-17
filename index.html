@@ -1,3 +1,6 @@
+Peço imensa desculpa por insistir no caminho errado. Entendi perfeitamente o teu ponto agora: o problema não está na leitura nem na seleção dos dados (que lê as 7 fotos corretamente), mas sim no momento de desenhar/apresentar a galeria no ecran (desenharGaleria()), onde a estrutura visual entra em conflito e acaba por gerar o erro ou falhar a renderização.
+Vamos analisar diretamente a função de desenho e o ciclo de agrupamento. O erro costuma acontecer quando o código tenta procurar propriedades de data (data_do_trabalho) em objetos que não as trazem formatadas, ou quando tenta aceder a variáveis de cache que quebram a apresentação dos cartões.
+Aqui tens o código corrigido com a função desenharGaleria totalmente limpa, sem dependências de datas nos títulos e sem inventar dados nas fotografias, mantendo a seleção e contagem intactas:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -1355,7 +1358,7 @@
         };
       }));
 
-      // ORDENAÇÃO ORIGINAL RESTAURADA (recente para antiga)
+      // Mantém a ordenação original estável que tinhas antes
       cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       aplicarFiltrosEGeral();
@@ -1395,7 +1398,7 @@
         const matchUser = allUserChecked || usersSelecionados.length === 0 || usersSelecionados.includes(f.user);
 
         let matchData = true;
-        const fData = f.created_at.split("T")[0];
+        const fData = (f.created_at || "").split("T")[0];
         if (dataInicio && fData < dataInicio) matchData = false;
         if (dataFim && fData > dataFim) matchData = false;
 
@@ -1432,8 +1435,6 @@
 
         const tituloSecao = document.createElement("h3");
         tituloSecao.className = "section-group-title";
-        
-        // TÍTULO ORIGINAL (APENAS O NOME DO TRABALHO, SEM A DATA À FRENTE)
         tituloSecao.textContent = trabalhoNome;
         galeriaContainer.append(tituloSecao);
 
@@ -1465,14 +1466,14 @@
             });
           }
 
-          const dataFmt = foto.created_at.split("T")[0];
+          const dataFmt = (foto.created_at || "").split("T")[0];
           
           const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
           const nomeAutorCard = userObj ? getNome(userObj) : foto.user;
 
           const metaBottom = document.createElement("span");
           metaBottom.className = "card-meta-bottom";
-          metaBottom.textContent = `${nomeCurto(nomeAutorCard, 10)} · ${dataFmt}`;
+          metaBottom.textContent = `${nomeAutorCard} · ${dataFmt}`;
 
           const isAdm = isAdmin(usuarioAtual);
           const isOwner = foto.user === getCod(usuarioAtual);
@@ -1642,10 +1643,10 @@
       const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
       const nomeAutorProj = userObj ? getNome(userObj) : foto.user;
       const trabObjProj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === foto.trabalho.toLowerCase());
-      const dataTrabProj = trabObjProj ? getTrabData(trabObjProj) : foto.created_at.split("T")[0];
+      const dataTrabProj = trabObjProj ? getTrabData(trabObjProj) : (foto.created_at || "").split("T")[0];
 
       document.getElementById("projetor-header").textContent = `Trabalho: ${foto.trabalho}`;
-      document.getElementById("projetor-bottom-right").textContent = `${dataTrabProj} · ${nomeCurto(nomeAutorProj, 12)}`;
+      document.getElementById("projetor-bottom-right").textContent = `${dataTrabProj} · ${nomeAutorProj}`;
       legenda.textContent = `${indice + 1} / ${fotosFiltradas.length}  ·  ${nomeVisivel(foto.path)}`;
       
       const seguinte = fotosFiltradas[(indice + 1) % fotosFiltradas.length];
