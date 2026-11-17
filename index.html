@@ -1,6 +1,3 @@
-Deixaste aqui pistas excelentes e certeiras para o diagnóstico! Analisando os três pontos que referiste, o problema exato que fazia com que as fotografias deixassem de aparecer foi a inclusão da data à frente do nome no render do título da secção (tituloSecao.innerHTML = ...) e na forma como comparávamos o nome do trabalho da fotografia (f.trabalho) com os checkboxes.
-Quando a base de dados guarda o nome do trabalho (ex: "Porto Antigo"), mas a secção exibia "2026-05-12 - Porto Antigo", a lógica de agrupamento e filtro perdia a referência exata. Além disso, ajustei a ordenação para garantir que exibe corretamente da mais antiga para a mais recente (como tinhas pedido).
-Aqui tens o código totalmente limpo, corrigido e com o texto simpático no upload mantido:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -802,10 +799,24 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
     function getCod(u) { return u.coduser || u.CodUser || u.id || ""; }
     function getNome(u) { return u.nome_utilizador || u.Nome_Utilizador || u.nome || u.Nome || "Utilizador"; }
     function getPw(u) { return u.pw_utilizador || u.Pw_Utilizador || u.pw_utilizadores || u.password || ""; }
-    function getEmail(u) { return u.email || u.Endwreço_Mail || u.Endereço_Mail || ""; }
+    function getEmail(u) { return u.email || u.Endereço_Mail || u.Endwreço_Mail || ""; }
     function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
     function isAdmin(u) { 
       return u.indicador_administrador === true || u.Indicador_Administrador === true || u.admin === true; 
+    }
+
+    function getTrabId(t) { return t.id || t.Id || t.ID || ""; }
+    function getTrabNome(t) { return t.nome_do_trabalho || t.Nome_do_Trabalho || t.nome || t.Nome || ""; }
+    function getTrabData(t) { return t.data_do_trabalho || t.Data_do_trabalho || t.data || t.Data || ""; }
+    function getTrabLimite(t) { 
+      if (t.limite_fotos !== undefined) return t.limite_fotos;
+      if (t.Limite_Fotos !== undefined) return t.Limite_Fotos;
+      return 10;
+    }
+    function getTrabAtivo(t) {
+      if (t.ativo !== undefined) return t.ativo;
+      if (t.Ativo !== undefined) return t.Ativo;
+      return true;
     }
 
     function isColorLight(r, g, b) {
@@ -1065,14 +1076,15 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
     });
 
     async function carregarSelectTrabalhosAdmin() {
-      const { data } = await supabase.from("trabalhos_de_fotografia").select("*").order("data_do_trabalho", { ascending: false });
+      const { data } = await supabase.from("trabalhos_de_fotografia").select("*");
       cacheTrabalhos = data || [];
+      cacheTrabalhos.sort((a, b) => new Date(getTrabData(b)) - new Date(getTrabData(a)));
 
       configSelectTrab.innerHTML = '<option value="">-- Criar Novo Trabalho --</option>';
       cacheTrabalhos.forEach(t => {
-        const id = t.id;
-        const nome = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
-        const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
+        const id = getTrabId(t);
+        const nome = getTrabNome(t);
+        const dataTrab = getTrabData(t);
         const opt = document.createElement("option");
         opt.value = id;
         opt.textContent = `${dataTrab} - ${nome}`;
@@ -1080,7 +1092,7 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       });
 
       if (cacheTrabalhos.length > 0) {
-        configSelectTrab.value = cacheTrabalhos[0].id;
+        configSelectTrab.value = getTrabId(cacheTrabalhos[0]);
         preencherFormularioTrabalho(cacheTrabalhos[0]);
       } else {
         preencherFormularioTrabalho(null);
@@ -1092,7 +1104,7 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       if (!selectedId) {
         preencherFormularioTrabalho(null);
       } else {
-        const t = cacheTrabalhos.find(x => String(x.id) === String(selectedId));
+        const t = cacheTrabalhos.find(x => String(getTrabId(x)) === String(selectedId));
         preencherFormularioTrabalho(t);
       }
     });
@@ -1104,11 +1116,11 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
 
     function preencherFormularioTrabalho(t) {
       if (t) {
-        editTrabId.value = t.id;
-        editTrabNome.value = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
-        editTrabData.value = t.data_do_trabalho || t.Data_do_trabalho || "";
-        editTrabLimite.value = t.limite_fotos !== undefined ? t.limite_fotos : (t.Limite_Fotos !== undefined ? t.Limite_Fotos : 10);
-        editTrabAtivo.checked = t.ativo !== undefined ? t.ativo : (t.Ativo !== undefined ? t.Ativo : true);
+        editTrabId.value = getTrabId(t);
+        editTrabNome.value = getTrabNome(t);
+        editTrabData.value = getTrabData(t);
+        editTrabLimite.value = getTrabLimite(t);
+        editTrabAtivo.checked = getTrabAtivo(t);
         btnSaveTrab.textContent = `Atualizar Trabalho (${editTrabNome.value})`;
         btnApagarTrabAtual.style.display = "inline-block";
       } else {
@@ -1178,8 +1190,9 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
 
     async function carregarDadosSistema() {
       try {
-        const resTrab = await supabase.from("trabalhos_de_fotografia").select("*").order("data_do_trabalho", { ascending: false });
+        const resTrab = await supabase.from("trabalhos_de_fotografia").select("*");
         cacheTrabalhos = resTrab.data || [];
+        cacheTrabalhos.sort((a, b) => new Date(getTrabData(b)) - new Date(getTrabData(a)));
 
         const { data: dataUsers } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = dataUsers || [];
@@ -1195,7 +1208,7 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
 
     function montarTrabalhosEmCurso() {
       trabalhoCursoContainer.replaceChildren();
-      const ativos = cacheTrabalhos.filter(t => t.ativo === true || t.Ativo === true);
+      const ativos = cacheTrabalhos.filter(t => getTrabAtivo(t) === true);
 
       if (ativos.length === 0) {
         trabalhoCursoContainer.innerHTML = '<span style="color: var(--muted); font-size: 0.95rem;">Sem trabalhos ativos disponíveis.</span>';
@@ -1203,8 +1216,8 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       }
 
       ativos.forEach((t, idx) => {
-        const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
-        const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
+        const nomeTrab = getTrabNome(t);
+        const dataTrab = getTrabData(t);
 
         const div = document.createElement("div");
         div.className = "trabalho-opcao";
@@ -1256,7 +1269,7 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       container.innerHTML = "";
       
       cacheTrabalhos.forEach((t) => {
-        const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
+        const nomeTrab = getTrabNome(t);
         const lbl = document.createElement("label");
         
         lbl.innerHTML = `
@@ -1323,7 +1336,10 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       const { data: storageFiles } = await supabase.storage.from(BUCKET).list("", { limit: 500, sortBy: { column: "created_at", order: "desc" } });
 
       const mapaDb = {};
-      (dbFotos || []).forEach(f => { mapaDb[f.file_name || f.caminho || f.url] = f; });
+      (dbFotos || []).forEach(f => {
+        const fileName = f.file_name || f.caminho || f.url || f.File_Name || "";
+        mapaDb[fileName] = f;
+      });
 
       cacheFotos = await Promise.all((storageFiles || []).filter(item => {
         if (!item?.name || item.name.startsWith(".")) return false;
@@ -1348,7 +1364,7 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
     }
 
     function metadadosCodigo(metadados) {
-      return metadados.codigo_trabalho || metadados.Trabalho || metadados.trabalho || metadados.nome_do_trabalho || "Trabalho Geral";
+      return metadados.codigo_trabalho || metadados.Trabalho || metadados.trabalho || metadados.nome_do_trabalho || metadados.Nome_do_Trabalho || "Trabalho Geral";
     }
 
     async function urlDaFoto(path) {
@@ -1414,22 +1430,21 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       });
 
       const gruposOrdenadosChaves = Object.keys(grupos).sort((a, b) => {
-        const trabA = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === a);
-        const trabB = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === b);
-        const dataA = trabA?.data_do_trabalho || trabA?.Data_do_trabalho || "";
-        const dataB = trabB?.data_do_trabalho || trabB?.Data_do_trabalho || "";
+        const trabA = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === a.toLowerCase());
+        const trabB = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === b.toLowerCase());
+        const dataA = trabA ? getTrabData(trabA) : "";
+        const dataB = trabB ? getTrabData(trabB) : "";
         return new Date(dataA) - new Date(dataB);
       });
 
       gruposOrdenadosChaves.forEach(trabalhoNome => {
         const fotosDoTrab = grupos[trabalhoNome];
-        const trabObj = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === trabalhoNome);
-        const dataTrab = trabObj?.data_do_trabalho || trabObj?.Data_do_trabalho || "";
+        const trabObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === trabalhoNome.toLowerCase());
+        const dataTrab = trabObj ? getTrabData(trabObj) : "";
 
         const tituloSecao = document.createElement("h3");
         tituloSecao.className = "section-group-title";
         
-        // ORDENAÇÃO: Se preferires a data separada do nome com um hífen normal
         tituloSecao.innerHTML = `${dataTrab} - <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500;">${trabalhoNome}</span>`;
         galeriaContainer.append(tituloSecao);
 
@@ -1569,8 +1584,8 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
         return;
       }
 
-      const trabalhoObj = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === trabalhoSelecionado);
-      const limiteMaximo = trabalhoObj?.limite_fotos !== undefined ? trabalhoObj.limite_fotos : (trabalhoObj?.Limite_Fotos !== undefined ? trabalhoObj.Limite_Fotos : 10);
+      const trabalhoObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === trabalhoSelecionado.toLowerCase());
+      const limiteMaximo = trabalhoObj ? getTrabLimite(trabalhoObj) : 10;
 
       if (limiteMaximo > 0) {
         estado.textContent = "A verificar limite de fotografias...";
@@ -1637,8 +1652,8 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
       
       const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
       const nomeAutorProj = userObj ? getNome(userObj) : foto.user;
-      const trabObjProj = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === foto.trabalho);
-      const dataTrabProj = trabObjProj?.data_do_trabalho || trabObjProj?.Data_do_trabalho || foto.created_at.split("T")[0];
+      const trabObjProj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === foto.trabalho.toLowerCase());
+      const dataTrabProj = trabObjProj ? getTrabData(trabObjProj) : foto.created_at.split("T")[0];
 
       document.getElementById("projetor-header").textContent = `Trabalho: ${foto.trabalho}`;
       document.getElementById("projetor-bottom-right").textContent = `${dataTrabProj} · ${nomeCurto(nomeAutorProj, 12)}`;
@@ -1744,4 +1759,3 @@ Aqui tens o código totalmente limpo, corrigido e com o texto simpático no uplo
   </script>
 </body>
 </html>
-
