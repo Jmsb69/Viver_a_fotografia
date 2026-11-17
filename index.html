@@ -660,12 +660,26 @@
 
           <form id="form-trabalho-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 2fr 1fr;">
             <input type="hidden" id="edit-trab-id">
-            <input type="text" id="edit-trab-nome" placeholder="Nome do Trabalho (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
-            <input type="date" id="edit-trab-data" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
-            <label style="display: flex; align-items: center; gap: 0.5rem; grid-column: span 2;">
+            
+            <div class="form-group" style="margin: 0; grid-column: span 2;">
+              <label for="edit-trab-nome">Nome do Trabalho</label>
+              <input type="text" id="edit-trab-nome" placeholder="Nome do Trabalho (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label for="edit-trab-data">Data do Trabalho</label>
+              <input type="date" id="edit-trab-data" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            </div>
+
+            <div class="form-group" style="margin: 0;">
+              <label for="edit-trab-limite">Número Máximo de fotografias por Fotógrafo</label>
+              <input type="number" id="edit-trab-limite" value="10" min="1" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+            </div>
+
+            <label style="display: flex; align-items: center; gap: 0.5rem; grid-column: span 2; margin-top: 0.4rem;">
               <input type="checkbox" id="edit-trab-ativo" checked> Trabalho Ativo
             </label>
-            <button type="submit" class="btn btn-solid" id="btn-save-trab" style="grid-column: span 2;">Guardar Alterações</button>
+            <button type="submit" class="btn btn-solid" id="btn-save-trab" style="grid-column: span 2; margin-top: 0.5rem;">Guardar Alterações</button>
           </form>
         </div>
       </div>
@@ -733,6 +747,7 @@
     const editTrabId = document.getElementById("edit-trab-id");
     const editTrabNome = document.getElementById("edit-trab-nome");
     const editTrabData = document.getElementById("edit-trab-data");
+    const editTrabLimite = document.getElementById("edit-trab-limite");
     const editTrabAtivo = document.getElementById("edit-trab-ativo");
     const btnSaveTrab = document.getElementById("btn-save-trab");
 
@@ -1029,6 +1044,7 @@
         editTrabId.value = t.id;
         editTrabNome.value = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         editTrabData.value = t.data_do_trabalho || t.Data_do_trabalho || "";
+        editTrabLimite.value = t.limite_fotos !== undefined ? t.limite_fotos : (t.Limite_Fotos !== undefined ? t.Limite_Fotos : 10);
         editTrabAtivo.checked = t.ativo !== undefined ? t.ativo : (t.Ativo !== undefined ? t.Ativo : true);
         btnSaveTrab.textContent = `Atualizar Trabalho (${editTrabNome.value})`;
         btnApagarTrabAtual.style.display = "inline-block";
@@ -1036,6 +1052,7 @@
         editTrabId.value = "";
         editTrabNome.value = "";
         editTrabData.value = new Date().toISOString().split("T")[0];
+        editTrabLimite.value = 10;
         editTrabAtivo.checked = true;
         btnSaveTrab.textContent = "Criar Novo Trabalho";
         btnApagarTrabAtual.style.display = "none";
@@ -1061,12 +1078,14 @@
       const idVal = editTrabId.value;
       const nome = editTrabNome.value.trim();
       const dataTrab = editTrabData.value;
+      const limite = parseInt(editTrabLimite.value, 10) || 10;
       const ativo = editTrabAtivo.checked;
 
       if (idVal) {
         const { error } = await supabase.from("trabalhos_de_fotografia").update({
           nome_do_trabalho: nome,
           data_do_trabalho: dataTrab,
+          limite_fotos: limite,
           ativo: ativo
         }).eq("id", idVal);
 
@@ -1081,6 +1100,7 @@
         const { error } = await supabase.from("trabalhos_de_fotografia").insert([{
           nome_do_trabalho: nome,
           data_do_trabalho: dataTrab,
+          limite_fotos: limite,
           ativo: ativo
         }]);
 
@@ -1445,7 +1465,7 @@
       return `${Date.now()}-${base}${ext}`;
     }
 
-    async function enviar(lista) {
+    async function validarEEnviar(lista) {
       const trabalhoSelecionado = uploadTrabalhoVal.value;
       if (!trabalhoSelecionado) {
         estado.textContent = "Aviso: Selecione primeiro um trabalho em curso na caixa acima!";
@@ -1456,6 +1476,29 @@
       if (imagens.length === 0) {
         estado.textContent = "Escolha ficheiros de imagem válidos.";
         return;
+      }
+
+      const trabalhoObj = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === trabalhoSelecionado);
+      const limiteMaximo = trabalhoObj?.limite_fotos !== undefined ? trabalhoObj.limite_fotos : (trabalhoObj?.Limite_Fotos !== undefined ? trabalhoObj.Limite_Fotos : 10);
+
+      if (limiteMaximo > 0) {
+        estado.textContent = "A verificar limite de fotografias...";
+        const { count, error } = await supabase
+          .from("fotografias")
+          .select("*", { count: "exact", head: true })
+          .eq("codigo_trabalho", trabalhoSelecionado)
+          .eq("coduser", getCod(usuarioAtual));
+
+        if (!error) {
+          const fotosAtuais = count || 0;
+          const novasFotos = imagens.length;
+
+          if (fotosAtuais + novasFotos > limiteMaximo) {
+            alert(`Limite excedido!\nEste trabalho permite no máximo ${limiteMaximo} fotografias por fotógrafo.\nJá tem ${fotosAtuais} carregadas e tentou adicionar mais ${novasFotos}.`);
+            estado.textContent = "Upload cancelado por exceder o limite.";
+            return;
+          }
+        }
       }
 
       let enviadas = 0;
@@ -1545,11 +1588,10 @@
       }
     }
 
-    // Event listener seguro para dispositivos móveis
     ficheiro.addEventListener("change", (e) => {
       if (e.target.files && e.target.files.length > 0) {
-        enviar(e.target.files);
-        e.target.value = ""; // Limpa para permitir selecionar a mesma foto novamente se necessário
+        validarEEnviar(e.target.files);
+        e.target.value = ""; 
       }
     });
 
@@ -1566,7 +1608,7 @@
         estado.textContent = "Aviso: Selecione primeiro um trabalho em curso!";
         return;
       }
-      enviar(evento.dataTransfer.files);
+      validarEEnviar(evento.dataTransfer.files);
     });
 
     projetorBtn.addEventListener("click", () => abrirProjetor(0));
