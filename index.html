@@ -1,3 +1,9 @@
+Aqui tens o código atualizado com todas as tuas instruções:
+
+Mensagem de Limite Excedido: O texto do alerta passou a ser "upload cancelado por limite atingido" e foi integrado diretamente na zona inferior da caixa de carregamento de fotografias (logo abaixo da indicação dos tipos de ficheiros permitidos), em vez de aparecer no alerta de sistema ou na linha de estado geral.
+Espaçamento da Caixa: A caixa de upload foi ligeiramente alargada na parte inferior para acomodar esta nova mensagem com todo o conforto visual.
+
+Aqui fica o código completo:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -36,6 +42,19 @@
 
     select option {
       padding: 0.5rem;
+    }
+
+    /* Estilo uniforme para inputs de data e suas setinhas */
+    input[type="date"] {
+      background-color: #1c1916;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      border-radius: 4px;
+      color-scheme: dark;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1) brightness(0.8);
+      cursor: pointer;
     }
 
     /* Modal de Login */
@@ -204,6 +223,8 @@
       border-bottom: 1px solid var(--line);
       padding-bottom: 0.4rem;
       margin-bottom: 0.4rem;
+      flex-wrap: nowrap;
+      gap: 1rem;
     }
 
     .filters-main-title {
@@ -212,9 +233,44 @@
       color: var(--brass);
       margin: 0;
       letter-spacing: 0.05em;
+      white-space: nowrap;
     }
 
-    .count { color: var(--muted); font-size: 0.95rem; }
+    .header-right-group {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      white-space: nowrap;
+    }
+
+    .count { color: var(--muted); font-size: 0.9rem; }
+
+    .btn-refresh {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--paper);
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: all 0.2s ease;
+    }
+    .btn-refresh:hover {
+      border-color: var(--brass);
+      color: var(--brass);
+    }
+    .btn-refresh.animating span {
+      display: inline-block;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     .filter-box {
       display: flex;
@@ -280,7 +336,7 @@
       border-radius: 12px;
       padding: 1.2rem;
       margin-bottom: 1.6rem;
-      max-width: 600px;
+      max-width: 720px;
     }
 
     .upload-main-title {
@@ -342,7 +398,7 @@
     .drop {
       border: 1px dashed rgba(215, 176, 122, 0.45);
       border-radius: 12px;
-      padding: 1.2rem 1.3rem;
+      padding: 1.4rem 1.3rem; /* Espaçamento inferior alargado */
       margin-top: 1rem;
       display: flex;
       flex-direction: column;
@@ -352,6 +408,35 @@
     }
 
     .drop.over { background: rgba(215, 176, 122, 0.08); }
+
+    .upload-action-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-escolher-fotos {
+      background: var(--brass);
+      color: var(--ink);
+      border-color: var(--brass);
+      font-weight: 500;
+      padding: 0.9rem 1.5rem;
+      border-radius: 999px;
+      cursor: pointer;
+      text-align: center;
+      display: inline-block;
+      line-height: 1.3;
+      min-width: 280px;
+      max-width: 100%;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .btn-escolher-fotos:hover {
+      background: #c29964;
+      border-color: #c29964;
+      color: var(--ink);
+    }
 
     .status {
       min-height: 1.4rem;
@@ -579,11 +664,13 @@
 
       <!-- ZONA DE DROP -->
       <div class="drop" id="drop">
-        <div>
-          <strong id="drop-label-text">Para o tema: -</strong>
+        <div class="upload-action-row">
+          <label for="ficheiro" class="btn-escolher-fotos" id="drop-label-btn">Escolher Fotografias</label>
+          <span id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper);">0 fotos de um máximo de 10 para o tema</span>
         </div>
-        <label for="ficheiro" class="btn btn-solid" style="cursor: pointer; display: inline-block;">Escolher Fotografias</label>
-        <p style="color: var(--muted); font-size: 0.85rem; margin: 0.4rem 0 0 0;">Pode carregar ficheiros de imagem (JPG, PNG, WebP, etc.)</p>
+        <p style="color: var(--muted); font-size: 0.82rem; margin: 0.3rem 0 0 0;">Pode carregar ficheiros de imagem (JPG, PNG, WebP, etc.) ou arrastá-los para aqui</p>
+        <!-- Mensagem de limite atingido movida para dentro da box, logo abaixo dos tipos de ficheiro -->
+        <p id="upload-aviso-limite" style="color: var(--danger); font-size: 0.85rem; margin: 0.4rem 0 0 0; display: none;"></p>
         <input id="ficheiro" type="file" accept="image/*" multiple style="display: none;">
       </div>
     </div>
@@ -592,7 +679,12 @@
     <div class="filters-panel">
       <div class="filters-header-row">
         <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS</h2>
-        <span class="count" id="contador">A ler o álbum…</span>
+        <div class="header-right-group">
+          <span class="count" id="contador">A ler o álbum…</span>
+          <button class="btn-refresh" id="btn-refresh-fotos" title="Atualizar fotografias" type="button">
+            <span>🔄</span> Atualizar
+          </button>
+        </div>
       </div>
       
       <div class="filter-box">
@@ -604,12 +696,12 @@
       </div>
       <div class="filter-box">
         <label>Entre que datas</label>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
-          <input type="date" id="filter-data-inicio" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
+        <div style="display: flex; gap: 0.4rem; align-items: center;">
+          <input type="date" id="filter-data-inicio" style="padding: 0.35rem; border-radius: 4px; font-size:0.75rem; width:100%;">
           <span style="color: var(--muted);">-</span>
-          <input type="date" id="filter-data-fim" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
+          <input type="date" id="filter-data-fim" style="padding: 0.35rem; border-radius: 4px; font-size:0.75rem; width:100%;">
         </div>
-        <button class="btn" id="btn-limpar-datas" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top:0.3rem;">Limpar datas</button>
+        <button class="btn" id="btn-limpar-datas" style="padding: 0.15rem 0.4rem; font-size: 0.72rem; margin-top:0.3rem;">Limpar datas</button>
       </div>
       <div class="filter-box">
         <label>Autor da fotografia</label>
@@ -639,20 +731,19 @@
       </div>
 
       <div style="display: grid; gap: 2rem;">
+        <!-- Gestão de Utilizadores -->
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1.2rem; margin-bottom: 1rem; padding-left: 0.5rem;">
             <h3 style="margin:0; color:var(--brass);">Gestão de Utilizadores</h3>
-            <button type="button" class="btn btn-solid" id="btn-novo-user-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; display: none;">+ Novo Utilizador</button>
+            <button type="button" class="btn" id="btn-apagar-user-atual" title="Eliminar Utilizador" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.35rem 0.7rem; display: none; font-size:0.85rem;">🗑️ Apagar</button>
+            <button type="button" class="btn btn-solid" id="btn-novo-user-modo" style="font-size: 0.8rem; padding: 0.35rem 0.8rem; display: none;">+ Novo Utilizador</button>
           </div>
           
           <div class="form-group" id="admin-user-selector-container" style="display: none; margin-bottom: 1rem;">
             <label for="config-select-user">Selecionar Utilizador para Editar</label>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
-                <option value="">-- Criar Novo Utilizador --</option>
-              </select>
-              <button type="button" id="btn-apagar-user-atual" class="btn" title="Eliminar Utilizador" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.6rem 0.8rem; display: none;">🗑️</button>
-            </div>
+            <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
+              <option value="">-- Criar Novo Utilizador --</option>
+            </select>
           </div>
 
           <form id="form-user-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 1fr 1fr;">
@@ -665,20 +756,19 @@
           </form>
         </div>
 
+        <!-- Gestão de Trabalhos -->
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1.2rem; margin-bottom: 1rem; padding-left: 0.5rem;">
             <h3 style="margin:0; color:var(--brass);">Gestão de Trabalhos de Fotografia</h3>
-            <button type="button" class="btn btn-solid" id="btn-novo-trab-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">+ Novo Trabalho</button>
+            <button type="button" class="btn" id="btn-apagar-trab-atual" title="Eliminar Trabalho" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.35rem 0.7rem; display: none; font-size:0.85rem;">🗑️ Apagar</button>
+            <button type="button" class="btn btn-solid" id="btn-novo-trab-modo" style="font-size: 0.8rem; padding: 0.35rem 0.8rem;">+ Novo Trabalho</button>
           </div>
 
           <div class="form-group" id="admin-trab-selector-container" style="margin-bottom: 1rem;">
             <label for="config-select-trab">Selecionar Trabalho para Editar</label>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-              <select id="config-select-trab" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
-                <option value="">-- Criar Novo Trabalho --</option>
-              </select>
-              <button type="button" id="btn-apagar-trab-atual" class="btn" title="Eliminar Trabalho" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.6rem 0.8rem; display: none;">🗑️</button>
-            </div>
+            <select id="config-select-trab" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
+              <option value="">-- Criar Novo Trabalho --</option>
+            </select>
           </div>
 
           <form id="form-trabalho-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 2fr 1fr;">
@@ -740,7 +830,7 @@
     let fotosFiltradas = [];
     let indice = 0;
     let temporizador = null;
-    let emPausa = true; // Por defeito, inicia em pausa quando clicado individualmente
+    let emPausa = true;
 
     const loginModal = document.getElementById("login-modal");
     const loginForm = document.getElementById("login-form");
@@ -775,10 +865,13 @@
     const btnSaveTrab = document.getElementById("btn-save-trab");
 
     const contador = document.getElementById("contador");
+    const btnRefreshFotos = document.getElementById("btn-refresh-fotos");
     const estado = document.getElementById("estado");
     const ficheiro = document.getElementById("ficheiro");
     const drop = document.getElementById("drop");
-    const dropLabelText = document.getElementById("drop-label-text");
+    const dropLabelBtn = document.getElementById("drop-label-btn");
+    const uploadContadorTexto = document.getElementById("upload-contador-texto");
+    const uploadAvisoLimite = document.getElementById("upload-aviso-limite");
     const projetorBtn = document.getElementById("projetor-btn");
     const projetor = document.getElementById("projetor");
     const slide = document.getElementById("slide");
@@ -809,35 +902,6 @@
       if (t.ativo !== undefined) return t.ativo;
       if (t.Ativo !== undefined) return t.Ativo;
       return true;
-    }
-
-    function isColorLight(r, g, b) {
-      const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-      return yiq >= 128;
-    }
-
-    function detetarCorContraste(imgElement, callback) {
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = 40;
-        canvas.height = 40;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(imgElement, 0, 0, 40, 40);
-        const pData = ctx.getImageData(0, 0, 20, 20).data;
-        let rSum = 0, gSum = 0, bSum = 0, count = 0;
-        for (let i = 0; i < pData.length; i += 4) {
-          rSum += pData[i];
-          gSum += pData[i+1];
-          bSum += pData[i+2];
-          count++;
-        }
-        const avgR = rSum / count;
-        const avgG = gSum / count;
-        const avgB = bSum / count;
-        callback(isColorLight(avgR, avgG, avgB));
-      } catch {
-        callback(false);
-      }
     }
 
     async function init() {
@@ -945,6 +1009,7 @@
     btnNovoUserModo.addEventListener("click", () => {
       configSelectUser.value = "";
       preencherFormularioUtilizador(null);
+      editNome.focus();
     });
 
     function preencherFormularioUtilizador(u) {
@@ -1075,10 +1140,9 @@
       cacheTrabalhos.forEach(t => {
         const id = getTrabId(t);
         const nome = getTrabNome(t);
-        const dataTrab = getTrabData(t);
         const opt = document.createElement("option");
         opt.value = id;
-        opt.textContent = `${dataTrab} - ${nome}`;
+        opt.textContent = nome;
         configSelectTrab.append(opt);
       });
 
@@ -1103,6 +1167,7 @@
     btnNovoTrabModo.addEventListener("click", () => {
       configSelectTrab.value = "";
       preencherFormularioTrabalho(null);
+      editTrabNome.focus();
     });
 
     function preencherFormularioTrabalho(t) {
@@ -1196,12 +1261,29 @@
       }
     }
 
+    async function atualizarContadorUploadAtual(nomeTema) {
+      if (!usuarioAtual || !nomeTema) return;
+      const trabalhoObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === nomeTema.toLowerCase());
+      const maximo = trabalhoObj ? getTrabLimite(trabalhoObj) : 10;
+
+      const { count } = await supabase
+        .from("fotografias")
+        .select("*", { count: "exact", head: true })
+        .eq("codigo_trabalho", nomeTema)
+        .eq("coduser", getCod(usuarioAtual));
+
+      const atual = count || 0;
+      uploadContadorTexto.textContent = `${atual} fotos de um máximo de ${maximo} para o tema`;
+    }
+
     function montarTrabalhosEmCurso() {
       trabalhoCursoContainer.replaceChildren();
       const ativos = cacheTrabalhos.filter(t => getTrabAtivo(t) === true);
 
       if (ativos.length === 0) {
         trabalhoCursoContainer.innerHTML = '<span style="color: var(--muted); font-size: 0.95rem;">Sem trabalhos ativos disponíveis.</span>';
+        dropLabelBtn.textContent = "Escolher Fotografias";
+        uploadContadorTexto.textContent = "0 fotos de um máximo de 10 para o tema";
         return;
       }
 
@@ -1215,7 +1297,8 @@
         if (idx === 0) {
           div.classList.add("destacado", "selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          dropLabelText.textContent = `Para o tema: ${nomeTrab}`;
+          dropLabelBtn.textContent = `Escolher Fotografias para o trabalho ${nomeTrab}`;
+          atualizarContadorUploadAtual(nomeTrab);
         } else {
           div.classList.add("atenuado");
           if (idx > 3) {
@@ -1233,7 +1316,9 @@
           document.querySelectorAll(".trabalho-opcao").forEach(el => el.classList.remove("selecionado"));
           div.classList.add("selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          dropLabelText.textContent = `Para o tema: ${nomeTrab}`;
+          dropLabelBtn.textContent = `Escolher Fotografias para o trabalho ${nomeTrab}`;
+          uploadAvisoLimite.style.display = "none";
+          atualizarContadorUploadAtual(nomeTrab);
         });
 
         trabalhoCursoContainer.append(div);
@@ -1321,6 +1406,15 @@
       aplicarFiltrosEGeral();
     });
 
+    btnRefreshFotos.addEventListener("click", async () => {
+      btnRefreshFotos.classList.add("animating");
+      estado.textContent = "A atualizar fotografias da base de dados...";
+      await carregarFotosEfetivas();
+      btnRefreshFotos.classList.remove("animating");
+      estado.textContent = "Álbum atualizado com sucesso!";
+      setTimeout(() => { estado.textContent = ""; }, 3000);
+    });
+
     async function carregarFotosEfetivas() {
       const { data: dbFotos } = await supabase.from("fotografias").select("*");
       const { data: storageFiles } = await supabase.storage.from(BUCKET).list("", { limit: 500 });
@@ -1350,6 +1444,9 @@
       cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       aplicarFiltrosEGeral();
+      if (uploadTrabalhoVal.value) {
+        atualizarContadorUploadAtual(uploadTrabalhoVal.value);
+      }
     }
 
     function metadadosCodigo(metadados) {
@@ -1468,7 +1565,6 @@
           }
 
           figura.append(img, metaTop, metaBottom);
-          // Clicar numa foto abre o visualizador individual em pausa
           figura.addEventListener("click", () => abrirVisualizadorParado(originalIndex));
           grid.append(figura);
         });
@@ -1546,6 +1642,7 @@
         return;
       }
 
+      uploadAvisoLimite.style.display = "none";
       const imagens = [...lista].filter((f) => f.type.startsWith("image/"));
       if (imagens.length === 0) {
         estado.textContent = "Escolha ficheiros de imagem válidos.";
@@ -1568,8 +1665,9 @@
           const novasFotos = imagens.length;
 
           if (fotosAtuais + novasFotos > limiteMaximo) {
-            alert(`Limite excedido!\nEste trabalho permite no máximo ${limiteMaximo} fotografias por fotógrafo.\nJá tem ${fotosAtuais} carregadas e tentou adicionar mais ${novasFotos}.`);
-            estado.textContent = "Upload cancelado por exceder o limite.";
+            uploadAvisoLimite.textContent = "upload cancelado por limite atingido";
+            uploadAvisoLimite.style.display = "block";
+            estado.textContent = "";
             return;
           }
         }
@@ -1643,7 +1741,6 @@
       temporizador = setInterval(() => mostrar(indice + 1), INTERVALO);
     }
 
-    // Botão "Modo projetor" (Abre e roda automaticamente)
     async function abrirProjetorAutomatico(i = 0) {
       if (fotosFiltradas.length === 0) return;
       emPausa = false;
@@ -1656,7 +1753,6 @@
       } catch {}
     }
 
-    // Clicar numa foto individual (Abre em pausa, só avança manualmente)
     async function abrirVisualizadorParado(i = 0) {
       if (fotosFiltradas.length === 0) return;
       emPausa = true;
@@ -1741,7 +1837,6 @@
         mostrar(indice - 1);
         if (!emPausa) retomar();
       }
-      // Enter ou Espaço avançam para a próxima fotografia mantendo o modo parado
       if (evento.key === "Enter" || evento.key === " ") {
         evento.preventDefault();
         mostrar(indice + 1);
