@@ -551,15 +551,15 @@
       </div>
       <input type="hidden" id="upload-trabalho-val" value="">
 
-      <!-- ZONA DE DROP (Sempre Visível) -->
-      <label class="drop" id="drop">
+      <!-- ZONA DE DROP / INPUT NATIVO SEGURO PARA MOBILE -->
+      <div class="drop" id="drop">
         <div>
-          <strong id="drop-label-text">Para o tema -</strong>
+          <strong id="drop-label-text">Para o tema: -</strong>
           <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias».</p>
         </div>
-        <span class="btn btn-solid">Escolher Fotografias</span>
-        <input id="ficheiro" type="file" accept="image/*" multiple hidden>
-      </label>
+        <label for="ficheiro" class="btn btn-solid" style="cursor: pointer; display: inline-block;">Escolher Fotografias</label>
+        <input id="ficheiro" type="file" accept="image/*" multiple>
+      </div>
     </div>
 
     <!-- ZONA DE FILTROS AVANÇADOS -->
@@ -1545,18 +1545,12 @@
       }
     }
 
-    drop.addEventListener("click", () => {
-      const trabalhoSelecionado = uploadTrabalhoVal.value;
-      if (!trabalhoSelecionado) {
-        estado.textContent = "Aviso: Selecione primeiro um trabalho em curso!";
-        return;
+    // Event listener seguro para dispositivos móveis
+    ficheiro.addEventListener("change", (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        enviar(e.target.files);
+        e.target.value = ""; // Limpa para permitir selecionar a mesma foto novamente se necessário
       }
-      ficheiro.click();
-    });
-
-    ficheiro.addEventListener("change", () => {
-      enviar(ficheiro.files);
-      ficheiro.value = "";
     });
 
     drop.addEventListener("dragover", (evento) => {
@@ -1615,4 +1609,3 @@
   </script>
 </body>
 </html>
-
