@@ -2513,23 +2513,3 @@
   </script>
 </body>
 </html>
-
-      }
-    });
-
-    document.addEventListener("keydown", (evento) => {
-      if (!projetor.classList.contains("aberto")) return;
-      if (evento.key === "ArrowRight") mostrar(indice + 1);
-      if (evento.key === "ArrowLeft") mostrar(indice - 1);
-      if (evento.key === " ") {
-        evento.preventDefault();
-        pausaBtn.click();
-      }
-      if (evento.key === "Escape" && !document.fullscreenElement) fecharProjetor();
-    });
-
-    init();
-  </script>
-</body>
-</html>
-
