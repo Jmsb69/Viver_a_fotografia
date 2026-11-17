@@ -1,3 +1,4 @@
+Aqui tens o código completo e atualizado com a alteração do texto do cabeçalho de upload para "Selecionar tema a que pertence(m) a(s) fotografia(s) a carregar":
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -542,18 +543,18 @@
   </header>
 
   <main>
-    <!-- TRABALHO EM CURSO & UPLOAD -->
+    <!-- TRABALHO EM CURSO & UPLOAD (Sempre Aberto) -->
     <div class="upload-section-box">
       <h2 class="upload-main-title">CARREGAR FOTOGRAFIAS</h2>
-      <p class="upload-subtitle">Selecionar tema a que pertence</p>
+      <p class="upload-subtitle">Selecionar tema a que pertence(m) a(s) fotografia(s) a carregar</p>
       
       <div class="trabalhos-curso-lista" id="trabalho-curso-container">
         <!-- Preenchido dinamicamente via JS -->
       </div>
       <input type="hidden" id="upload-trabalho-val" value="">
 
-      <!-- ZONA DE DROP (aparece apenas quando selecionado) -->
-      <label class="drop" id="drop" style="display: none;">
+      <!-- ZONA DE DROP (Sempre Visível) -->
+      <label class="drop" id="drop">
         <div>
           <strong id="drop-label-text">Escolha um trabalho acima</strong>
           <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias».</p>
@@ -594,9 +595,8 @@
         </div>
       </div>
       
-      <!-- BOTÕES NO CANTO INFERIOR DIREITO DA BOX (Lado a lado) -->
-      <div style="position: absolute; bottom: 1.2rem; right: 1.2rem; display: flex; gap: 0.6rem;">
-        <button class="btn" id="btn-aplicar-filtros" type="button">Aplicar seleção</button>
+      <!-- BOTÃO MODO PROJETOR NO CANTO INFERIOR DIREITO DA BOX -->
+      <div style="position: absolute; bottom: 1.2rem; right: 1.2rem;">
         <button class="btn btn-solid" id="projetor-btn" type="button" disabled>Modo projetor</button>
       </div>
     </div>
@@ -1010,8 +1010,11 @@
 
         const div = document.createElement("div");
         div.className = "trabalho-opcao";
+        
         if (idx === 0) {
-          div.classList.add("destacado");
+          div.classList.add("destacado", "selecionado");
+          uploadTrabalhoVal.value = nomeTrab;
+          dropLabelText.textContent = `Destino: ${nomeTrab}`;
         } else {
           div.classList.add("atenuado");
           if (idx > 3) {
@@ -1029,7 +1032,6 @@
           document.querySelectorAll(".trabalho-opcao").forEach(el => el.classList.remove("selecionado"));
           div.classList.add("selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          drop.style.display = "flex";
           dropLabelText.textContent = `Destino: ${nomeTrab}`;
         });
 
@@ -1063,6 +1065,7 @@
         lbl.querySelector("input").addEventListener("change", () => {
           const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(cb => cb.checked);
           document.getElementById("check-all-trabalhos").checked = !anyChecked;
+          aplicarFiltrosEGeral();
         });
 
         container.append(lbl);
@@ -1084,6 +1087,7 @@
         lbl.querySelector("input").addEventListener("change", () => {
           const anyChecked = Array.from(document.querySelectorAll(".filtro-user-item")).some(cb => cb.checked);
           document.getElementById("check-all-utilizadores").checked = !anyChecked;
+          aplicarFiltrosEGeral();
         });
 
         container.append(lbl);
@@ -1094,17 +1098,18 @@
       if (e.target.checked) {
         document.querySelectorAll(".filtro-trab-item").forEach(cb => cb.checked = false);
       }
+      aplicarFiltrosEGeral();
     });
 
     document.getElementById("check-all-utilizadores").addEventListener("change", (e) => {
       if (e.target.checked) {
         document.querySelectorAll(".filtro-user-item").forEach(cb => cb.checked = false);
       }
-    });
-
-    document.getElementById("btn-aplicar-filtros").addEventListener("click", () => {
       aplicarFiltrosEGeral();
     });
+
+    document.getElementById("filter-data-inicio").addEventListener("change", () => aplicarFiltrosEGeral());
+    document.getElementById("filter-data-fim").addEventListener("change", () => aplicarFiltrosEGeral());
 
     document.getElementById("btn-limpar-datas").addEventListener("click", () => {
       document.getElementById("filter-data-inicio").value = "";
@@ -1495,3 +1500,4 @@
   </script>
 </body>
 </html>
+
