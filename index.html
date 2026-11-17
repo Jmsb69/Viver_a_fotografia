@@ -509,7 +509,7 @@
       padding: 2rem 0;
     }
 
-    /* Projetor */
+    /* Projetor / Visualizador Expandido */
     .projetor {
       display: none;
       position: fixed;
@@ -567,19 +567,32 @@
       z-index: 5;
     }
 
-    .hit {
+    /* Setas laterais visíveis para navegação manual */
+    .nav-arrow {
       position: absolute;
-      top: 0;
-      bottom: 5rem;
-      width: 28%;
-      background: transparent;
-      border: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(20, 18, 16, 0.6);
+      border: 1px solid var(--line);
+      color: var(--paper);
+      font-size: 2rem;
+      width: 60px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      z-index: 4;
+      z-index: 6;
+      border-radius: 4px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
-
-    .hit-prev { left: 0; }
-    .hit-next { right: 0; }
+    .nav-arrow:hover {
+      background: rgba(215, 176, 122, 0.2);
+      border-color: var(--brass);
+      color: var(--brass);
+    }
+    .nav-arrow-prev { left: 1.5rem; }
+    .nav-arrow-next { right: 1.5rem; }
 
     /* Modal de Configurações */
     .config-modal {
@@ -603,6 +616,7 @@
     @media (max-width: 700px) {
       .hero-copy, main { padding-left: 1.2rem; padding-right: 1.2rem; }
       .filters-panel { padding-bottom: 7.5rem; }
+      .nav-arrow { width: 45px; height: 60px; font-size: 1.5rem; }
     }
   </style>
 </head>
@@ -649,7 +663,7 @@
     <!-- TRABALHO EM CURSO & UPLOAD -->
     <div class="upload-section-box">
       <h2 class="upload-main-title">CARREGAR FOTOGRAFIAS</h2>
-      <p class="upload-subtitle">Selecionar tema a que pertence(m) a(s) fotografia(s) a carregar</p>
+      <p class="upload-subtitle">Selecionar tema a que vai(vão) pertencer a(s) fotografia(s) a carregar</p>
       
       <div class="trabalhos-curso-lista" id="trabalho-curso-container">
         <!-- Preenchido dinamicamente via JS -->
@@ -660,7 +674,7 @@
       <div class="drop" id="drop">
         <div class="upload-action-row">
           <label for="ficheiro" class="btn-escolher-fotos" id="drop-label-btn">Escolher Fotografias</label>
-          <span id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper);">0 fotos de um máximo de 10 para o tema</span>
+          <span id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper);">Tem 0 fotos de um máximo de 10 para o tema</span>
         </div>
         <p style="color: var(--muted); font-size: 0.82rem; margin: 0.3rem 0 0 0;">Pode carregar ficheiros de imagem (JPG, PNG, WebP, etc.) ou arrastá-los para aqui</p>
         <p id="upload-aviso-limite" style="color: var(--danger); font-size: 0.85rem; margin: 0.4rem 0 0 0; display: none;"></p>
@@ -671,7 +685,7 @@
     <!-- ZONA DE FILTROS AVANÇADOS -->
     <div class="filters-panel">
       <div class="filters-header-row">
-        <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS</h2>
+        <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS A VISUALIZAR</h2>
         <div class="header-right-group">
           <span class="count" id="contador">A ler o álbum…</span>
           <button class="btn-refresh" id="btn-refresh-fotos" title="Atualizar fotografias" type="button">
@@ -726,8 +740,8 @@
       <div style="display: grid; gap: 2rem;">
         <!-- Gestão de Utilizadores -->
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
-          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1.2rem; margin-bottom: 1rem; padding-left: 0.5rem;">
-            <h3 style="margin:0; color:var(--brass);">Gestão de Utilizadores</h3>
+          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1.2rem; margin-bottom: 1rem; padding-left: 1.5rem;">
+            <h3 style="margin:0; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--brass); letter-spacing: 0.05em;">Gestão de Utilizadores</h3>
             <button type="button" class="btn" id="btn-apagar-user-atual" title="Eliminar Utilizador" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.35rem 0.7rem; display: none; font-size:0.85rem;">🗑️ Apagar</button>
             <button type="button" class="btn btn-solid" id="btn-novo-user-modo" style="font-size: 0.8rem; padding: 0.35rem 0.8rem; display: none;">+ Novo Utilizador</button>
           </div>
@@ -751,8 +765,8 @@
 
         <!-- Gestão de Trabalhos -->
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
-          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1.2rem; margin-bottom: 1rem; padding-left: 0.5rem;">
-            <h3 style="margin:0; color:var(--brass);">Gestão de Trabalhos de Fotografia</h3>
+          <div style="display: flex; justify-content: flex-start; align-items: center; gap: 1.2rem; margin-bottom: 1rem; padding-left: 1.5rem;">
+            <h3 style="margin:0; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--brass); letter-spacing: 0.05em;">Gestão de Trabalhos de Fotografia</h3>
             <button type="button" class="btn" id="btn-apagar-trab-atual" title="Eliminar Trabalho" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.35rem 0.7rem; display: none; font-size:0.85rem;">🗑️ Apagar</button>
             <button type="button" class="btn btn-solid" id="btn-novo-trab-modo" style="font-size: 0.8rem; padding: 0.35rem 0.8rem;">+ Novo Trabalho</button>
           </div>
@@ -792,17 +806,20 @@
     </div>
   </div>
 
-  <!-- PROJETOR -->
+  <!-- VISUALIZADOR EXPANDIDO (PROJETOR / ZOOM) -->
   <section class="projetor" id="projetor" aria-label="Apresentação em ecrã inteiro">
     <div class="projetor-header" id="projetor-header">Filtro aplicado</div>
     <img id="slide" alt="">
+    
+    <!-- Setas Laterais Visíveis -->
+    <button class="nav-arrow nav-arrow-prev" id="btn-arrow-prev" type="button" aria-label="Fotografia anterior">‹</button>
+    <button class="nav-arrow nav-arrow-next" id="btn-arrow-next" type="button" aria-label="Fotografia seguinte">›</button>
+
     <div class="projetor-bottom-right" id="projetor-bottom-right"></div>
-    <button class="hit hit-prev" id="anterior" type="button" aria-label="Fotografia anterior"></button>
-    <button class="hit hit-next" id="seguinte" type="button" aria-label="Fotografia seguinte"></button>
     <div class="projetor-bar">
       <span id="legenda"></span>
       <div class="actions">
-        <button class="btn" id="pausa" type="button">Pausa</button>
+        <button class="btn" id="pausa" type="button">⏸ Pause</button>
         <button class="btn" id="sair" type="button">Sair</button>
       </div>
     </div>
@@ -1266,7 +1283,7 @@
         .eq("coduser", getCod(usuarioAtual));
 
       const atual = count || 0;
-      uploadContadorTexto.textContent = `${atual} fotos de um máximo de ${maximo} para o tema`;
+      uploadContadorTexto.textContent = `Tem ${atual} fotos de um máximo de ${maximo} para o tema`;
     }
 
     function montarTrabalhosEmCurso() {
@@ -1276,7 +1293,7 @@
       if (ativos.length === 0) {
         trabalhoCursoContainer.innerHTML = '<span style="color: var(--muted); font-size: 0.95rem;">Sem trabalhos ativos disponíveis.</span>';
         dropLabelBtn.textContent = "Escolher Fotografias";
-        uploadContadorTexto.textContent = "0 fotos de um máximo de 10 para o tema";
+        uploadContadorTexto.textContent = "Tem 0 fotos de um máximo de 10 para o tema";
         return;
       }
 
@@ -1734,10 +1751,18 @@
       temporizador = setInterval(() => mostrar(indice + 1), INTERVALO);
     }
 
+    function atualizarBotaoPausa() {
+      if (emPausa) {
+        pausaBtn.innerHTML = "▶ Retomar";
+      } else {
+        pausaBtn.innerHTML = "⏸ Pause";
+      }
+    }
+
     async function abrirProjetorAutomatico(i = 0) {
       if (fotosFiltradas.length === 0) return;
       emPausa = false;
-      pausaBtn.textContent = "Retomar";
+      atualizarBotaoPausa();
       projetor.classList.add("aberto");
       mostrar(i);
       retomar();
@@ -1749,7 +1774,7 @@
     async function abrirVisualizadorParado(i = 0) {
       if (fotosFiltradas.length === 0) return;
       emPausa = true;
-      pausaBtn.textContent = "Retomar";
+      atualizarBotaoPausa();
       parar();
       projetor.classList.add("aberto");
       mostrar(i);
@@ -1792,21 +1817,33 @@
 
     projetorBtn.addEventListener("click", () => abrirProjetorAutomatico(0));
     
-    document.getElementById("anterior").addEventListener("click", () => {
+    // Controlo de setas laterais e botões de navegação
+    function navegarAnterior() {
       mostrar(indice - 1);
-      if (!emPausa) retomar();
-    });
-    
-    document.getElementById("seguinte").addEventListener("click", () => {
+      if (!emPausa) {
+        emPausa = true;
+        atualizarBotaoPausa();
+        parar();
+      }
+    }
+
+    function navegarSeguinte() {
       mostrar(indice + 1);
-      if (!emPausa) retomar();
-    });
+      if (!emPausa) {
+        emPausa = true;
+        atualizarBotaoPausa();
+        parar();
+      }
+    }
+
+    document.getElementById("btn-arrow-prev").addEventListener("click", navegarAnterior);
+    document.getElementById("btn-arrow-next").addEventListener("click", navegarSeguinte);
 
     document.getElementById("sair").addEventListener("click", fecharProjetor);
     
     pausaBtn.addEventListener("click", () => {
       emPausa = !emPausa;
-      pausaBtn.textContent = emPausa ? "Retomar" : "Pausa";
+      atualizarBotaoPausa();
       if (emPausa) parar();
       else retomar();
     });
@@ -1823,17 +1860,17 @@
       if (!projetor.classList.contains("aberto")) return;
       
       if (evento.key === "ArrowRight") {
-        mostrar(indice + 1);
-        if (!emPausa) retomar();
+        navegarSeguinte();
       }
       if (evento.key === "ArrowLeft") {
-        mostrar(indice - 1);
-        if (!emPausa) retomar();
+        navegarAnterior();
       }
       if (evento.key === "Enter" || evento.key === " ") {
         evento.preventDefault();
-        mostrar(indice + 1);
-        if (!emPausa) retomar();
+        emPausa = !emPausa;
+        atualizarBotaoPausa();
+        if (emPausa) parar();
+        else retomar();
       }
       if (evento.key === "Escape" && !document.fullscreenElement) fecharProjetor();
     });
