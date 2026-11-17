@@ -1,9 +1,3 @@
-Aqui tens o código atualizado com todas as tuas instruções:
-
-Mensagem de Limite Excedido: O texto do alerta passou a ser "upload cancelado por limite atingido" e foi integrado diretamente na zona inferior da caixa de carregamento de fotografias (logo abaixo da indicação dos tipos de ficheiros permitidos), em vez de aparecer no alerta de sistema ou na linha de estado geral.
-Espaçamento da Caixa: A caixa de upload foi ligeiramente alargada na parte inferior para acomodar esta nova mensagem com todo o conforto visual.
-
-Aqui fica o código completo:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -398,7 +392,7 @@ Aqui fica o código completo:
     .drop {
       border: 1px dashed rgba(215, 176, 122, 0.45);
       border-radius: 12px;
-      padding: 1.4rem 1.3rem; /* Espaçamento inferior alargado */
+      padding: 1.4rem 1.3rem;
       margin-top: 1rem;
       display: flex;
       flex-direction: column;
@@ -669,7 +663,6 @@ Aqui fica o código completo:
           <span id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper);">0 fotos de um máximo de 10 para o tema</span>
         </div>
         <p style="color: var(--muted); font-size: 0.82rem; margin: 0.3rem 0 0 0;">Pode carregar ficheiros de imagem (JPG, PNG, WebP, etc.) ou arrastá-los para aqui</p>
-        <!-- Mensagem de limite atingido movida para dentro da box, logo abaixo dos tipos de ficheiro -->
         <p id="upload-aviso-limite" style="color: var(--danger); font-size: 0.85rem; margin: 0.4rem 0 0 0; display: none;"></p>
         <input id="ficheiro" type="file" accept="image/*" multiple style="display: none;">
       </div>
