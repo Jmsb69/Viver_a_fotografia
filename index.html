@@ -1,4 +1,3 @@
-Aqui tens o código completo e atualizado com a alteração do texto do cabeçalho de upload para "Selecionar tema a que pertence(m) a(s) fotografia(s) a carregar":
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -618,13 +617,19 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
       <div style="display: grid; gap: 2rem;">
         <!-- Gestão / Consulta de utilizadores -->
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
-          <h3 style="margin-top:0; color:var(--brass);" id="user-section-title">Os Meus Dados</h3>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="margin:0; color:var(--brass);" id="user-section-title">Gestão de Utilizadores</h3>
+            <button type="button" class="btn" id="btn-novo-user-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; display: none;">+ Novo Utilizador</button>
+          </div>
           
           <div class="form-group" id="admin-user-selector-container" style="display: none; margin-bottom: 1rem;">
-            <label for="config-select-user">Selecionar Utilizador</label>
-            <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
-              <option value="">-- Criar Novo Utilizador --</option>
-            </select>
+            <label for="config-select-user">Selecionar Utilizador para Editar</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <select id="config-select-user" style="width: 100%; padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
+                <option value="">-- Criar Novo Utilizador --</option>
+              </select>
+              <button type="button" id="btn-apagar-user-atual" class="btn" title="Eliminar Utilizador" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.6rem 0.8rem; display: none;">🗑️</button>
+            </div>
           </div>
 
           <form id="form-user-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 1fr 1fr;">
@@ -649,7 +654,7 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
             <button type="submit" class="btn btn-solid" style="grid-column: span 3;">Criar Trabalho</button>
           </form>
           <div>
-            <h4 style="margin-bottom: 0.5rem; color: var(--muted);">Trabalhos Existentes (Ativar / Desativar)</h4>
+            <h4 style="margin-bottom: 0.5rem; color: var(--muted);">Trabalhos Existentes (Ativar / Desativar / Apagar)</h4>
             <div id="lista-trabalhos-admin" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.4rem;"></div>
           </div>
         </div>
@@ -703,6 +708,8 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
     const adminUserSelectorContainer = document.getElementById("admin-user-selector-container");
     const adminTrabalhosSection = document.getElementById("admin-trabalhos-section");
     const configSelectUser = document.getElementById("config-select-user");
+    const btnApagarUserAtual = document.getElementById("btn-apagar-user-atual");
+    const btnNovoUserModo = document.getElementById("btn-novo-user-modo");
     const editCodUser = document.getElementById("edit-cod-user");
     const editNome = document.getElementById("edit-nome");
     const editPw = document.getElementById("edit-pw");
@@ -794,11 +801,13 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
       configModal.style.display = "block";
       if (isAdmin(usuarioAtual)) {
         adminUserSelectorContainer.style.display = "block";
+        btnNovoUserModo.style.display = "inline-block";
         adminTrabalhosSection.style.display = "block";
         carregarSelectutilizadoresAdmin();
         carregarTrabalhosAdmin();
       } else {
         adminUserSelectorContainer.style.display = "none";
+        btnNovoUserModo.style.display = "none";
         adminTrabalhosSection.style.display = "none";
         preencherFormularioUtilizador(usuarioAtual);
       }
@@ -833,6 +842,11 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
       }
     });
 
+    btnNovoUserModo.addEventListener("click", () => {
+      configSelectUser.value = "";
+      preencherFormularioUtilizador(null);
+    });
+
     function preencherFormularioUtilizador(u) {
       if (u) {
         editCodUser.value = getCod(u);
@@ -840,7 +854,10 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
         editPw.value = getPw(u);
         editEmail.value = getEmail(u);
         editTel.value = getTel(u);
-        btnSaveUser.textContent = isAdmin(usuarioAtual) && !configSelectUser.value ? "Criar Novo Utilizador" : `Atualizar Dados (${getNome(u)})`;
+        btnSaveUser.textContent = `Atualizar Dados (${getNome(u)})`;
+        if (isAdmin(usuarioAtual)) {
+          btnApagarUserAtual.style.display = "inline-block";
+        }
       } else {
         editCodUser.value = "";
         editNome.value = "";
@@ -848,8 +865,29 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
         editEmail.value = "";
         editTel.value = "";
         btnSaveUser.textContent = "Criar Novo Utilizador";
+        btnApagarUserAtual.style.display = "none";
       }
     }
+
+    btnApagarUserAtual.addEventListener("click", async () => {
+      const codUserVal = editCodUser.value;
+      if (!codUserVal) return;
+      if (getCod(usuarioAtual) === codUserVal) {
+        alert("Não pode apagar o seu próprio utilizador enquanto tem sessão iniciada.");
+        return;
+      }
+      if (!confirm("Tem a certeza que pretende eliminar este utilizador?")) return;
+
+      const { error } = await supabase.from("utilizadores").delete().eq("coduser", codUserVal);
+      if (error) {
+        alert("Erro ao apagar utilizador: " + error.message);
+      } else {
+        alert("Utilizador eliminado com sucesso!");
+        const { data } = await supabase.from("utilizadores").select("*");
+        cacheutilizadores = data || [];
+        carregarSelectutilizadoresAdmin();
+      }
+    });
 
     document.getElementById("form-user-edit").addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -965,9 +1003,12 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
         div.style.cssText = "display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 0.5rem; border-radius: 4px;";
         div.innerHTML = `
           <span><strong>${nomeTrab}</strong> (${dataTrab})</span>
-          <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; cursor: pointer;">
-            <input type="checkbox" ${ativoTrab ? "checked" : ""} onchange="toggleTrabalhoAtivo('${t.id}', this.checked)"> Ativo
-          </label>
+          <div style="display: flex; gap: 0.6rem; align-items: center;">
+            <label style="display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; cursor: pointer;">
+              <input type="checkbox" ${ativoTrab ? "checked" : ""} onchange="toggleTrabalhoAtivo('${t.id}', this.checked)"> Ativo
+            </label>
+            <button type="button" class="btn" onclick="apagarTrabalhoAdmin('${t.id}')" title="Eliminar Trabalho" style="background: rgba(201, 74, 74, 0.2); border-color: var(--danger); color: var(--paper); padding: 0.2rem 0.5rem; font-size: 0.8rem;">🗑️</button>
+          </div>
         `;
         container.append(div);
       });
@@ -976,6 +1017,16 @@ Aqui tens o código completo e atualizado com a alteração do texto do cabeçal
     window.toggleTrabalhoAtivo = async function(id, novoEstado) {
       await supabase.from("trabalhos_de_fotografia").update({ ativo: novoEstado }).eq("id", id);
       carregarTrabalhosAdmin();
+    };
+
+    window.apagarTrabalhoAdmin = async function(id) {
+      if (!confirm("Tem a certeza que pretende eliminar este trabalho de fotografia?")) return;
+      const { error } = await supabase.from("trabalhos_de_fotografia").delete().eq("id", id);
+      if (error) {
+        alert("Erro ao eliminar trabalho: " + error.message);
+      } else {
+        carregarTrabalhosAdmin();
+      }
     };
 
     async function carregarDadosSistema() {
