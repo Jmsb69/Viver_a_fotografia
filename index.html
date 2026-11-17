@@ -169,8 +169,19 @@
 
     .btn:hover { border-color: var(--brass); color: var(--brass); }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-    .btn-solid { background: var(--paper); color: var(--ink); border-color: var(--paper); }
-    .btn-solid:hover { background: var(--brass); color: var(--ink); border-color: var(--brass); }
+    
+    /* Botões em Tom Mel / Solid */
+    .btn-solid { 
+      background: var(--brass); 
+      color: var(--ink); 
+      border-color: var(--brass); 
+      font-weight: 500;
+    }
+    .btn-solid:hover { 
+      background: #c29964; 
+      color: var(--ink); 
+      border-color: #c29964; 
+    }
 
     /* Painel de Filtros Avançados */
     .filters-panel {
@@ -218,6 +229,36 @@
       color: var(--muted);
       font-weight: 400;
     }
+
+    /* Scrollbars personalizadas discretas (não brilhantes) */
+    .scroll-select-box, .trabalhos-curso-lista, .config-modal {
+      scrollbar-width: thin;
+      scrollbar-color: #524b42 rgba(0,0,0,0.2);
+    }
+    .scroll-select-box::-webkit-scrollbar, 
+    .trabalhos-curso-lista::-webkit-scrollbar, 
+    .config-modal::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .scroll-select-box::-webkit-scrollbar-track, 
+    .trabalhos-curso-lista::-webkit-scrollbar-track, 
+    .config-modal::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+    .scroll-select-box::-webkit-scrollbar-thumb, 
+    .trabalhos-curso-lista::-webkit-scrollbar-thumb, 
+    .config-modal::-webkit-scrollbar-thumb {
+      background: #524b42;
+      border-radius: 4px;
+    }
+    .scroll-select-box::-webkit-scrollbar-thumb:hover, 
+    .trabalhos-curso-lista::-webkit-scrollbar-thumb:hover, 
+    .config-modal::-webkit-scrollbar-thumb:hover {
+      background: #6e6459;
+    }
+
     .scroll-select-box {
       max-height: 130px;
       overflow-y: auto;
@@ -317,7 +358,6 @@
     }
 
     .drop.over { background: rgba(215, 176, 122, 0.08); }
-    .drop p { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.9rem; }
 
     .status {
       min-height: 1.4rem;
@@ -363,12 +403,12 @@
       position: absolute;
       top: 0.5rem;
       left: 0.5rem;
-      background: rgba(0, 0, 0, 0.7);
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      background: transparent;
+      padding: 0.1rem 0.3rem;
       font-size: 0.75rem;
-      color: var(--brass);
+      font-weight: 400;
       z-index: 2;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
     }
 
     .card-meta-bottom {
@@ -555,7 +595,6 @@
       <div class="drop" id="drop">
         <div>
           <strong id="drop-label-text">Para o tema: -</strong>
-          <p>JPG, PNG, WEBP ou GIF. Ficam no bucket «fotografias».</p>
         </div>
         <label for="ficheiro" class="btn btn-solid" style="cursor: pointer; display: inline-block;">Escolher Fotografias</label>
         <input id="ficheiro" type="file" accept="image/*" multiple>
@@ -618,7 +657,7 @@
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; color:var(--brass);">Gestão de Utilizadores</h3>
-            <button type="button" class="btn" id="btn-novo-user-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; display: none;">+ Novo Utilizador</button>
+            <button type="button" class="btn btn-solid" id="btn-novo-user-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem; display: none;">+ Novo Utilizador</button>
           </div>
           
           <div class="form-group" id="admin-user-selector-container" style="display: none; margin-bottom: 1rem;">
@@ -645,7 +684,7 @@
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; color:var(--brass);">Gestão de Trabalhos de Fotografia</h3>
-            <button type="button" class="btn" id="btn-novo-trab-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">+ Novo Trabalho</button>
+            <button type="button" class="btn btn-solid" id="btn-novo-trab-modo" style="font-size: 0.8rem; padding: 0.3rem 0.6rem;">+ Novo Trabalho</button>
           </div>
 
           <div class="form-group" id="admin-trab-selector-container" style="margin-bottom: 1rem;">
@@ -668,12 +707,12 @@
 
             <div class="form-group" style="margin: 0;">
               <label for="edit-trab-data">Data do Trabalho</label>
-              <input type="date" id="edit-trab-data" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+              <input type="date" id="edit-trab-data" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
             </div>
 
             <div class="form-group" style="margin: 0;">
               <label for="edit-trab-limite">Número Máximo de fotografias por Fotógrafo</label>
-              <input type="number" id="edit-trab-limite" value="10" min="1" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper);">
+              <input type="number" id="edit-trab-limite" value="10" min="1" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper);">
             </div>
 
             <label style="display: flex; align-items: center; gap: 0.5rem; grid-column: span 2; margin-top: 0.4rem;">
@@ -772,6 +811,35 @@
     function getTel(u) { return u.telefone || u.Número_Telefone || ""; }
     function isAdmin(u) { 
       return u.indicador_administrador === true || u.Indicador_Administrador === true || u.admin === true; 
+    }
+
+    function isColorLight(r, g, b) {
+      const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+      return yiq >= 128;
+    }
+
+    function detetarCorContraste(imgElement, callback) {
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = 40;
+        canvas.height = 40;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(imgElement, 0, 0, 40, 40);
+        const pData = ctx.getImageData(0, 0, 20, 20).data;
+        let rSum = 0, gSum = 0, bSum = 0, count = 0;
+        for (let i = 0; i < pData.length; i += 4) {
+          rSum += pData[i];
+          gSum += pData[i+1];
+          bSum += pData[i+2];
+          count++;
+        }
+        const avgR = rSum / count;
+        const avgG = gSum / count;
+        const avgB = bSum / count;
+        callback(isColorLight(avgR, avgG, avgB));
+      } catch {
+        callback(false);
+      }
     }
 
     async function init() {
@@ -1012,7 +1080,7 @@
         const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
         const opt = document.createElement("option");
         opt.value = id;
-        opt.textContent = `${nome} (${dataTrab})`;
+        opt.textContent = `${dataTrab} - ${nome}`;
         configSelectTrab.append(opt);
       });
 
@@ -1159,7 +1227,7 @@
         }
 
         div.innerHTML = `
-          <span>${nomeTrab}</span>
+          <span><span style="font-size: 0.8rem; color: var(--muted);">${dataTrab} - </span>${nomeTrab}</span>
           <span style="font-size: 0.85rem; color: var(--muted); margin-left: 1.5rem; white-space: nowrap;">${dataTrab}</span>
         `;
 
@@ -1194,8 +1262,9 @@
       
       cacheTrabalhos.forEach((t) => {
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
+        const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> ${nomeTrab}`;
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span style="font-size: 0.8rem; color: var(--muted);">${dataTrab} - </span>${nomeTrab}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(cb => cb.checked);
@@ -1275,6 +1344,8 @@
         };
       }));
 
+      cacheFotos.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+
       aplicarFiltrosEGeral();
     }
 
@@ -1291,11 +1362,6 @@
     function nomeVisivel(path) {
       const ficheiro = path.split("/").pop() || path;
       return ficheiro.replace(/^\d+-/, "").replace(/[-_]+/g, " ");
-    }
-
-    function nomeCurto(str, max = 15) {
-      if (!str) return "";
-      return str.length > max ? str.slice(0, max) + "..." : str;
     }
 
     function aplicarFiltrosEGeral() {
@@ -1348,10 +1414,22 @@
         grupos[trab].push(f);
       });
 
-      for (const [trabalhoNome, fotosDoTrab] of Object.entries(grupos)) {
+      const gruposOrdenadosChaves = Object.keys(grupos).sort((a, b) => {
+        const trabA = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === a);
+        const trabB = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === b);
+        const dataA = trabA?.data_do_trabalho || trabA?.Data_do_trabalho || "";
+        const dataB = trabB?.data_do_trabalho || trabB?.Data_do_trabalho || "";
+        return new Date(dataB) - new Date(dataA);
+      });
+
+      gruposOrdenadosChaves.forEach(trabalhoNome => {
+        const fotosDoTrab = grupos[trabalhoNome];
+        const trabObj = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === trabalhoNome);
+        const dataTrab = trabObj?.data_do_trabalho || trabObj?.Data_do_trabalho || "";
+
         const tituloSecao = document.createElement("h3");
         tituloSecao.className = "section-group-title";
-        tituloSecao.textContent = trabalhoNome;
+        tituloSecao.innerHTML = `${dataTrab} - <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500;">${trabalhoNome}</span>`;
         galeriaContainer.append(tituloSecao);
 
         const grid = document.createElement("div");
@@ -1363,12 +1441,24 @@
           figura.className = "card";
 
           const img = document.createElement("img");
+          img.crossOrigin = "anonymous";
           img.src = foto.url;
           img.alt = nomeVisivel(foto.path);
 
           const metaTop = document.createElement("span");
           metaTop.className = "card-meta-top";
-          metaTop.textContent = nomeCurto(foto.trabalho, 12);
+          metaTop.textContent = nomeVisivel(foto.path);
+
+          img.addEventListener("load", () => {
+            detetarCorContraste(img, (isLight) => {
+              metaTop.style.color = isLight ? "#000000" : "#ffffff";
+            });
+          });
+          if (img.complete) {
+            detetarCorContraste(img, (isLight) => {
+              metaTop.style.color = isLight ? "#000000" : "#ffffff";
+            });
+          }
 
           const dataFmt = foto.created_at.split("T")[0];
           
@@ -1400,7 +1490,7 @@
         });
 
         galeriaContainer.append(grid);
-      }
+      });
     }
 
     async function apagarFotografia(path) {
@@ -1546,9 +1636,11 @@
       
       const userObj = cacheutilizadores.find(u => getCod(u) === foto.user);
       const nomeAutorProj = userObj ? getNome(userObj) : foto.user;
+      const trabObjProj = cacheTrabalhos.find(t => (t.nome_do_trabalho || t.Nome_do_Trabalho) === foto.trabalho);
+      const dataTrabProj = trabObjProj?.data_do_trabalho || trabObjProj?.Data_do_trabalho || foto.created_at.split("T")[0];
 
       document.getElementById("projetor-header").textContent = `Trabalho: ${foto.trabalho}`;
-      document.getElementById("projetor-bottom-right").textContent = `${nomeCurto(foto.trabalho, 15)} · ${foto.created_at.split("T")[0]} · ${nomeCurto(nomeAutorProj, 10)}`;
+      document.getElementById("projetor-bottom-right").textContent = `${dataTrabProj} · ${nomeCurto(nomeAutorProj, 12)}`;
       legenda.textContent = `${indice + 1} / ${fotosFiltradas.length}  ·  ${nomeVisivel(foto.path)}`;
       
       const seguinte = fotosFiltradas[(indice + 1) % fotosFiltradas.length];
@@ -1651,3 +1743,5 @@
   </script>
 </body>
 </html>
+
+
