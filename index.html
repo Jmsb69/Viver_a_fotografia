@@ -1,5 +1,3 @@
-Compreendido! Removi completamente a data que ainda aparecia à frente do nome dos trabalhos na caixa (browse) dos critérios de seleção, deixando apenas o nome limpo e elegante do tema em cada linha.
-Aqui tens o código completo e atualizado:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -593,6 +591,7 @@ Aqui tens o código completo e atualizado:
           <strong id="drop-label-text">Para o tema: -</strong>
         </div>
         <label for="ficheiro" class="btn btn-solid" style="cursor: pointer; display: inline-block;">Escolher Fotografias</label>
+        <p style="color: var(--muted); font-size: 0.85rem; margin: 0.4rem 0 0 0;">Pode carregar ficheiros de imagem (JPG, PNG, WebP, etc.)</p>
         <input id="ficheiro" type="file" accept="image/*" multiple style="display: none;">
       </div>
     </div>
@@ -1257,7 +1256,6 @@ Aqui tens o código completo e atualizado:
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const lbl = document.createElement("label");
         
-        // RETIRADA TOTAL DA DATA NA CAIXA DE FILTROS DOS CRITÉRIOS DE SELEÇÃO
         lbl.innerHTML = `
           <input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span>${nomeTrab}</span>
         `;
@@ -1367,14 +1365,15 @@ Aqui tens o código completo e atualizado:
       const trabCbs = Array.from(document.querySelectorAll(".filtro-trab-item"));
       const userCbs = Array.from(document.querySelectorAll(".filtro-user-item"));
       
-      const trabsSelecionados = trabCbs.filter(cb => cb.checked).map(cb => cb.value);
+      const trabsSelecionados = trabCbs.filter(cb => cb.checked).map(cb => cb.value.trim().toLowerCase());
       const usersSelecionados = userCbs.filter(cb => cb.checked).map(cb => cb.value);
 
       const dataInicio = document.getElementById("filter-data-inicio").value;
       const dataFim = document.getElementById("filter-data-fim").value;
 
       fotosFiltradas = cacheFotos.filter(f => {
-        const matchTrab = allTrabChecked || trabsSelecionados.length === 0 || trabsSelecionados.includes(f.trabalho);
+        const trabFotoLimpo = (f.trabalho || "").trim().toLowerCase();
+        const matchTrab = allTrabChecked || trabsSelecionados.length === 0 || trabsSelecionados.includes(trabFotoLimpo);
         const matchUser = allUserChecked || usersSelecionados.length === 0 || usersSelecionados.includes(f.user);
 
         let matchData = true;
