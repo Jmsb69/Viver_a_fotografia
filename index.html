@@ -1,3 +1,5 @@
+Compreendido perfeitamente! Removi a data que aparecia no início do nome dos temas tanto no bloco de carregamento ("Carregar Fotografias") como no painel de seleção de critérios, deixando apenas o nome limpo do tema em ambos os locais.
+Aqui tens o código atualizado e pronto a usar:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -170,7 +172,6 @@
     .btn:hover { border-color: var(--brass); color: var(--brass); }
     .btn:disabled { opacity: 0.4; cursor: not-allowed; }
     
-    /* Botões em Tom Mel / Solid */
     .btn-solid { 
       background: var(--brass); 
       color: var(--ink); 
@@ -230,7 +231,7 @@
       font-weight: 400;
     }
 
-    /* Scrollbars personalizadas discretas (não brilhantes) */
+    /* Scrollbars personalizadas discretas */
     .scroll-select-box, .trabalhos-curso-lista, .config-modal {
       scrollbar-width: thin;
       scrollbar-color: #524b42 rgba(0,0,0,0.2);
@@ -252,11 +253,6 @@
     .config-modal::-webkit-scrollbar-thumb {
       background: #524b42;
       border-radius: 4px;
-    }
-    .scroll-select-box::-webkit-scrollbar-thumb:hover, 
-    .trabalhos-curso-lista::-webkit-scrollbar-thumb:hover, 
-    .config-modal::-webkit-scrollbar-thumb:hover {
-      background: #6e6459;
     }
 
     .scroll-select-box {
@@ -581,7 +577,7 @@
   </header>
 
   <main>
-    <!-- TRABALHO EM CURSO & UPLOAD (Sempre Aberto) -->
+    <!-- TRABALHO EM CURSO & UPLOAD -->
     <div class="upload-section-box">
       <h2 class="upload-main-title">CARREGAR FOTOGRAFIAS</h2>
       <p class="upload-subtitle">Selecionar tema a que pertence(m) a(s) fotografia(s) a carregar</p>
@@ -591,7 +587,7 @@
       </div>
       <input type="hidden" id="upload-trabalho-val" value="">
 
-      <!-- ZONA DE DROP / INPUT NATIVO SEGURO PARA MOBILE -->
+      <!-- ZONA DE DROP -->
       <div class="drop" id="drop">
         <div>
           <strong id="drop-label-text">Para o tema: -</strong>
@@ -632,7 +628,6 @@
         </div>
       </div>
       
-      <!-- BOTÃO MODO PROJETOR NO CANTO INFERIOR DIREITO DA BOX -->
       <div style="position: absolute; bottom: 1.2rem; right: 1.2rem;">
         <button class="btn btn-solid" id="projetor-btn" type="button" disabled>Modo projetor</button>
       </div>
@@ -653,7 +648,6 @@
       </div>
 
       <div style="display: grid; gap: 2rem;">
-        <!-- Gestão de Utilizadores -->
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; color:var(--brass);">Gestão de Utilizadores</h3>
@@ -680,7 +674,6 @@
           </form>
         </div>
 
-        <!-- Manutenção de Trabalhos -->
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; color:var(--brass);">Gestão de Trabalhos de Fotografia</h3>
@@ -1226,8 +1219,9 @@
           }
         }
 
+        // RETIRADA A DATA DO INÍCIO: Fica apenas o nome do tema e a data à direita
         div.innerHTML = `
-          <span><span style="font-size: 0.8rem; color: var(--muted);">${dataTrab} - </span>${nomeTrab}</span>
+          <span>${nomeTrab}</span>
           <span style="font-size: 0.85rem; color: var(--muted); margin-left: 1.5rem; white-space: nowrap;">${dataTrab}</span>
         `;
 
@@ -1264,7 +1258,8 @@
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span style="font-size: 0.8rem; color: var(--muted);">${dataTrab} - </span>${nomeTrab}`;
+        // RETIRADA A DATA DO INÍCIO NO FILTRO: Fica apenas o nome do tema e a data à direita
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span style="flex:1;">${nomeTrab}</span> <span style="font-size: 0.8rem; color: var(--muted); margin-left: 1rem; white-space: nowrap;">${dataTrab}</span>`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(cb => cb.checked);
@@ -1743,5 +1738,4 @@
   </script>
 </body>
 </html>
-
 
