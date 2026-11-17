@@ -1,5 +1,5 @@
-Compreendido perfeitamente! Removi a data que aparecia no início do nome dos temas tanto no bloco de carregamento ("Carregar Fotografias") como no painel de seleção de critérios, deixando apenas o nome limpo do tema em ambos os locais.
-Aqui tens o código atualizado e pronto a usar:
+Compreendido! Removi completamente a data que ainda aparecia à frente do nome dos trabalhos na caixa (browse) dos critérios de seleção, deixando apenas o nome limpo e elegante do tema em cada linha.
+Aqui tens o código completo e atualizado:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -593,7 +593,7 @@ Aqui tens o código atualizado e pronto a usar:
           <strong id="drop-label-text">Para o tema: -</strong>
         </div>
         <label for="ficheiro" class="btn btn-solid" style="cursor: pointer; display: inline-block;">Escolher Fotografias</label>
-        <input id="ficheiro" type="file" accept="image/*" multiple>
+        <input id="ficheiro" type="file" accept="image/*" multiple style="display: none;">
       </div>
     </div>
 
@@ -1219,7 +1219,6 @@ Aqui tens o código atualizado e pronto a usar:
           }
         }
 
-        // RETIRADA A DATA DO INÍCIO: Fica apenas o nome do tema e a data à direita
         div.innerHTML = `
           <span>${nomeTrab}</span>
           <span style="font-size: 0.85rem; color: var(--muted); margin-left: 1.5rem; white-space: nowrap;">${dataTrab}</span>
@@ -1256,10 +1255,12 @@ Aqui tens o código atualizado e pronto a usar:
       
       cacheTrabalhos.forEach((t) => {
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
-        const dataTrab = t.data_do_trabalho || t.Data_do_trabalho || "";
         const lbl = document.createElement("label");
-        // RETIRADA A DATA DO INÍCIO NO FILTRO: Fica apenas o nome do tema e a data à direita
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span style="flex:1;">${nomeTrab}</span> <span style="font-size: 0.8rem; color: var(--muted); margin-left: 1rem; white-space: nowrap;">${dataTrab}</span>`;
+        
+        // RETIRADA TOTAL DA DATA NA CAIXA DE FILTROS DOS CRITÉRIOS DE SELEÇÃO
+        lbl.innerHTML = `
+          <input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span>${nomeTrab}</span>
+        `;
         
         lbl.querySelector("input").addEventListener("change", () => {
           const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(cb => cb.checked);
@@ -1281,7 +1282,7 @@ Aqui tens o código atualizado e pronto a usar:
         const codigoUser = getCod(u);
         const nomeUser = getNome(u);
         const lbl = document.createElement("label");
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}"> ${nomeUser}`;
+        lbl.innerHTML = `<span style="display: flex; align-items: center; gap: 0.5rem;"><input type="checkbox" class="filtro-user-item" value="${codigoUser}"> <span>${nomeUser}</span></span>`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           const anyChecked = Array.from(document.querySelectorAll(".filtro-user-item")).some(cb => cb.checked);
