@@ -29,7 +29,6 @@
 
     button, input, select { font: inherit; color: inherit; }
 
-    /* Correção de legibilidade para selects e opções */
     select, option {
       background-color: #1c1916;
       color: var(--paper);
@@ -207,6 +206,12 @@
       color: var(--brass);
     }
     .scroll-select-box {
+      max-height: 130px;
+      overflow-y: auto;
+      background: rgba(0,0,0,0.2);
+      border: 
+
+.scroll-select-box {
       max-height: 130px;
       overflow-y: auto;
       background: rgba(0,0,0,0.2);
@@ -511,7 +516,7 @@
     <div class="hero-copy">
       <p class="eyebrow">Álbum</p>
       <h1>Viver a Fotografia</h1>
-      <p class="lede">Cataloga as tuas fotografias associadas a um trabalho .</p>
+      <p class="lede">Cataloga as tuas fotografias associadas a um trabalho.</p>
     </div>
   </header>
 
@@ -522,7 +527,7 @@
 
     <!-- TRABALHO EM CURSO & UPLOAD -->
     <div class="upload-section-box">
-      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">CARREGAR FOTOGRAFIA/S) - selecciona a que trabalho pertence</label>
+      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">CARREGAR FOTOGRAFIA(S) - selecciona a que trabalho pertence</label>
       <div class="trabalhos-curso-lista" id="trabalho-curso-container">
         <!-- Preenchido dinamicamente via JS -->
       </div>
@@ -544,7 +549,7 @@
       <div class="filter-box">
         <label>Tema dos Trabalhos</label>
         <div class="scroll-select-box" id="filter-trabalhos-container">
-          <label><input type="checkbox" id="check-all-trabalhos"> Selecionar Todos</label>
+          <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar Todos</label>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
         <button class="btn btn-solid" id="btn-aplicar-filtros" style="margin-top: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.8rem; width: 100%;">Aplicar Seleção</button>
@@ -1013,6 +1018,8 @@
     }
 
     function montarFiltrosTrabalhos() {
+      const checkAll = document.getElementById("check-all-trabalhos");
+      if (checkAll) checkAll.checked = true;
       const container = document.getElementById("list-trabalhos-checkboxes");
       container.innerHTML = "";
       
@@ -1020,9 +1027,8 @@
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const lbl = document.createElement("label");
         const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
-        // Apenas o primeiro trabalho vem selecionado por defeito (idx === 0)
-        const isChecked = idx === 0 ? "checked" : "";
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" ${isChecked}> ${nomeTrab}${badge}`;
+        // Todos os trabalhos selecionados por defeito
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}${badge}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-trabalhos").checked = false;
@@ -1033,17 +1039,22 @@
     }
 
     function montarFiltrosutilizadores() {
+      const checkAll = document.getElementById("check-all-utilizadores");
+      if (checkAll) checkAll.checked = false;
       const container = document.getElementById("list-utilizadores-checkboxes");
       container.innerHTML = "";
       
+      const meuCod = getCod(usuarioAtual);
+
       cacheutilizadores.forEach((u, idx) => {
         const codigoUser = getCod(u);
         const nomeUser = getNome(u);
         const lbl = document.createElement("label");
         const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
-        // Apenas o primeiro utilizador vem selecionado por defeito (idx === 0)
-        const isChecked = idx === 0 ? "checked" : "";
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" ${isChecked}> ${nomeUser}${badge}`;
+        
+        // Selecionado APENAS se for o utilizador atual autenticado
+        const isMeuUser = codigoUser === meuCod;
+        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" ${isMeuUser ? "checked" : ""}> ${nomeUser}${badge}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-utilizadores").checked = false;
@@ -1453,3 +1464,6 @@
   </script>
 </body>
 </html>
+
+
+        
