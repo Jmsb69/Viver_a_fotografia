@@ -186,7 +186,7 @@
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 1.2rem;
+      padding: 1.4rem 1.2rem 1.2rem;
       padding-bottom: 4.2rem;
       margin-bottom: 1.6rem;
       position: relative;
@@ -194,16 +194,29 @@
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1rem;
     }
+    
+    .filters-main-title {
+      grid-column: 1 / -1;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.5rem;
+      color: var(--brass);
+      margin: 0 0 0.4rem 0;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.4rem;
+      letter-spacing: 0.05em;
+    }
+
     .filter-box {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
     }
     .filter-box label {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--brass);
+      font-size: 0.75rem;
+      text-transform: none;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+      font-weight: 400;
     }
     .scroll-select-box {
       max-height: 130px;
@@ -235,6 +248,22 @@
       max-width: 600px;
     }
 
+    .upload-main-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.5rem;
+      color: var(--brass);
+      margin: 0 0 0.2rem 0;
+      letter-spacing: 0.05em;
+    }
+
+    .upload-subtitle {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin: 0 0 0.8rem 0;
+      font-weight: 300;
+      text-transform: none;
+    }
+
     .trabalhos-curso-lista {
       display: flex;
       flex-direction: column;
@@ -248,7 +277,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.5rem 0.75rem;
+      padding: 0.5rem 0.85rem;
       border-radius: 6px;
       background: rgba(0,0,0,0.2);
       border: 1px solid var(--line);
@@ -521,7 +550,9 @@
 
     <!-- TRABALHO EM CURSO & UPLOAD -->
     <div class="upload-section-box">
-      <label style="font-size: 0.8rem; text-transform: uppercase; color: var(--brass); margin-bottom: 0.5rem; display:block; letter-spacing: 0.1em;">CARREGAR FOTOGRAFIA(S) - selecciona a que trabalho pertence</label>
+      <h2 class="upload-main-title">CARREGAR FOTOGRAFIAS</h2>
+      <p class="upload-subtitle">Selecionar tema a que pertence</p>
+      
       <div class="trabalhos-curso-lista" id="trabalho-curso-container">
         <!-- Preenchido dinamicamente via JS -->
       </div>
@@ -540,13 +571,15 @@
 
     <!-- ZONA DE FILTROS AVANÇADOS -->
     <div class="filters-panel">
+      <h2 class="filters-main-title">CRITERIOS DE SELEÇÃO DE FOTOGRAFIAS</h2>
+      
       <div class="filter-box">
-        <label>Tema dos Trabalhos</label>
+        <label>Tema dos trabalhos</label>
         <div class="scroll-select-box" id="filter-trabalhos-container">
-          <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar Todos</label>
+          <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar todos</label>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
-        <button class="btn btn-solid" id="btn-aplicar-filtros" style="margin-top: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.8rem; width: 100%;">Aplicar Seleção</button>
+        <button class="btn btn-solid" id="btn-aplicar-filtros" style="margin-top: 0.6rem; padding: 0.4rem 0.8rem; font-size: 0.8rem; width: 100%;">Aplicar seleção</button>
       </div>
       <div class="filter-box">
         <label>Entre que datas</label>
@@ -555,18 +588,18 @@
           <span style="color: var(--muted);">-</span>
           <input type="date" id="filter-data-fim" style="padding: 0.4rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); font-size:0.8rem; width:100%;">
         </div>
-        <button class="btn" id="btn-limpar-datas" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top:0.3rem;">Limpar Datas</button>
+        <button class="btn" id="btn-limpar-datas" style="padding: 0.2rem 0.5rem; font-size: 0.75rem; margin-top:0.3rem;">Limpar datas</button>
       </div>
       <div class="filter-box">
-        <label>Autor da Fotografia</label>
+        <label>Autor da fotografia</label>
         <div class="scroll-select-box" id="filter-utilizadores-container">
-          <label><input type="checkbox" id="check-all-utilizadores"> Selecionar Todos</label>
+          <label><input type="checkbox" id="check-all-utilizadores"> Selecionar todos</label>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
       </div>
       
       <!-- BOTÃO MODO PROJETOR NO CANTO INFERIOR DIREITO DA BOX -->
-      <button class="btn btn-solid" id="projetor-btn" type="button" disabled style="position: absolute; bottom: 1.2rem; right: 1.2rem;">Modo Projetor</button>
+      <button class="btn btn-solid" id="projetor-btn" type="button" disabled style="position: absolute; bottom: 1.2rem; right: 1.2rem;">Modo projetor</button>
     </div>
 
     <p class="status" id="estado" role="status"></p>
@@ -983,8 +1016,8 @@
         }
 
         div.innerHTML = `
-          <span>${nomeTrab} <span style="font-size: 0.75rem; color: var(--muted);">(${dataTrab})</span></span>
-          <span style="font-size: 0.75rem; color: var(--brass);">${idx === 0 ? '★ Mais recente' : ''}</span>
+          <span>${nomeTrab}</span>
+          <span style="font-size: 0.8rem; color: var(--muted); margin-left: 1.5rem; white-space: nowrap;">${dataTrab}</span>
         `;
 
         div.addEventListener("click", () => {
@@ -1017,12 +1050,10 @@
       const container = document.getElementById("list-trabalhos-checkboxes");
       container.innerHTML = "";
       
-      cacheTrabalhos.forEach((t, idx) => {
+      cacheTrabalhos.forEach((t) => {
         const nomeTrab = t.nome_do_trabalho || t.Nome_do_Trabalho || "";
         const lbl = document.createElement("label");
-        const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
-        // Todos os trabalhos selecionados por defeito
-        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}${badge}`;
+        lbl.innerHTML = `<input type="checkbox" class="filtro-trab-item" value="${nomeTrab}" checked> ${nomeTrab}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-trabalhos").checked = false;
@@ -1040,15 +1071,13 @@
       
       const meuCod = getCod(usuarioAtual);
 
-      cacheutilizadores.forEach((u, idx) => {
+      cacheutilizadores.forEach((u) => {
         const codigoUser = getCod(u);
         const nomeUser = getNome(u);
         const lbl = document.createElement("label");
-        const badge = idx < 3 ? ' <span style="color:var(--brass); font-size:0.75rem;">(Recente)</span>' : '';
         
-        // Selecionado APENAS se for o utilizador atual autenticado
         const isMeuUser = codigoUser === meuCod;
-        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" ${isMeuUser ? "checked" : ""}> ${nomeUser}${badge}`;
+        lbl.innerHTML = `<input type="checkbox" class="filtro-user-item" value="${codigoUser}" ${isMeuUser ? "checked" : ""}> ${nomeUser}`;
         
         lbl.querySelector("input").addEventListener("change", () => {
           document.getElementById("check-all-utilizadores").checked = false;
@@ -1458,6 +1487,3 @@
   </script>
 </body>
 </html>
-
-
-        
