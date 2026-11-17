@@ -1,3 +1,5 @@
+Compreendo perfeitamente! Se a listagem ficou vazia, foi exatamente porque mexemos na estrutura de ordenação e na forma como os grupos e os títulos eram gerados, o que acabou por quebrar a referência dos dados.
+Aqui tens o código totalmente revertido para a versão anterior estável (sem a data no título e com a ordenação original que funcionava perfeitamente), mas mantendo a caixa de seleção de trabalhos em curso e a correção do campo limite_fotos:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -1078,7 +1080,6 @@
     async function carregarSelectTrabalhosAdmin() {
       const { data } = await supabase.from("trabalhos_de_fotografia").select("*");
       cacheTrabalhos = data || [];
-      cacheTrabalhos.sort((a, b) => new Date(getTrabData(b)) - new Date(getTrabData(a)));
 
       configSelectTrab.innerHTML = '<option value="">-- Criar Novo Trabalho --</option>';
       cacheTrabalhos.forEach(t => {
@@ -1192,7 +1193,6 @@
       try {
         const resTrab = await supabase.from("trabalhos_de_fotografia").select("*");
         cacheTrabalhos = resTrab.data || [];
-        cacheTrabalhos.sort((a, b) => new Date(getTrabData(b)) - new Date(getTrabData(a)));
 
         const { data: dataUsers } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = dataUsers || [];
@@ -1357,8 +1357,8 @@
         };
       }));
 
-      // ORDENAÇÃO: Da mais antiga para a mais recente (crescente pelo timestamp)
-      cacheFotos.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      // ORDENAÇÃO ORIGINAL RESTAURADA (recente para antiga)
+      cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       aplicarFiltrosEGeral();
     }
@@ -1429,23 +1429,14 @@
         grupos[trab].push(f);
       });
 
-      const gruposOrdenadosChaves = Object.keys(grupos).sort((a, b) => {
-        const trabA = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === a.toLowerCase());
-        const trabB = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === b.toLowerCase());
-        const dataA = trabA ? getTrabData(trabA) : "";
-        const dataB = trabB ? getTrabData(trabB) : "";
-        return new Date(dataA) - new Date(dataB);
-      });
-
-      gruposOrdenadosChaves.forEach(trabalhoNome => {
+      Object.keys(grupos).forEach(trabalhoNome => {
         const fotosDoTrab = grupos[trabalhoNome];
-        const trabObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === trabalhoNome.toLowerCase());
-        const dataTrab = trabObj ? getTrabData(trabObj) : "";
 
         const tituloSecao = document.createElement("h3");
         tituloSecao.className = "section-group-title";
         
-        tituloSecao.innerHTML = `${dataTrab} - <span style="font-family: 'Cormorant Garamond', serif; font-weight: 500;">${trabalhoNome}</span>`;
+        // TÍTULO ORIGINAL (APENAS O NOME DO TRABALHO, SEM A DATA À FRENTE)
+        tituloSecao.textContent = trabalhoNome;
         galeriaContainer.append(tituloSecao);
 
         const grid = document.createElement("div");
@@ -1759,3 +1750,4 @@
   </script>
 </body>
 </html>
+
