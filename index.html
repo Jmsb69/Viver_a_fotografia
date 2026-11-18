@@ -1,3 +1,15 @@
+Aqui tens o código completo e com todos os detalhes pedidos ajustados com precisão:
+
+Botão "Limpar datas": Movido para dentro da sub-box de datas.
+Rótulos dos inputs de data: Alterados para Data Início e Data Fim (com a indicação "AAAA MM DD" limpa dos cabeçalhos).
+Altura dos Browses de Critérios: Ajustados para comportarem sensivelmente 7 linhas (max-height: 220px;) até ao limite da box com scroll suave.
+Ordenação Alfabética de Autores:
+O browse dos autores de fotografia está agora ordenado alfabeticamente pelo nome.
+O seletor de utilizadores no modal de Login também está ordenado alfabeticamente.
+
+
+Inteligência no Login: O sistema memoriza localmente (localStorage) o último utilizador que fez login com sucesso e coloca-o automaticamente no topo da lista de seleção, deixando a palavra-passe por preencher.
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -49,7 +61,7 @@
       color: var(--paper);
     }
 
-    /* Linhas individuais dentro das caixas de browse, com transição e aspeto idêntico aos trabalhos em curso */
+    /* Linhas individuais dentro das caixas de browse */
     .browse-linha-opcao {
       display: flex;
       align-items: center;
@@ -434,7 +446,7 @@
       font-weight: 400;
     }
 
-    /* Scrollbars personalizadas discretas */
+    /* Scrollbars personalizadas discretas e altura para comportar cerca de 7 linhas */
     .scroll-select-box, .trabalhos-curso-lista, .config-modal {
       scrollbar-width: thin;
       scrollbar-color: #524b42 rgba(0,0,0,0.2);
@@ -459,7 +471,7 @@
     }
 
     .scroll-select-box {
-      max-height: 130px;
+      max-height: 220px;
       overflow-y: auto;
       padding: 0.4rem;
     }
@@ -876,21 +888,23 @@
         </div>
       </div>
       
-      <!-- Entre que Datas -->
+      <!-- Entre que Datas (com Botão Limpar integrado) -->
       <div class="filter-box">
         <label>Entre que datas</label>
-        <div class="filtro-caixa-moldura" style="display: flex; gap: 0.4rem; align-items: center; height: 130px; box-sizing: border-box; justify-content: space-between;">
-          <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
-            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Início (AAAA MM DD)</label>
-            <input type="date" id="filter-data-inicio">
+        <div class="filtro-caixa-moldura" style="display: flex; flex-direction: column; gap: 0.6rem; height: 220px; box-sizing: border-box; justify-content: space-between;">
+          <div style="display: flex; gap: 0.4rem; align-items: center; width: 100%;">
+            <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
+              <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Data Início</label>
+              <input type="date" id="filter-data-inicio">
+            </div>
+            <span style="color: var(--muted); align-self: center;">-</span>
+            <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
+              <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Data Fim</label>
+              <input type="date" id="filter-data-fim">
+            </div>
           </div>
-          <span style="color: var(--muted); align-self: center;">-</span>
-          <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
-            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Fim (AAAA MM DD)</label>
-            <input type="date" id="filter-data-fim">
-          </div>
+          <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; align-self: flex-start;">Limpar datas</button>
         </div>
-        <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; margin-top:0.4rem; align-self: flex-start;">Limpar datas</button>
       </div>
 
       <!-- Autor da Fotografia -->
@@ -983,7 +997,7 @@
             </div>
 
             <div class="form-group" style="margin: 0;">
-              <label for="edit-trab-data" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block;">Data do Trabalho (AAAA MM DD)</label>
+              <label for="edit-trab-data" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block;">Data do Trabalho</label>
               <div class="filtro-caixa-moldura" style="padding: 0.4rem 0.6rem;">
                 <input type="date" id="edit-trab-data" required>
               </div>
@@ -1131,8 +1145,24 @@
           return;
         }
 
+        // Ordenar utilizadores por ordem alfabética do nome
+        cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
+
+        // Verificar último utilizador guardado em localStorage
+        const ultimoUserCod = localStorage.getItem("viver_fotografia_ultimo_user");
+
         loginUserSelect.innerHTML = '<option value="">Selecione o seu utilizador...</option>';
-        cacheutilizadores.forEach(u => {
+        
+        let utilizadoresParaRenderizar = [...cacheutilizadores];
+        if (ultimoUserCod) {
+          const idx = utilizadoresParaRenderizar.findIndex(u => getCod(u) === ultimoUserCod);
+          if (idx > -1) {
+            const [userRec] = utilizadoresParaRenderizar.splice(idx, 1);
+            utilizadoresParaRenderizar.unshift(userRec);
+          }
+        }
+
+        utilizadoresParaRenderizar.forEach(u => {
           const cod = getCod(u);
           const nome = getNome(u);
           const opt = document.createElement("option");
@@ -1197,6 +1227,9 @@
       }
 
       usuarioAtual = userRecord;
+      // Guardar último utilizador que fez login
+      localStorage.setItem("viver_fotografia_ultimo_user", getCod(usuarioAtual));
+
       loginModal.style.display = "none";
       currentUserDisplay.textContent = `${getNome(usuarioAtual)}`;
       btnAuthToggle.textContent = "Logout";
@@ -1296,6 +1329,7 @@
         alert("Utilizador eliminado com sucesso!");
         const { data } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = data || [];
+        cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
         carregarSelectutilizadoresAdmin();
       }
     });
@@ -1329,6 +1363,7 @@
           }
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
+          cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
           if (isAdmin(usuarioAtual)) carregarSelectutilizadoresAdmin();
         }
       } else {
@@ -1373,6 +1408,7 @@
           alert(`Utilizador criado com sucesso!`);
           const { data } = await supabase.from("utilizadores").select("*");
           cacheutilizadores = data || [];
+          cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
           carregarSelectutilizadoresAdmin();
         }
       }
@@ -1497,6 +1533,8 @@
 
         const { data: dataUsers } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = dataUsers || [];
+        // Ordenar globalmente por nome
+        cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
 
         montarTrabalhosEmCurso();
         montarFiltrosTrabalhos();
