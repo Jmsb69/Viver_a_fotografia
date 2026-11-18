@@ -54,17 +54,21 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.4rem 0.6rem;
+      padding: 0.5rem 0.85rem;
       border-radius: 6px;
       background: rgba(0,0,0,0.2);
       border: 1px solid var(--line);
       cursor: pointer;
       transition: all 0.2s ease;
       font-size: 0.95rem;
-      margin-bottom: 0.3rem;
+      margin-bottom: 0.4rem;
     }
     .browse-linha-opcao:hover {
       border-color: var(--brass);
+    }
+    .browse-linha-opcao.selecionado {
+      border-color: var(--brass);
+      background: rgba(215, 176, 122, 0.1);
     }
     .browse-linha-opcao input[type="checkbox"] {
       cursor: pointer;
@@ -350,7 +354,7 @@
       margin-bottom: 1.6rem;
       position: relative;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.2rem;
     }
     
@@ -559,10 +563,7 @@
       text-align: center;
       display: inline-block;
       line-height: 1.3;
-      min-width: 280px;
-      max-width: 100%;
-      white-space: normal;
-      word-break: break-word;
+      white-space: nowrap;
     }
     .btn-escolher-fotos:hover {
       background: #c29964;
@@ -822,10 +823,10 @@
   </header>
 
   <main>
-    <!-- TRABALHO EM CURSO & UPLOAD -->
+    <!-- TRABALHO EM CURSO & UPLOAD (CLASSIFICAR FOTOGRAFIAS) -->
     <div class="upload-section-box" id="upload-section-box">
-      <h2 class="upload-main-title">CARREGAR FOTOGRAFIAS</h2>
-      <p class="upload-subtitle">Selecionar tema a que vai(vão) pertencer a(s) fotografia(s) a carregar</p>
+      <h2 class="upload-main-title">CLASSIFICAR FOTOGRAFIAS</h2>
+      <p class="upload-subtitle">Seleciona tema do trabalho da(s) fotografia(s) a classificar</p>
       
       <div class="trabalhos-curso-lista" id="trabalho-curso-container">
         <!-- Preenchido dinamicamente via JS -->
@@ -836,9 +837,16 @@
       <div class="drop" id="drop">
         <div class="upload-action-row">
           <label for="ficheiro" class="btn-escolher-fotos" id="drop-label-btn" style="cursor: pointer;">Escolher Fotografias</label>
-          <span id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper);">Tem 0 fotos de um máximo de 10 para o tema</span>
         </div>
-        <p style="color: var(--muted); font-size: 0.82rem; margin: 0.3rem 0 0 0;">Pode carregar ficheiros de imagem (JPG, PNG, WebP, etc.) ou arrastá-los para aqui</p>
+        <!-- Linha em branco brilho com tamanho idêntico ao botão -->
+        <span style="font-size: 0.9rem; color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.7); margin-top: 0.2rem;">Ficheiros de imagem (JPG, PNG, WebP, etc.) ou arrasta para aqui</span>
+        
+        <!-- Contador sem brilho -->
+        <p id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper); margin: 0.3rem 0 0 0;">Tens 0 fotos de um máximo de 10 para o tema</p>
+        
+        <!-- Lista ou nome do(s) ficheiro(s) selecionado(s) -->
+        <div id="upload-ficheiros-selecionados" style="font-size: 0.85rem; color: var(--brass); margin-top: 0.2rem; font-style: italic;"></div>
+
         <p id="upload-aviso-limite" style="color: var(--danger); font-size: 0.85rem; margin: 0.4rem 0 0 0; display: none;"></p>
         <input id="ficheiro" type="file" accept="image/*" multiple style="display: none;">
       </div>
@@ -860,9 +868,9 @@
       <div class="filter-box">
         <label>Tema dos trabalhos</label>
         <div class="scroll-select-box filtro-caixa-moldura" id="filter-trabalhos-container">
-          <div class="browse-linha-opcao">
+          <div class="browse-linha-opcao" id="linha-all-trabalhos">
             <input type="checkbox" id="check-all-trabalhos" checked> 
-            <label for="check-all-trabalhos" style="cursor:pointer; margin:0; font-weight:400; color:var(--paper);">Selecionar todos</label>
+            <label for="check-all-trabalhos" style="cursor:pointer; width:100%; margin:0; font-weight:400; color:var(--paper);">Selecionar todos</label>
           </div>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
@@ -889,9 +897,9 @@
       <div class="filter-box">
         <label>Autor da fotografia</label>
         <div class="scroll-select-box filtro-caixa-moldura" id="filter-utilizadores-container">
-          <div class="browse-linha-opcao">
+          <div class="browse-linha-opcao" id="linha-all-utilizadores">
             <input type="checkbox" id="check-all-utilizadores" checked> 
-            <label for="check-all-utilizadores" style="cursor:pointer; margin:0; font-weight:400; color:var(--paper);">Selecionar todos</label>
+            <label for="check-all-utilizadores" style="cursor:pointer; width:100%; margin:0; font-weight:400; color:var(--paper);">Selecionar todos</label>
           </div>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
@@ -1078,6 +1086,7 @@
     const drop = document.getElementById("drop");
     const dropLabelBtn = document.getElementById("drop-label-btn");
     const uploadContadorTexto = document.getElementById("upload-contador-texto");
+    const uploadFicheirosSelecionados = document.getElementById("upload-ficheiros-selecionados");
     const uploadAvisoLimite = document.getElementById("upload-aviso-limite");
     const projetorBtn = document.getElementById("projetor-btn");
     const projetor = document.getElementById("projetor");
@@ -1510,7 +1519,7 @@
         .eq("coduser", getCod(usuarioAtual));
 
       const atual = count || 0;
-      uploadContadorTexto.textContent = `Tem ${atual} fotos de um máximo de ${maximo} para o tema`;
+      uploadContadorTexto.textContent = `Tens ${atual} fotos de um máximo de ${maximo} para o tema`;
     }
 
     function montarTrabalhosEmCurso() {
@@ -1520,7 +1529,7 @@
       if (ativos.length === 0) {
         trabalhoCursoContainer.innerHTML = '<span style="color: var(--muted); font-size: 0.95rem;">Sem trabalhos ativos disponíveis.</span>';
         dropLabelBtn.textContent = "Escolher Fotografias";
-        uploadContadorTexto.textContent = "Tem 0 fotos de um máximo de 10 para o tema";
+        uploadContadorTexto.textContent = "Tens 0 fotos de um máximo de 10 para o tema";
         return;
       }
 
@@ -1540,7 +1549,7 @@
         if (idx === 0) {
           div.classList.add("destacado", "selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          dropLabelBtn.textContent = `Escolher Fotografias para o trabalho ${nomeTrab}`;
+          dropLabelBtn.textContent = "Escolher Fotografias";
           if (usuarioAtual) atualizarContadorUploadAtual(nomeTrab);
         } else {
           div.classList.add("atenuado");
@@ -1555,7 +1564,7 @@
           document.querySelectorAll(".trabalho-opcao").forEach(el => el.classList.remove("selecionado"));
           div.classList.add("selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          dropLabelBtn.textContent = `Escolher Fotografias para o trabalho ${nomeTrab}`;
+          dropLabelBtn.textContent = "Escolher Fotografias";
           uploadAvisoLimite.style.display = "none";
           if (usuarioAtual) atualizarContadorUploadAtual(nomeTrab);
         });
@@ -1566,7 +1575,10 @@
 
     function montarFiltrosTrabalhos() {
       const checkAll = document.getElementById("check-all-trabalhos");
+      const linhaAllTrab = document.getElementById("linha-all-trabalhos");
       if (checkAll) checkAll.checked = true;
+      if (linhaAllTrab) linhaAllTrab.classList.add("selecionado");
+
       const container = document.getElementById("list-trabalhos-checkboxes");
       container.innerHTML = "";
       
@@ -1583,18 +1595,40 @@
         
         const cb = divLinha.querySelector("input");
         cb.addEventListener("change", () => {
+          if (cb.checked) divLinha.classList.add("selecionado");
+          else divLinha.classList.remove("selecionado");
+
           const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(item => item.checked);
           document.getElementById("check-all-trabalhos").checked = !anyChecked;
+          if (!anyChecked) linhaAllTrab.classList.add("selecionado");
+          else linhaAllTrab.classList.remove("selecionado");
+
           aplicarFiltrosEGeral();
         });
 
         container.append(divLinha);
       });
+
+      checkAll.addEventListener("change", () => {
+        if (checkAll.checked) {
+          linhaAllTrab.classList.add("selecionado");
+          document.querySelectorAll(".filtro-trab-item").forEach(cb => {
+            cb.checked = false;
+            cb.closest(".browse-linha-opcao").classList.remove("selecionado");
+          });
+        } else {
+          linhaAllTrab.classList.remove("selecionado");
+        }
+        aplicarFiltrosEGeral();
+      });
     }
 
     function montarFiltrosutilizadores() {
       const checkAll = document.getElementById("check-all-utilizadores");
+      const linhaAllUser = document.getElementById("linha-all-utilizadores");
       if (checkAll) checkAll.checked = true;
+      if (linhaAllUser) linhaAllUser.classList.add("selecionado");
+
       const container = document.getElementById("list-utilizadores-checkboxes");
       container.innerHTML = "";
 
@@ -1612,28 +1646,33 @@
         
         const cb = divLinha.querySelector("input");
         cb.addEventListener("change", () => {
+          if (cb.checked) divLinha.classList.add("selecionado");
+          else divLinha.classList.remove("selecionado");
+
           const anyChecked = Array.from(document.querySelectorAll(".filtro-user-item")).some(item => item.checked);
           document.getElementById("check-all-utilizadores").checked = !anyChecked;
+          if (!anyChecked) linhaAllUser.classList.add("selecionado");
+          else linhaAllUser.classList.remove("selecionado");
+
           aplicarFiltrosEGeral();
         });
 
         container.append(divLinha);
       });
+
+      checkAll.addEventListener("change", () => {
+        if (checkAll.checked) {
+          linhaAllUser.classList.add("selecionado");
+          document.querySelectorAll(".filtro-user-item").forEach(cb => {
+            cb.checked = false;
+            cb.closest(".browse-linha-opcao").classList.remove("selecionado");
+          });
+        } else {
+          linhaAllUser.classList.remove("selecionado");
+        }
+        aplicarFiltrosEGeral();
+      });
     }
-
-    document.getElementById("check-all-trabalhos").addEventListener("change", (e) => {
-      if (e.target.checked) {
-        document.querySelectorAll(".filtro-trab-item").forEach(cb => cb.checked = false);
-      }
-      aplicarFiltrosEGeral();
-    });
-
-    document.getElementById("check-all-utilizadores").addEventListener("change", (e) => {
-      if (e.target.checked) {
-        document.querySelectorAll(".filtro-user-item").forEach(cb => cb.checked = false);
-      }
-      aplicarFiltrosEGeral();
-    });
 
     document.getElementById("filter-data-inicio").addEventListener("change", () => aplicarFiltrosEGeral());
     document.getElementById("filter-data-fim").addEventListener("change", () => aplicarFiltrosEGeral());
@@ -1907,6 +1946,15 @@
       return `${Date.now()}-${base}${ext}`;
     }
 
+    function atualizarNomesSelecionados(lista) {
+      if (!lista || lista.length === 0) {
+        uploadFicheirosSelecionados.textContent = "";
+        return;
+      }
+      const nomes = Array.from(lista).map(f => f.name).join(", ");
+      uploadFicheirosSelecionados.textContent = `Selecionado(s): ${nomes}`;
+    }
+
     async function validarEEnviar(lista) {
       if (!usuarioAtual) {
         alert("Necessita de iniciar sessão para carregar fotografias.");
@@ -1925,6 +1973,8 @@
         estado.textContent = "Escolha ficheiros de imagem válidos.";
         return;
       }
+
+      atualizarNomesSelecionados(imagens);
 
       const trabalhoObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === trabalhoSelecionado.toLowerCase());
       const limiteMaximo = trabalhoObj ? getTrabLimite(trabalhoObj) : 10;
@@ -2061,6 +2111,7 @@
 
     ficheiro.addEventListener("change", (e) => {
       if (e.target.files && e.target.files.length > 0) {
+        atualizarNomesSelecionados(e.target.files);
         validarEEnviar(e.target.files);
         e.target.value = ""; 
       }
@@ -2083,7 +2134,10 @@
         estado.textContent = "Aviso: Selecione primeiro um trabalho em curso!";
         return;
       }
-      validarEEnviar(evento.dataTransfer.files);
+      if (evento.dataTransfer.files && evento.dataTransfer.files.length > 0) {
+        atualizarNomesSelecionados(evento.dataTransfer.files);
+        validarEEnviar(evento.dataTransfer.files);
+      }
     });
 
     projetorBtn.addEventListener("click", () => abrirProjetorAutomatico(0));
