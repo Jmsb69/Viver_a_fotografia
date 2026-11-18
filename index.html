@@ -347,7 +347,7 @@
 
     .count { color: var(--muted); font-size: 0.9rem; }
 
-    /* Botão Refrescar Atualizações de Terceiros melhorado (símbolo maior, fundo igual e apenas símbolo com relevo) */
+    /* Botão Refrescar Atualizações de Terceiros melhorado */
     .btn-refresh {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--line);
@@ -1632,8 +1632,6 @@
         };
       }));
 
-      cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-
       aplicarFiltrosEGeral();
       if (usuarioAtual && uploadTrabalhoVal.value) {
         atualizarContadorUploadAtual(uploadTrabalhoVal.value);
@@ -1668,7 +1666,7 @@
       const dataInicio = document.getElementById("filter-data-inicio").value;
       const dataFim = document.getElementById("filter-data-fim").value;
 
-      fotosFiltradas = cacheFotos.filter(f => {
+      const filtradas = cacheFotos.filter(f => {
         const trabFotoLimpo = (f.trabalho || "").trim().toLowerCase();
         const matchTrab = allTrabChecked || trabsSelecionados.length === 0 || trabsSelecionados.includes(trabFotoLimpo);
         const matchUser = allUserChecked || usersSelecionados.length === 0 || usersSelecionados.includes(f.user);
@@ -1679,6 +1677,37 @@
         if (dataFim && fData > dataFim) matchData = false;
 
         return matchTrab && matchUser && matchData;
+      });
+
+      // Ordenação global sincronizada (Browse + Projetor + Navegação):
+      // 1. Data do trabalho (mais recente primeiro) -> garante agrupamento por tema
+      // 2. Agrupamento por coduser (ordem alfabética do coduser)
+      // 3. Data de upload da foto (mais recente primeiro)
+      const mapaDataTrabalho = {};
+      cacheTrabalhos.forEach(t => {
+        mapaDataTrabalho[getTrabNome(t).trim().toLowerCase()] = getTrabData(t) || "1970-01-01";
+      });
+
+      fotosFiltradas = [...filtradas].sort((a, b) => {
+        const trabA = (a.trabalho || "").trim().toLowerCase();
+        const trabB = (b.trabalho || "").trim().toLowerCase();
+
+        // 1. Ordenar pela data do trabalho (decrescente)
+        const dataTrabA = mapaDataTrabalho[trabA] || "1970-01-01";
+        const dataTrabB = mapaDataTrabalho[trabB] || "1970-01-01";
+        const diffDataTrab = new Date(dataTrabB) - new Date(dataTrabA);
+        if (diffDataTrab !== 0) return diffDataTrab;
+
+        // Desempate caso dois temas distintos partilhem exatamente a mesma data
+        if (trabA !== trabB) return trabA.localeCompare(trabB);
+
+        // 2. Agrupar por coduser dentro do mesmo tema
+        const userA = (a.user || "").toLowerCase();
+        const userB = (b.user || "").toLowerCase();
+        if (userA !== userB) return userA.localeCompare(userB);
+
+        // 3. Ordenar por data de upload (mais recente primeiro) dentro do mesmo coduser
+        return new Date(b.created_at) - new Date(a.created_at);
       });
 
       desenharGaleria();
@@ -1699,31 +1728,19 @@
         return;
       }
 
-      const grupos = {};
+      // Como fotosFiltradas já está rigorosamente ordenado por Tema -> coduser -> upload,
+      // preservamos a ordem exata da lista ao agrupar por secção de trabalho
+      const grupos = new Map();
       fotosFiltradas.forEach(f => {
         const trab = f.trabalho || "Outros";
-        if (!grupos[trab]) grupos[trab] = [];
-        grupos[trab].push(f);
+        if (!grupos.has(trab)) grupos.set(trab, []);
+        grupos.get(trab).push(f);
       });
 
-      const temasOrdenados = Object.keys(grupos).sort((a, b) => {
-        const trabObjA = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === a.toLowerCase());
-        const trabObjB = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === b.toLowerCase());
-        
-        const dataA = trabObjA ? getTrabData(trabObjA) : "1970-01-01";
-        const dataB = trabObjB ? getTrabData(trabObjB) : "1970-01-01";
-
-        return new Date(dataB) - new Date(dataA);
-      });
-
-      temasOrdenados.forEach(trabalhoNome => {
-        const fotosDoTrab = grupos[trabalhoNome];
-
-        // Procurar o objeto do trabalho para obter a data correta da tabela
+      grupos.forEach((fotosDoTrab, trabalhoNome) => {
         const trabObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === trabalhoNome.toLowerCase());
         const dataTrabalhoFmt = trabObj ? getTrabData(trabObj) : "";
 
-        // Cabeçalho da secção com Nome do Trabalho à esquerda e Data associada à direita
         const headerRow = document.createElement("div");
         headerRow.className = "section-header-row";
 
@@ -2095,4 +2112,3 @@
   </script>
 </body>
 </html>
-
