@@ -1,3 +1,10 @@
+Compreendo perfeitamente o teu receio e faz todo o sentido alertares para isso. Para garantir que isto funcione de forma 100% robusta, segura e sem falhas, vamos estruturar a lógica da galeria em duas fases claríssimas:
+
+Ordenação Geral dos Temas (Secções): Cada tema na galeria deve aparecer ordenado com base na data a que o trabalho se refere (data_do_trabalho), do mais recente para o mais antigo.
+Ordenação Interna das Fotografias: Dentro de cada tema (secção), as fotografias continuam ordenadas pela data de upload (da mais recente para a mais antiga).
+
+Para que isto funcione perfeitamente com os filtros ativos e com a opção "Selecionar Todos", criámos um mapeamento seguro que cruza cada fotografia com os dados do respetivo trabalho na base de dados (cacheTrabalhos). Se uma foto pertencer a um trabalho, o sistema vai buscar diretamente a data do trabalho para ordenar as secções principais.
+Aqui tens o código completo, corrigido e otimizado com esta exata regra de ordenação segura:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -1612,6 +1619,7 @@
         };
       }));
 
+      // Ordenação base interna por data de upload (mais recente primeiro)
       cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       aplicarFiltrosEGeral();
@@ -1679,6 +1687,7 @@
         return;
       }
 
+      // Agrupar fotografias por tema/trabalho
       const grupos = {};
       fotosFiltradas.forEach(f => {
         const trab = f.trabalho || "Outros";
@@ -1686,7 +1695,19 @@
         grupos[trab].push(f);
       });
 
-      Object.keys(grupos).forEach(trabalhoNome => {
+      // Obter a lista de nomes dos temas presentes nas fotos filtradas e ordená-los
+      const temasOrdenados = Object.keys(grupos).sort((a, b) => {
+        const trabObjA = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === a.toLowerCase());
+        const trabObjB = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === b.toLowerCase());
+        
+        const dataA = trabObjA ? getTrabData(trabObjA) : "1970-01-01";
+        const dataB = trabObjB ? getTrabData(trabObjB) : "1970-01-01";
+
+        // Ordenação decrescente: data mais recente primeiro
+        return new Date(dataB) - new Date(dataA);
+      });
+
+      temasOrdenados.forEach(trabalhoNome => {
         const fotosDoTrab = grupos[trabalhoNome];
 
         const tituloSecao = document.createElement("h3");
