@@ -42,11 +42,12 @@
 
     /* Estilo uniforme para inputs de data e suas setinhas */
     input[type="date"] {
-      background-color: #1c1916;
+      background-color: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--line);
       color: var(--paper);
-      border-radius: 4px;
+      border-radius: 6px;
       color-scheme: dark;
+      padding: 0.5rem 0.6rem;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1) brightness(0.8);
@@ -304,13 +305,12 @@
       border-color: #e57373;
     }
 
-    /* Painel de Filtros Avançados */
+    /* Painel de Filtros Avançados (Idêntico esteticamente à box de upload) */
     .filters-panel {
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--line);
       border-radius: 12px;
-      padding: 1.4rem 1.2rem 1.2rem;
-      padding-bottom: 6.5rem;
+      padding: 1.2rem;
       margin-bottom: 1.6rem;
       position: relative;
       display: grid;
@@ -387,7 +387,7 @@
       gap: 0.4rem;
     }
     .filter-box label {
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       text-transform: none;
       letter-spacing: 0.02em;
       color: var(--muted);
@@ -749,7 +749,6 @@
 
     @media (max-width: 700px) {
       .hero-copy, main { padding-left: 1.2rem; padding-right: 1.2rem; }
-      .filters-panel { padding-bottom: 7.5rem; }
       .nav-arrow { width: 45px; height: 60px; font-size: 1.5rem; }
       .top-bar { top: 1rem; right: 1rem; }
     }
@@ -823,7 +822,7 @@
       </div>
     </div>
 
-    <!-- ZONA DE FILTROS AVANÇADOS -->
+    <!-- ZONA DE FILTROS AVANÇADOS (Uniformizada) -->
     <div class="filters-panel">
       <div class="filters-header-row">
         <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS A VISUALIZAR</h2>
@@ -845,11 +844,11 @@
       <div class="filter-box">
         <label>Entre que datas</label>
         <div style="display: flex; gap: 0.4rem; align-items: center;">
-          <input type="date" id="filter-data-inicio" style="padding: 0.35rem; border-radius: 4px; font-size:0.75rem; width:100%;">
+          <input type="date" id="filter-data-inicio" style="width:100%;">
           <span style="color: var(--muted);">-</span>
-          <input type="date" id="filter-data-fim" style="padding: 0.35rem; border-radius: 4px; font-size:0.75rem; width:100%;">
+          <input type="date" id="filter-data-fim" style="width:100%;">
         </div>
-        <button class="btn" id="btn-limpar-datas" style="padding: 0.15rem 0.4rem; font-size: 0.72rem; margin-top:0.3rem;">Limpar datas</button>
+        <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; margin-top:0.4rem; align-self: flex-start;">Limpar datas</button>
       </div>
       <div class="filter-box">
         <label>Autor da fotografia</label>
@@ -859,7 +858,7 @@
         </div>
       </div>
       
-      <div style="position: absolute; bottom: 1.2rem; right: 1.2rem;">
+      <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 0.5rem;">
         <button class="btn btn-solid" id="projetor-btn" type="button" disabled>Modo projetor</button>
       </div>
     </div>
@@ -883,7 +882,6 @@
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--brass); letter-spacing: 0.05em;">Gestão de Utilizadores</h3>
-            <!-- Botão Novo Utilizador no topo direito -->
             <button type="button" class="btn-action-green" id="btn-novo-user-modo" style="display: none;">+ Novo Utilizador</button>
           </div>
           
@@ -909,7 +907,6 @@
             <div class="form-group" style="margin: 0;">
               <input type="text" id="edit-tel" placeholder="Número de Telefone (Opcional)" style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper); width: 100%;">
             </div>
-            <!-- Linha inferior com Atualizar à esquerda e Apagar encostado à direita alinhados pelo topo -->
             <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.4rem;">
               <button type="submit" class="btn-action-green-dynamic" id="btn-save-user">Guardar Alterações</button>
               <button type="button" class="btn-action-danger" id="btn-apagar-user-atual" title="Eliminar Utilizador" style="display: none;">🗑️ Apagar</button>
@@ -921,7 +918,6 @@
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--brass); letter-spacing: 0.05em;">Gestão de Trabalhos de Fotografia</h3>
-            <!-- Botão Novo Trabalho no topo direito -->
             <button type="button" class="btn-action-green" id="btn-novo-trab-modo">+ Novo Trabalho</button>
           </div>
 
@@ -952,7 +948,6 @@
             <label style="display: flex; align-items: center; gap: 0.5rem; grid-column: span 2; margin-top: 0.4rem;">
               <input type="checkbox" id="edit-trab-ativo" checked> Trabalho Ativo
             </label>
-            <!-- Linha inferior com Atualizar à esquerda e Apagar encostado à direita alinhados pelo topo -->
             <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.5rem;">
               <button type="submit" class="btn-action-green-dynamic" id="btn-save-trab">Guardar Alterações</button>
               <button type="button" class="btn-action-danger" id="btn-apagar-trab-atual" title="Eliminar Trabalho" style="display: none;">🗑️ Apagar</button>
@@ -1679,9 +1674,9 @@
         return matchTrab && matchUser && matchData;
       });
 
-      // Ordenação global sincronizada (Browse + Projetor + Navegação):
-      // 1. Data do trabalho (mais recente primeiro) -> garante agrupamento por tema
-      // 2. Agrupamento por coduser (ordem alfabética do coduser)
+      // Ordenação rigorosa atualizada:
+      // 1. Data do trabalho (mais recente primeiro) -> Agrupa por tema
+      // 2. Agrupamento por coduser (ordem alfabética)
       // 3. Data de upload da foto (mais recente primeiro)
       const mapaDataTrabalho = {};
       cacheTrabalhos.forEach(t => {
@@ -1692,21 +1687,20 @@
         const trabA = (a.trabalho || "").trim().toLowerCase();
         const trabB = (b.trabalho || "").trim().toLowerCase();
 
-        // 1. Ordenar pela data do trabalho (decrescente)
+        // 1. Data do trabalho (decrescente)
         const dataTrabA = mapaDataTrabalho[trabA] || "1970-01-01";
         const dataTrabB = mapaDataTrabalho[trabB] || "1970-01-01";
         const diffDataTrab = new Date(dataTrabB) - new Date(dataTrabA);
         if (diffDataTrab !== 0) return diffDataTrab;
 
-        // Desempate caso dois temas distintos partilhem exatamente a mesma data
         if (trabA !== trabB) return trabA.localeCompare(trabB);
 
-        // 2. Agrupar por coduser dentro do mesmo tema
+        // 2. Agrupar por coduser dentro do mesmo tema (alfabético)
         const userA = (a.user || "").toLowerCase();
         const userB = (b.user || "").toLowerCase();
         if (userA !== userB) return userA.localeCompare(userB);
 
-        // 3. Ordenar por data de upload (mais recente primeiro) dentro do mesmo coduser
+        // 3. Data de upload (mais recente primeiro)
         return new Date(b.created_at) - new Date(a.created_at);
       });
 
@@ -1728,8 +1722,6 @@
         return;
       }
 
-      // Como fotosFiltradas já está rigorosamente ordenado por Tema -> coduser -> upload,
-      // preservamos a ordem exata da lista ao agrupar por secção de trabalho
       const grupos = new Map();
       fotosFiltradas.forEach(f => {
         const trab = f.trabalho || "Outros";
