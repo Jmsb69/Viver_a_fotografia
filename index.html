@@ -1,3 +1,9 @@
+Para garantir que os campos de data seguem o formato visual claro e intencional AAAA MM DD (Ano, Mês, Dia) em vez de ficarem dependentes da formatação automática e por vezes confusa do sistema operativo ou do browser, podemos aplicar duas abordagens complementares:
+
+Textos de Ajuda / Rótulos Claros: Explicitar nos rótulos e placeholders exatamente a ordem esperada (AAAA-MM-DD).
+Estilização Consistente: Manter o mesmo bloco de contorno em todos os inputs de data (tanto no painel de filtros como no modal de administração de trabalhos).
+
+Aqui tens o código completo e atualizado com o ajuste em todos os campos de data da aplicação (tanto nos filtros como na criação/edição de novos trabalhos):
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -40,31 +46,32 @@
       padding: 0.5rem;
     }
 
-    /* Classe unificada para caixas/inputs com a borda e fundo exatos da box de upload */
-    .campo-caixa-estilo {
+    /* Moldura unificada idêntica à box de upload para TODOS os campos de filtro e datas */
+    .filtro-caixa-moldura {
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--line);
       border-radius: 6px;
+      padding: 0.6rem;
       color: var(--paper);
-      color-scheme: dark;
     }
 
-    /* Estilo uniforme para inputs de data */
+    /* Estilo uniforme para inputs de data (força o esquema escuro e legibilidade) */
     input[type="date"] {
       background: transparent;
       border: none;
       color: var(--paper);
       color-scheme: dark;
-      padding: 0.2rem;
+      padding: 0.1rem;
       width: 100%;
       outline: none;
+      font-size: 0.85rem;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1) brightness(0.8);
       cursor: pointer;
     }
 
-    /* Estilo para setinhas de input number com fundo igual e só setas visíveis */
+    /* Estilo para setinhas de input number */
     input[type="number"] {
       background-color: #1c1916;
       border: 1px solid var(--line);
@@ -315,7 +322,7 @@
       border-color: #e57373;
     }
 
-    /* Painel de Filtros Avançados (Idêntico esteticamente à box de upload) */
+    /* Painel de Filtros Avançados */
     .filters-panel {
       background: rgba(255,255,255,0.02);
       border: 1px solid var(--line);
@@ -324,8 +331,8 @@
       margin-bottom: 1.6rem;
       position: relative;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.2rem;
     }
     
     .filters-header-row {
@@ -431,7 +438,6 @@
     .scroll-select-box {
       max-height: 130px;
       overflow-y: auto;
-      padding: 0.5rem;
     }
     .scroll-select-box label {
       display: flex;
@@ -561,7 +567,7 @@
       color: var(--brass);
     }
 
-    /* Cabeçalho da Secção de Trabalho na Galeria (Nome à esquerda, Data à direita) */
+    /* Cabeçalho da Secção de Trabalho na Galeria */
     .section-header-row {
       display: flex;
       justify-content: space-between;
@@ -829,7 +835,7 @@
       </div>
     </div>
 
-    <!-- ZONA DE FILTROS AVANÇADOS (Perfeitamente Uniformizada) -->
+    <!-- ZONA DE FILTROS AVANÇADOS -->
     <div class="filters-panel">
       <div class="filters-header-row">
         <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS A VISUALIZAR</h2>
@@ -843,23 +849,31 @@
       
       <div class="filter-box">
         <label>Tema dos trabalhos</label>
-        <div class="scroll-select-box campo-caixa-estilo" id="filter-trabalhos-container">
+        <div class="scroll-select-box filtro-caixa-moldura" id="filter-trabalhos-container">
           <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar todos</label>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
       </div>
+      
       <div class="filter-box">
-        <label>Entre que datas</label>
-        <div class="campo-caixa-estilo" style="display: flex; gap: 0.4rem; align-items: center; padding: 0.4rem 0.5rem;">
-          <input type="date" id="filter-data-inicio">
-          <span style="color: var(--muted);">-</span>
-          <input type="date" id="filter-data-fim">
+        <label>Entre que datas <span style="font-size: 0.75rem; color: var(--brass);">(AAAA MM DD)</span></label>
+        <div class="filtro-caixa-moldura" style="display: flex; gap: 0.4rem; align-items: center; height: 130px; box-sizing: border-box; justify-content: space-between;">
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.2rem;">
+            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Início</label>
+            <input type="date" id="filter-data-inicio">
+          </div>
+          <span style="color: var(--muted); align-self: center; margin-top: 1rem;">-</span>
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.2rem;">
+            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Fim</label>
+            <input type="date" id="filter-data-fim">
+          </div>
         </div>
         <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; margin-top:0.4rem; align-self: flex-start;">Limpar datas</button>
       </div>
+
       <div class="filter-box">
         <label>Autor da fotografia</label>
-        <div class="scroll-select-box campo-caixa-estilo" id="filter-utilizadores-container">
+        <div class="scroll-select-box filtro-caixa-moldura" id="filter-utilizadores-container">
           <label><input type="checkbox" id="check-all-utilizadores" checked> Selecionar todos</label>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
@@ -943,8 +957,11 @@
             </div>
 
             <div class="form-group" style="margin: 0;">
-              <label for="edit-trab-data" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block;">Data do Trabalho</label>
-              <input type="date" id="edit-trab-data" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color: var(--paper); width: 100%;">
+              <label for="edit-trab-data" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block;">Data do Trabalho <span style="font-size: 0.75rem; color: var(--brass);">(AAAA MM DD)</span></label>
+              <!-- Aplicada a mesma classe de moldura visual unificada no input de data do modal -->
+              <div class="filtro-caixa-moldura" style="padding: 0.4rem 0.6rem;">
+                <input type="date" id="edit-trab-data" required>
+              </div>
             </div>
 
             <div class="form-group" style="margin: 0;">
