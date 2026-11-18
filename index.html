@@ -464,7 +464,6 @@
       text-transform: none;
     }
 
-    /* Lista de trabalhos em curso com altura otimizada (cerca de 3.5 itens visíveis e scroll elegante) */
     .trabalhos-curso-lista {
       display: flex;
       flex-direction: column;
@@ -555,13 +554,28 @@
       color: var(--brass);
     }
 
+    /* Cabeçalho da Secção de Trabalho na Galeria (Nome à esquerda, Data à direita) */
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 0.3rem;
+      margin: 2rem 0 1rem;
+    }
+
     .section-group-title {
       font-family: "Cormorant Garamond", serif;
       font-size: 1.8rem;
       color: var(--brass);
-      margin: 2rem 0 1rem;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 0.3rem;
+      margin: 0;
+    }
+
+    .section-group-date {
+      font-size: 0.95rem;
+      color: var(--muted);
+      font-weight: 300;
+      white-space: nowrap;
     }
 
     .grid {
@@ -1474,7 +1488,13 @@
         return;
       }
 
-      ativos.forEach((t, idx) => {
+      const ativosOrdenados = [...ativos].sort((a, b) => {
+        const dataA = getTrabData(a) || "1970-01-01";
+        const dataB = getTrabData(b) || "1970-01-01";
+        return new Date(dataB) - new Date(dataA);
+      });
+
+      ativosOrdenados.forEach((t, idx) => {
         const nomeTrab = getTrabNome(t);
         const dataTrab = getTrabData(t);
 
@@ -1612,7 +1632,6 @@
         };
       }));
 
-      // Ordenação base interna por data de upload (mais recente primeiro)
       cacheFotos.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
       aplicarFiltrosEGeral();
@@ -1680,7 +1699,6 @@
         return;
       }
 
-      // Agrupar fotografias por tema/trabalho
       const grupos = {};
       fotosFiltradas.forEach(f => {
         const trab = f.trabalho || "Outros";
@@ -1688,7 +1706,6 @@
         grupos[trab].push(f);
       });
 
-      // Obter a lista de nomes dos temas presentes nas fotos filtradas e ordená-los
       const temasOrdenados = Object.keys(grupos).sort((a, b) => {
         const trabObjA = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === a.toLowerCase());
         const trabObjB = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === b.toLowerCase());
@@ -1696,17 +1713,30 @@
         const dataA = trabObjA ? getTrabData(trabObjA) : "1970-01-01";
         const dataB = trabObjB ? getTrabData(trabObjB) : "1970-01-01";
 
-        // Ordenação decrescente: data mais recente primeiro
         return new Date(dataB) - new Date(dataA);
       });
 
       temasOrdenados.forEach(trabalhoNome => {
         const fotosDoTrab = grupos[trabalhoNome];
 
+        // Procurar o objeto do trabalho para obter a data correta da tabela
+        const trabObj = cacheTrabalhos.find(t => getTrabNome(t).toLowerCase() === trabalhoNome.toLowerCase());
+        const dataTrabalhoFmt = trabObj ? getTrabData(trabObj) : "";
+
+        // Cabeçalho da secção com Nome do Trabalho à esquerda e Data associada à direita
+        const headerRow = document.createElement("div");
+        headerRow.className = "section-header-row";
+
         const tituloSecao = document.createElement("h3");
         tituloSecao.className = "section-group-title";
         tituloSecao.textContent = trabalhoNome;
-        galeriaContainer.append(tituloSecao);
+
+        const dataSecao = document.createElement("span");
+        dataSecao.className = "section-group-date";
+        dataSecao.textContent = dataTrabalhoFmt;
+
+        headerRow.append(tituloSecao, dataSecao);
+        galeriaContainer.append(headerRow);
 
         const grid = document.createElement("div");
         grid.className = "grid";
