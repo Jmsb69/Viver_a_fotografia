@@ -40,7 +40,7 @@
       padding: 0.5rem;
     }
 
-    /* Moldura unificada idêntica à box de upload para TODOS os campos de filtro e datas */
+    /* Moldura unificada idêntica à box de upload para TODOS os blocos de critérios */
     .filtro-caixa-moldura {
       background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--line);
@@ -49,16 +49,43 @@
       color: var(--paper);
     }
 
-    /* Estilo uniforme para inputs de data (força o esquema escuro e legibilidade) */
+    /* Linhas individuais dentro das caixas de browse, com transição e aspeto idêntico aos trabalhos em curso */
+    .browse-linha-opcao {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.2);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem;
+    }
+    .browse-linha-opcao:hover {
+      border-color: var(--brass);
+    }
+    .browse-linha-opcao input[type="checkbox"] {
+      cursor: pointer;
+      accent-color: var(--brass);
+    }
+
+    /* Estilo uniforme para inputs de data */
     input[type="date"] {
-      background: transparent;
-      border: none;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--line);
       color: var(--paper);
+      border-radius: 6px;
       color-scheme: dark;
-      padding: 0.1rem;
+      padding: 0.4rem;
       width: 100%;
       outline: none;
       font-size: 0.85rem;
+      transition: border-color 0.2s ease;
+    }
+    input[type="date"]:hover, input[type="date"]:focus {
+      border-color: var(--brass);
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1) brightness(0.8);
@@ -250,7 +277,7 @@
       border-color: #c29964; 
     }
 
-    /* Botão Verde Estilo Criar com largura fixa uniforme */
+    /* Botões de Ação Uniformes */
     .btn-action-green {
       background: rgba(46, 125, 50, 0.25);
       border: 1px solid var(--success);
@@ -272,7 +299,6 @@
       color: #fff;
     }
 
-    /* Botão Atualizar / Guardar Alterações com tamanho dinâmico e layout verde */
     .btn-action-green-dynamic {
       background: rgba(46, 125, 50, 0.25);
       border: 1px solid var(--success);
@@ -295,7 +321,6 @@
       color: #fff;
     }
 
-    /* Botão Apagar Padronizado com largura fixa uniforme */
     .btn-action-danger {
       background: rgba(201, 74, 74, 0.2);
       border: 1px solid var(--danger);
@@ -358,7 +383,7 @@
 
     .count { color: var(--muted); font-size: 0.9rem; }
 
-    /* Botão Refrescar Atualizações de Terceiros melhorado */
+    /* Botão Refrescar */
     .btn-refresh {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--line);
@@ -432,17 +457,7 @@
     .scroll-select-box {
       max-height: 130px;
       overflow-y: auto;
-    }
-    .scroll-select-box label {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.95rem;
-      color: var(--paper);
-      cursor: pointer;
-      padding: 0.2rem 0;
-      text-transform: none;
-      letter-spacing: normal;
+      padding: 0.4rem;
     }
 
     /* Secção Trabalho em Curso & Upload */
@@ -841,34 +856,43 @@
         </div>
       </div>
       
+      <!-- Tema dos Trabalhos -->
       <div class="filter-box">
         <label>Tema dos trabalhos</label>
         <div class="scroll-select-box filtro-caixa-moldura" id="filter-trabalhos-container">
-          <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar todos</label>
+          <div class="browse-linha-opcao">
+            <input type="checkbox" id="check-all-trabalhos" checked> 
+            <label for="check-all-trabalhos" style="cursor:pointer; margin:0; font-weight:400; color:var(--paper);">Selecionar todos</label>
+          </div>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
       </div>
       
+      <!-- Entre que Datas -->
       <div class="filter-box">
-        <label>Entre que datas <span style="font-size: 0.75rem; color: var(--brass);">(AAAA MM DD)</span></label>
+        <label>Entre que datas</label>
         <div class="filtro-caixa-moldura" style="display: flex; gap: 0.4rem; align-items: center; height: 130px; box-sizing: border-box; justify-content: space-between;">
-          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.2rem;">
-            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Início</label>
+          <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
+            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Início (AAAA MM DD)</label>
             <input type="date" id="filter-data-inicio">
           </div>
-          <span style="color: var(--muted); align-self: center; margin-top: 1rem;">-</span>
-          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 0.2rem;">
-            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Fim</label>
+          <span style="color: var(--muted); align-self: center;">-</span>
+          <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
+            <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Fim (AAAA MM DD)</label>
             <input type="date" id="filter-data-fim">
           </div>
         </div>
         <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; margin-top:0.4rem; align-self: flex-start;">Limpar datas</button>
       </div>
 
+      <!-- Autor da Fotografia -->
       <div class="filter-box">
         <label>Autor da fotografia</label>
         <div class="scroll-select-box filtro-caixa-moldura" id="filter-utilizadores-container">
-          <label><input type="checkbox" id="check-all-utilizadores" checked> Selecionar todos</label>
+          <div class="browse-linha-opcao">
+            <input type="checkbox" id="check-all-utilizadores" checked> 
+            <label for="check-all-utilizadores" style="cursor:pointer; margin:0; font-weight:400; color:var(--paper);">Selecionar todos</label>
+          </div>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
       </div>
@@ -951,8 +975,7 @@
             </div>
 
             <div class="form-group" style="margin: 0;">
-              <label for="edit-trab-data" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block;">Data do Trabalho <span style="font-size: 0.75rem; color: var(--brass);">(AAAA MM DD)</span></label>
-              <!-- Aplicada a mesma classe de moldura visual unificada no input de data do modal -->
+              <label for="edit-trab-data" style="font-size: 0.85rem; color: var(--muted); margin-bottom: 0.3rem; display: block;">Data do Trabalho (AAAA MM DD)</label>
               <div class="filtro-caixa-moldura" style="padding: 0.4rem 0.6rem;">
                 <input type="date" id="edit-trab-data" required>
               </div>
@@ -1549,19 +1572,23 @@
       
       cacheTrabalhos.forEach((t) => {
         const nomeTrab = getTrabNome(t);
-        const lbl = document.createElement("label");
+        const divLinha = document.createElement("div");
+        divLinha.className = "browse-linha-opcao";
         
-        lbl.innerHTML = `
-          <input type="checkbox" class="filtro-trab-item" value="${nomeTrab}"> <span>${nomeTrab}</span>
+        const checkboxId = `trab-chk-${Math.random().toString(36).substring(2, 9)}`;
+        divLinha.innerHTML = `
+          <input type="checkbox" class="filtro-trab-item" id="${checkboxId}" value="${nomeTrab}">
+          <label for="${checkboxId}" style="cursor:pointer; width:100%; margin:0; font-weight:300; color:var(--paper);">${nomeTrab}</label>
         `;
         
-        lbl.querySelector("input").addEventListener("change", () => {
-          const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(cb => cb.checked);
+        const cb = divLinha.querySelector("input");
+        cb.addEventListener("change", () => {
+          const anyChecked = Array.from(document.querySelectorAll(".filtro-trab-item")).some(item => item.checked);
           document.getElementById("check-all-trabalhos").checked = !anyChecked;
           aplicarFiltrosEGeral();
         });
 
-        container.append(lbl);
+        container.append(divLinha);
       });
     }
 
@@ -1574,16 +1601,23 @@
       cacheutilizadores.forEach((u) => {
         const codigoUser = getCod(u);
         const nomeUser = getNome(u);
-        const lbl = document.createElement("label");
-        lbl.innerHTML = `<span style="display: flex; align-items: center; gap: 0.5rem;"><input type="checkbox" class="filtro-user-item" value="${codigoUser}"> <span>${nomeUser}</span></span>`;
+        const divLinha = document.createElement("div");
+        divLinha.className = "browse-linha-opcao";
+
+        const checkboxId = `user-chk-${Math.random().toString(36).substring(2, 9)}`;
+        divLinha.innerHTML = `
+          <input type="checkbox" class="filtro-user-item" id="${checkboxId}" value="${codigoUser}">
+          <label for="${checkboxId}" style="cursor:pointer; width:100%; margin:0; font-weight:300; color:var(--paper);">${nomeUser}</label>
+        `;
         
-        lbl.querySelector("input").addEventListener("change", () => {
-          const anyChecked = Array.from(document.querySelectorAll(".filtro-user-item")).some(cb => cb.checked);
+        const cb = divLinha.querySelector("input");
+        cb.addEventListener("change", () => {
+          const anyChecked = Array.from(document.querySelectorAll(".filtro-user-item")).some(item => item.checked);
           document.getElementById("check-all-utilizadores").checked = !anyChecked;
           aplicarFiltrosEGeral();
         });
 
-        container.append(lbl);
+        container.append(divLinha);
       });
     }
 
