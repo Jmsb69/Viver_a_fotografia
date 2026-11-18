@@ -1,3 +1,6 @@
+Para resolver essa questão e garantir que o utilizador perceba imediatamente que existem mais trabalhos para além dos primeiros visíveis, vamos atualizar a secção de carregamento de fotografias.
+O contentor de seleção de trabalhos passará a ter uma barra de scroll vertical elegante e suave (mantendo a consistência visual com os restantes seletores da aplicação) e ajustaremos a altura para exibir cerca de 3 linhas e meia visíveis, revelando de forma subtil o rebordo do seguinte para que seja intuitivo fazer scroll e explorar todos os trabalhos disponíveis.
+Aqui tens o código completo e atualizado com esta alteração implementada:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -53,7 +56,7 @@
       cursor: pointer;
     }
 
-    /* Estilo para setinhas de input number */
+    /* Estilo para setinhas de input number com fundo igual ao backup geral e só setas visíveis */
     input[type="number"] {
       background-color: #1c1916;
       border: 1px solid var(--line);
@@ -238,7 +241,7 @@
       border-color: #c29964; 
     }
 
-    /* Botão Verde Estilo Apagar (para Ações de Criar / Atualizar) com largura fixa uniforme */
+    /* Botão Verde Estilo Criar com largura fixa uniforme */
     .btn-action-green {
       background: rgba(46, 125, 50, 0.25);
       border: 1px solid var(--success);
@@ -260,7 +263,7 @@
       color: #fff;
     }
 
-    /* Botão Atualizar com tamanho dinâmico ao nome que contém e layout verde */
+    /* Botão Atualizar / Guardar Alterações com tamanho dinâmico e layout verde */
     .btn-action-green-dynamic {
       background: rgba(46, 125, 50, 0.25);
       border: 1px solid var(--success);
@@ -288,7 +291,7 @@
       background: rgba(201, 74, 74, 0.2);
       border: 1px solid var(--danger);
       color: var(--paper);
-      padding: 0.35rem 0.9rem;
+      padding: 0.45rem 1.2rem;
       border-radius: 4px;
       font-size: 0.85rem;
       cursor: pointer;
@@ -347,6 +350,7 @@
 
     .count { color: var(--muted); font-size: 0.9rem; }
 
+    /* Botão Refrescar Atualizações de Terceiros melhorado (símbolo maior, fundo igual e apenas símbolo com relevo) */
     .btn-refresh {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--line);
@@ -357,19 +361,19 @@
       font-size: 0.85rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
       transition: all 0.2s ease;
     }
     .btn-refresh:hover {
       border-color: var(--brass);
-      color: var(--brass);
       background: rgba(215, 176, 122, 0.08);
     }
     .btn-refresh span {
       display: inline-block;
-      font-size: 1.1rem;
+      font-size: 1.35rem;
       color: var(--brass);
-      text-shadow: 0 0 6px rgba(215, 176, 122, 0.5);
+      text-shadow: 0 0 8px rgba(215, 176, 122, 0.7);
+      line-height: 1;
     }
     .btn-refresh.animating span {
       animation: spin 0.8s linear infinite;
@@ -463,13 +467,15 @@
       text-transform: none;
     }
 
+    /* Lista de trabalhos em curso com altura otimizada (cerca de 3.5 itens visíveis e scroll elegante) */
     .trabalhos-curso-lista {
       display: flex;
       flex-direction: column;
       gap: 0.4rem;
       margin-bottom: 0.8rem;
-      max-height: 160px;
+      max-height: 155px;
       overflow-y: auto;
+      padding-right: 4px;
     }
 
     .trabalho-opcao {
@@ -759,7 +765,7 @@
         <p id="login-error" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 1rem;"></p>
         <div style="display: flex; flex-direction: column; gap: 0.6rem;">
           <button type="submit" class="btn btn-solid" style="width: 100%;">Entrar</button>
-          <button type="button" class="btn" id="btn-sair-consulta" style="width: 100%; text-align: center;">Sair / Modo Consulta</button>
+          <button type="button" class="btn" id="btn-sair-consulta" style="width: 100%; text-align: center;">Modo de Consulta</button>
         </div>
       </form>
     </div>
@@ -866,6 +872,8 @@
         <div style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line);">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--brass); letter-spacing: 0.05em;">Gestão de Utilizadores</h3>
+            <!-- Botão Novo Utilizador no topo direito -->
+            <button type="button" class="btn-action-green" id="btn-novo-user-modo" style="display: none;">+ Novo Utilizador</button>
           </div>
           
           <div class="form-group" id="admin-user-selector-container" style="display: none; margin-bottom: 1rem;">
@@ -878,16 +886,9 @@
           <form id="form-user-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 1fr 1fr;">
             <input type="hidden" id="edit-cod-user">
             
-            <div class="form-group" style="margin: 0; grid-column: 1 / 2;">
+            <div class="form-group" style="margin: 0; grid-column: span 2;">
               <input type="text" id="edit-nome" placeholder="Nome Completo (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper); width: 100%;">
             </div>
-            
-            <!-- Botões alinhados perfeitamente pelo fim da caixa de introdução do 1º campo -->
-            <div style="grid-column: 2 / 3; display: flex; justify-content: flex-end; gap: 0.5rem; align-items: center;">
-              <button type="button" class="btn-action-danger" id="btn-apagar-user-atual" title="Eliminar Utilizador" style="display: none;">🗑️ Apagar</button>
-              <button type="button" class="btn-action-green" id="btn-novo-user-modo" style="display: none;">+ Novo Utilizador</button>
-            </div>
-
             <div class="form-group" style="margin: 0; grid-column: span 2;">
               <input type="password" id="edit-pw" placeholder="Palavra-passe (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper); width: 100%;">
             </div>
@@ -897,8 +898,10 @@
             <div class="form-group" style="margin: 0;">
               <input type="text" id="edit-tel" placeholder="Número de Telefone (Opcional)" style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper); width: 100%;">
             </div>
-            <div style="grid-column: span 2; display: flex; justify-content: flex-start; margin-top: 0.4rem;">
+            <!-- Linha inferior com Atualizar à esquerda e Apagar encostado à direita alinhados pelo topo -->
+            <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.4rem;">
               <button type="submit" class="btn-action-green-dynamic" id="btn-save-user">Guardar Alterações</button>
+              <button type="button" class="btn-action-danger" id="btn-apagar-user-atual" title="Eliminar Utilizador" style="display: none;">🗑️ Apagar</button>
             </div>
           </form>
         </div>
@@ -907,6 +910,8 @@
         <div id="admin-trabalhos-section" style="background: rgba(0,0,0,0.2); padding: 1.2rem; border-radius: 8px; border: 1px solid var(--line); display: none;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
             <h3 style="margin:0; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: var(--brass); letter-spacing: 0.05em;">Gestão de Trabalhos de Fotografia</h3>
+            <!-- Botão Novo Trabalho no topo direito -->
+            <button type="button" class="btn-action-green" id="btn-novo-trab-modo">+ Novo Trabalho</button>
           </div>
 
           <div class="form-group" id="admin-trab-selector-container" style="margin-bottom: 1rem;">
@@ -919,14 +924,8 @@
           <form id="form-trabalho-edit" style="display: grid; gap: 0.8rem; grid-template-columns: 1fr 1fr;">
             <input type="hidden" id="edit-trab-id">
             
-            <div class="form-group" style="margin: 0; grid-column: 1 / 2;">
+            <div class="form-group" style="margin: 0; grid-column: span 2;">
               <input type="text" id="edit-trab-nome" placeholder="Nome do Trabalho (Obrigatório)" required style="padding: 0.6rem; background: #1c1916; border: 1px solid var(--line); border-radius: 4px; color:var(--paper); width: 100%;">
-            </div>
-
-            <!-- Botões alinhados perfeitamente pelo fim da caixa de introdução do 1º campo de trabalhos -->
-            <div style="grid-column: 2 / 3; display: flex; justify-content: flex-end; gap: 0.5rem; align-items: center;">
-              <button type="button" class="btn-action-danger" id="btn-apagar-trab-atual" title="Eliminar Trabalho" style="display: none;">🗑️ Apagar</button>
-              <button type="button" class="btn-action-green" id="btn-novo-trab-modo">+ Novo Trabalho</button>
             </div>
 
             <div class="form-group" style="margin: 0;">
@@ -942,8 +941,10 @@
             <label style="display: flex; align-items: center; gap: 0.5rem; grid-column: span 2; margin-top: 0.4rem;">
               <input type="checkbox" id="edit-trab-ativo" checked> Trabalho Ativo
             </label>
-            <div style="grid-column: span 2; display: flex; justify-content: flex-start; margin-top: 0.5rem;">
+            <!-- Linha inferior com Atualizar à esquerda e Apagar encostado à direita alinhados pelo topo -->
+            <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: flex-start; margin-top: 0.5rem;">
               <button type="submit" class="btn-action-green-dynamic" id="btn-save-trab">Guardar Alterações</button>
+              <button type="button" class="btn-action-danger" id="btn-apagar-trab-atual" title="Eliminar Trabalho" style="display: none;">🗑️ Apagar</button>
             </div>
           </form>
         </div>
@@ -1095,7 +1096,7 @@
     btnAuthToggle.addEventListener("click", () => {
       if (usuarioAtual) {
         usuarioAtual = null;
-        currentUserDisplay.textContent = "Modo Consulta";
+        currentUserDisplay.textContent = "Modo de Consulta";
         btnAuthToggle.textContent = "Login";
         btnConfig.style.display = "none";
         uploadSectionBox.style.display = "none";
@@ -1110,7 +1111,7 @@
     btnSairConsulta.addEventListener("click", () => {
       usuarioAtual = null;
       loginModal.style.display = "none";
-      currentUserDisplay.textContent = "Modo Consulta";
+      currentUserDisplay.textContent = "Modo de Consulta";
       btnAuthToggle.textContent = "Login";
       btnConfig.style.display = "none";
       uploadSectionBox.style.display = "none";
@@ -1490,10 +1491,6 @@
           if (usuarioAtual) atualizarContadorUploadAtual(nomeTrab);
         } else {
           div.classList.add("atenuado");
-          if (idx > 3) {
-            div.style.display = "none";
-            div.dataset.extra = "true";
-          }
         }
 
         div.innerHTML = `
@@ -1512,18 +1509,6 @@
 
         trabalhoCursoContainer.append(div);
       });
-
-      if (ativos.length > 4) {
-        const btnVerTodos = document.createElement("button");
-        btnVerTodos.className = "btn";
-        btnVerTodos.style.cssText = "font-size: 0.8rem; padding: 0.3rem 0.6rem; align-self: flex-start; margin-top: 0.3rem;";
-        btnVerTodos.textContent = "Ver todos os trabalhos ativos...";
-        btnVerTodos.addEventListener("click", () => {
-          document.querySelectorAll(".trabalho-opcao[data-extra='true']").forEach(el => el.style.display = "flex");
-          btnVerTodos.remove();
-        });
-        trabalhoCursoContainer.append(btnVerTodos);
-      }
     }
 
     function montarFiltrosTrabalhos() {
