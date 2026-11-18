@@ -1,3 +1,6 @@
+Peço imensa desculpa, tens toda a razão. Estava a aplicar a diretoria do input em si, mas a caixa exterior e a estrutura dos inputs de data precisavam de partilhar exatamente a mesma classe de fundo e contorno da box de carregamento (upload-section-box e trabalho-opcao).
+Para garantirmos que fica a 100% idêntico e uniforme, criámos uma classe dedicada chamada .campo-caixa-estilo que é exatamente igual à caixa de upload (com a mesma transparência de fundo rgba(0,0,0,0.2), a mesma borda subtil var(--line), e o mesmo arredondamento de cantos). Assim, tanto a box de upload como a box de seleção de datas e os seletores de temas ficam com o mesmo ADN visual.
+Aqui tens o código completo e definitivo com esta uniformização aplicada a todos os elementos:
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -40,21 +43,31 @@
       padding: 0.5rem;
     }
 
-    /* Estilo uniforme para inputs de data e suas setinhas */
-    input[type="date"] {
-      background-color: rgba(0, 0, 0, 0.2);
+    /* Classe unificada para caixas/inputs com a borda e fundo exatos da box de upload */
+    .campo-caixa-estilo {
+      background: rgba(0, 0, 0, 0.2);
       border: 1px solid var(--line);
-      color: var(--paper);
       border-radius: 6px;
+      color: var(--paper);
       color-scheme: dark;
-      padding: 0.5rem 0.6rem;
+    }
+
+    /* Estilo uniforme para inputs de data */
+    input[type="date"] {
+      background: transparent;
+      border: none;
+      color: var(--paper);
+      color-scheme: dark;
+      padding: 0.2rem;
+      width: 100%;
+      outline: none;
     }
     input[type="date"]::-webkit-calendar-picker-indicator {
       filter: invert(1) brightness(0.8);
       cursor: pointer;
     }
 
-    /* Estilo para setinhas de input number com fundo igual ao backup geral e só setas visíveis */
+    /* Estilo para setinhas de input number com fundo igual e só setas visíveis */
     input[type="number"] {
       background-color: #1c1916;
       border: 1px solid var(--line);
@@ -421,9 +434,6 @@
     .scroll-select-box {
       max-height: 130px;
       overflow-y: auto;
-      background: rgba(0,0,0,0.2);
-      border: 1px solid var(--line);
-      border-radius: 6px;
       padding: 0.5rem;
     }
     .scroll-select-box label {
@@ -822,7 +832,7 @@
       </div>
     </div>
 
-    <!-- ZONA DE FILTROS AVANÇADOS (Uniformizada) -->
+    <!-- ZONA DE FILTROS AVANÇADOS (Perfeitamente Uniformizada) -->
     <div class="filters-panel">
       <div class="filters-header-row">
         <h2 class="filters-main-title">CRITÉRIOS DE SELEÇÃO DE FOTOGRAFIAS A VISUALIZAR</h2>
@@ -836,23 +846,23 @@
       
       <div class="filter-box">
         <label>Tema dos trabalhos</label>
-        <div class="scroll-select-box" id="filter-trabalhos-container">
+        <div class="scroll-select-box campo-caixa-estilo" id="filter-trabalhos-container">
           <label><input type="checkbox" id="check-all-trabalhos" checked> Selecionar todos</label>
           <div id="list-trabalhos-checkboxes"></div>
         </div>
       </div>
       <div class="filter-box">
         <label>Entre que datas</label>
-        <div style="display: flex; gap: 0.4rem; align-items: center;">
-          <input type="date" id="filter-data-inicio" style="width:100%;">
+        <div class="campo-caixa-estilo" style="display: flex; gap: 0.4rem; align-items: center; padding: 0.4rem 0.5rem;">
+          <input type="date" id="filter-data-inicio">
           <span style="color: var(--muted);">-</span>
-          <input type="date" id="filter-data-fim" style="width:100%;">
+          <input type="date" id="filter-data-fim">
         </div>
         <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; margin-top:0.4rem; align-self: flex-start;">Limpar datas</button>
       </div>
       <div class="filter-box">
         <label>Autor da fotografia</label>
-        <div class="scroll-select-box" id="filter-utilizadores-container">
+        <div class="scroll-select-box campo-caixa-estilo" id="filter-utilizadores-container">
           <label><input type="checkbox" id="check-all-utilizadores" checked> Selecionar todos</label>
           <div id="list-utilizadores-checkboxes"></div>
         </div>
@@ -1674,10 +1684,6 @@
         return matchTrab && matchUser && matchData;
       });
 
-      // Ordenação rigorosa atualizada:
-      // 1. Data do trabalho (mais recente primeiro) -> Agrupa por tema
-      // 2. Agrupamento por coduser (ordem alfabética)
-      // 3. Data de upload da foto (mais recente primeiro)
       const mapaDataTrabalho = {};
       cacheTrabalhos.forEach(t => {
         mapaDataTrabalho[getTrabNome(t).trim().toLowerCase()] = getTrabData(t) || "1970-01-01";
@@ -1687,7 +1693,6 @@
         const trabA = (a.trabalho || "").trim().toLowerCase();
         const trabB = (b.trabalho || "").trim().toLowerCase();
 
-        // 1. Data do trabalho (decrescente)
         const dataTrabA = mapaDataTrabalho[trabA] || "1970-01-01";
         const dataTrabB = mapaDataTrabalho[trabB] || "1970-01-01";
         const diffDataTrab = new Date(dataTrabB) - new Date(dataTrabA);
@@ -1695,12 +1700,10 @@
 
         if (trabA !== trabB) return trabA.localeCompare(trabB);
 
-        // 2. Agrupar por coduser dentro do mesmo tema (alfabético)
         const userA = (a.user || "").toLowerCase();
         const userB = (b.user || "").toLowerCase();
         if (userA !== userB) return userA.localeCompare(userB);
 
-        // 3. Data de upload (mais recente primeiro)
         return new Date(b.created_at) - new Date(a.created_at);
       });
 
@@ -2104,3 +2107,4 @@
   </script>
 </body>
 </html>
+
