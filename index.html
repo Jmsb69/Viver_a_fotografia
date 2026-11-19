@@ -1,3 +1,8 @@
+Aqui tens o código completo e atualizado com as alterações solicitadas para a zona de upload:
+
+Nova Box abaixo do botão principal: Criado um bloco com o mesmo formato/estilo arredondado do botão que exibe o texto "Ou arraste para aqui o(s) ficheiro(s) selecionados.".
+Ajuste na label de tipos de ficheiro: Removido o texto "ou arrasta para aqui" e retirado o efeito de brilho (glow), ficando com um aspeto limpo e discreto.
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -434,7 +439,7 @@
       font-weight: 400;
     }
 
-    /* Scrollbars personalizadas discretas e altura para comportar cerca de 7 linhas */
+    /* Scrollbars personalizadas discretas e altura ajustada para cerca de 9 linhas */
     .scroll-select-box, .trabalhos-curso-lista, .config-modal {
       scrollbar-width: thin;
       scrollbar-color: #524b42 rgba(0,0,0,0.2);
@@ -459,7 +464,7 @@
     }
 
     .scroll-select-box {
-      max-height: 220px;
+      max-height: 275px;
       overflow-y: auto;
       padding: 0.4rem;
     }
@@ -547,9 +552,10 @@
 
     .upload-action-row {
       display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      flex-wrap: wrap;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.7rem;
+      width: 100%;
     }
 
     .btn-escolher-fotos {
@@ -569,6 +575,18 @@
       background: #c29964;
       border-color: #c29964;
       color: var(--ink);
+    }
+
+    /* Caixa com o formato arredondado do botão para a indicação de arrastar ficheiros */
+    .drop-instrucao-box {
+      display: inline-block;
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.75rem 1.25rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      color: var(--paper);
+      letter-spacing: 0.03em;
     }
 
     .status {
@@ -787,13 +805,13 @@
       <form id="login-form">
         <div class="form-group">
           <label for="login-user-select">Utilizador</label>
-          <select id="login-user-select" required>
+          <select id="login-user-select" size="6" style="height: auto; max-height: 160px;" required>
             <option value="">A carregar utilizadores...</option>
           </select>
         </div>
         <div class="form-group">
           <label for="login-pw">Palavra-passe</label>
-          <input type="password" id="login-pw" placeholder="Palavra-passe">
+          <input type="password" id="login-pw" placeholder="Palavra-passe" autocomplete="new-password">
         </div>
         <p id="login-error" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 1rem;"></p>
         <div style="display: flex; flex-direction: column; gap: 0.6rem;">
@@ -837,11 +855,16 @@
       <div class="drop" id="drop">
         <div class="upload-action-row">
           <label for="ficheiro" class="btn-escolher-fotos" id="drop-label-btn" style="cursor: pointer;">Escolher Fotografias</label>
+          <!-- Caixa com formato idêntico ao botão abaixo dele -->
+          <div class="drop-instrucao-box">
+            Ou arraste para aqui o(s) ficheiro(s) selecionados.
+          </div>
         </div>
-        <!-- Linha em branco brilho com tamanho idêntico ao botão -->
-        <span style="font-size: 0.9rem; color: #fff; text-shadow: 0 0 8px rgba(255, 255, 255, 0.7); margin-top: 0.2rem;">Ficheiros de imagem (JPG, PNG, WebP, etc.) ou arrasta para aqui</span>
         
-        <!-- Contador sem brilho -->
+        <!-- Label de tipos de ficheiro sem brilho e sem "ou arrasta para aqui" -->
+        <span style="font-size: 0.9rem; color: var(--muted); margin-top: 0.2rem;">Ficheiros de imagem (JPG, PNG, WebP, etc.)</span>
+        
+        <!-- Contador -->
         <p id="upload-contador-texto" style="font-size: 0.9rem; color: var(--paper); margin: 0.3rem 0 0 0;">Tens 0 fotos de um máximo de 10 para o tema</p>
         
         <!-- Lista ou nome do(s) ficheiro(s) selecionado(s) -->
@@ -876,10 +899,10 @@
         </div>
       </div>
       
-      <!-- Entre que Datas (com Botão Limpar integrado) -->
+      <!-- Entre que Datas -->
       <div class="filter-box">
         <label>Entre que datas</label>
-        <div class="filtro-caixa-moldura" style="display: flex; flex-direction: column; gap: 0.6rem; height: 220px; box-sizing: border-box; justify-content: space-between;">
+        <div class="filtro-caixa-moldura" style="display: flex; flex-direction: column; gap: 0.5rem; height: auto; box-sizing: border-box; justify-content: flex-start; align-items: stretch;">
           <div style="display: flex; gap: 0.4rem; align-items: center; width: 100%;">
             <div class="browse-linha-opcao" style="flex: 1; flex-direction: column; align-items: flex-start; margin:0; padding: 0.4rem;">
               <label style="font-size: 0.75rem; color: var(--muted); margin:0;">Data Início</label>
@@ -891,7 +914,7 @@
               <input type="date" id="filter-data-fim">
             </div>
           </div>
-          <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; align-self: flex-start;">Limpar datas</button>
+          <button class="btn" id="btn-limpar-datas" style="padding: 0.35rem 0.8rem; font-size: 0.8rem; align-self: center;">Limpar datas</button>
         </div>
       </div>
 
@@ -1133,10 +1156,8 @@
           return;
         }
 
-        // Ordenar utilizadores por ordem alfabética do nome
         cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
 
-        // Verificar último utilizador guardado em localStorage
         const ultimoUserCod = localStorage.getItem("viver_fotografia_ultimo_user");
 
         loginUserSelect.innerHTML = '<option value="">Selecione o seu utilizador...</option>';
@@ -1211,14 +1232,15 @@
       const realPw = getPw(userRecord);
       if (realPw && realPw !== pwEntered) {
         loginError.textContent = "Palavra-passe incorreta.";
+        loginPw.value = "";
         return;
       }
 
       usuarioAtual = userRecord;
-      // Guardar último utilizador que fez login
       localStorage.setItem("viver_fotografia_ultimo_user", getCod(usuarioAtual));
 
       loginModal.style.display = "none";
+      loginPw.value = "";
       currentUserDisplay.textContent = `${getNome(usuarioAtual)}`;
       btnAuthToggle.textContent = "Logout";
       btnConfig.style.display = "inline-block";
@@ -1521,7 +1543,6 @@
 
         const { data: dataUsers } = await supabase.from("utilizadores").select("*");
         cacheutilizadores = dataUsers || [];
-        // Ordenar globalmente por nome
         cacheutilizadores.sort((a, b) => getNome(a).localeCompare(getNome(b), 'pt', { sensitivity: 'base' }));
 
         montarTrabalhosEmCurso();
@@ -1575,7 +1596,7 @@
         if (idx === 0) {
           div.classList.add("destacado", "selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          dropLabelBtn.textContent = "Escolher Fotografias";
+          dropLabelBtn.textContent = `Escolher Fotografias para ${nomeTrab}`;
           if (usuarioAtual) atualizarContadorUploadAtual(nomeTrab);
         } else {
           div.classList.add("atenuado");
@@ -1590,7 +1611,7 @@
           document.querySelectorAll(".trabalho-opcao").forEach(el => el.classList.remove("selecionado"));
           div.classList.add("selecionado");
           uploadTrabalhoVal.value = nomeTrab;
-          dropLabelBtn.textContent = "Escolher Fotografias";
+          dropLabelBtn.textContent = `Escolher Fotografias para ${nomeTrab}`;
           uploadAvisoLimite.style.display = "none";
           if (usuarioAtual) atualizarContadorUploadAtual(nomeTrab);
         });
