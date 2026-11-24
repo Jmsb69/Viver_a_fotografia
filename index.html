@@ -235,7 +235,9 @@
     #current-user-display.brilho { opacity: 1; font-weight: 500; }
 
     .top-auth-bar .btn {
-      background: #000000;
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #000000;
       border: 1px solid var(--line);
       color: var(--paper);
       padding: 0.45rem 0.9rem;
@@ -243,12 +245,15 @@
       cursor: pointer;
       font-family: inherit;
       font-size: 0.85rem;
-      transition: background 0.2s, border-color 0.2s;
+      transition: background-color 0.2s, border-color 0.2s;
     }
 
-    .top-auth-bar .btn:hover {
-      background: rgba(212, 163, 89, 0.06);
+    .top-auth-bar .btn:hover,
+    .top-auth-bar .btn:focus,
+    .top-auth-bar .btn:active {
+      background-color: #000000;
       border-color: var(--line-hover);
+      outline: none;
     }
 
     .hero-label-top {
@@ -300,7 +305,7 @@
     .section-header-static,
     .section-header-btn {
       width: 100%;
-      background: #000000;
+      background-color: #000000;
       border: 0;
       border-bottom: 1px solid var(--line);
       padding: 0.9rem 1.2rem;
@@ -313,10 +318,22 @@
       transition: border-bottom-width 0.15s ease, border-bottom-color 0.15s ease;
     }
 
-    .section-header-btn { cursor: pointer; }
+    .section-header-btn {
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #000000;
+    }
 
-    .section-header-btn:hover {
+    .section-header-btn:hover,
+    .section-header-btn:focus,
+    .section-header-btn:active {
+      background-color: #000000;
       border-bottom: 2px solid var(--line-hover);
+    }
+
+    .section-header-btn:focus {
+      outline: none;
     }
 
     .section-header-title-area {
@@ -374,7 +391,9 @@
     #btn-limpa-filtros,
     #btn-refresh-fotos,
     #btn-login-entrar {
-      background: rgba(212, 163, 89, 0.08);
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: rgba(212, 163, 89, 0.08);
       border: 1px solid rgba(212, 163, 89, 0.32);
       color: var(--brass-soft);
       font-family: "Plus Jakarta Sans", system-ui, sans-serif;
@@ -389,7 +408,7 @@
       gap: 0.35rem;
       white-space: nowrap;
       cursor: pointer;
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      transition: background-color 0.2s, color 0.2s, border-color 0.2s;
     }
 
     #btn-abrir-projetor-header {
@@ -414,10 +433,31 @@
     #btn-refresh-fotos:focus-visible,
     #btn-login-entrar:hover,
     #btn-login-entrar:focus-visible {
-      background: var(--brass);
+      background-color: var(--brass);
       border-color: var(--brass);
       color: #141210;
       font-weight: 500;
+      outline: none;
+    }
+
+    @media (max-width: 640px) {
+      .galeria-acoes-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.55rem;
+      }
+
+      #btn-abrir-projetor-header,
+      #btn-refresh-fotos {
+        margin-left: 0;
+        margin-right: 0;
+        align-self: flex-start;
+      }
+
+      #btn-refresh-fotos {
+        white-space: normal;
+        text-align: left;
+      }
     }
 
     .win-control-zone {
@@ -442,7 +482,9 @@
     }
 
     .btn {
-      background: #000000;
+      appearance: none;
+      -webkit-appearance: none;
+      background-color: #000000;
       border: 1px solid var(--line);
       color: var(--paper);
       padding: 0.45rem 0.9rem;
@@ -450,12 +492,15 @@
       cursor: pointer;
       font-family: inherit;
       font-size: 0.85rem;
-      transition: border-color 0.2s, background 0.2s, color 0.2s;
+      transition: border-color 0.2s, background-color 0.2s, color 0.2s;
     }
 
-    .btn:hover {
+    .btn:hover,
+    .btn:focus,
+    .btn:active {
       border-color: var(--line-hover);
-      background: rgba(212, 163, 89, 0.06);
+      background-color: #000000;
+      outline: none;
     }
 
     .btn-outline-white {
