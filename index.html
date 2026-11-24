@@ -35,8 +35,10 @@ body{position:relative;margin:0;min-height:100vh;background-color:#000000;color:
 .hero-label-bottom{margin:.65rem 0 0;font-size:.98rem;color:var(--paper-soft);max-width:58ch}
 #current-user-display{font-size:.9rem;color:var(--brass);padding:.25rem .45rem}
 #current-user-display.brilho{color:var(--paper-strong);font-weight:500}
-.btn,.btn-filtro-par,.btn-outline-white,.btn-action-green-dynamic,.btn-action-danger,#btn-login-entrar,#btn-refresh-fotos{background:rgba(0,0,0,.72);color:var(--paper-soft);border:1px solid var(--line);border-radius:6px;padding:.45rem .85rem;font-family:inherit;font-size:.86rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;transition:border-color .15s ease,color .15s ease,background .15s ease}
-.btn:hover,.btn-filtro-par:hover,.btn-outline-white:hover,#btn-refresh-fotos:hover{border-color:var(--line-hover);color:var(--paper-strong)}
+.btn,.btn-filtro-par,.btn-outline-white,.btn-action-green-dynamic,.btn-action-danger,#btn-login-entrar,#btn-refresh-fotos{appearance:none;-webkit-appearance:none;background:#090909;color:var(--brass);border:1px solid rgba(212,163,89,.36);border-radius:6px;padding:.45rem .85rem;font-family:inherit;font-size:.86rem;font-weight:400;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.4rem;transition:border-color .15s ease,color .15s ease,background .15s ease}
+#btn-auth-toggle,#btn-registo-header,#btn-config{background:#090909;color:var(--brass);border:1px solid rgba(212,163,89,.38);opacity:1;filter:none;text-shadow:none}
+#btn-config.ativo,#config-modal.ativa #btn-config{color:var(--soft-white);border-color:var(--brass-soft);background:#12110e}
+.btn:hover,#btn-auth-toggle:hover,#btn-registo-header:hover,#btn-config:hover,.btn-filtro-par:hover,.btn-outline-white:hover,#btn-refresh-fotos:hover{border-color:var(--brass-soft);color:var(--paper-strong);background:#12110e}
 #btn-login-entrar,.btn-action-green-dynamic{border-color:rgba(79,157,105,.55);color:#cdebd7}
 #btn-login-entrar:hover,.btn-action-green-dynamic:hover{border-color:var(--success);background:rgba(79,157,105,.16)}
 .btn-action-danger{border-color:rgba(217,83,79,.55);color:#f5c2c0}
@@ -65,7 +67,6 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .upload-contador-bar.em-preview{border-style:dashed;border-color:var(--brass-soft)}
 .upload-contador-numero,.upload-contador-tema-destaque{color:var(--brass)}
 .upload-contador-preview-tag{color:var(--muted);font-size:.8rem}
-.galeria-acoes-bar{display:flex;justify-content:flex-end;margin-bottom:.85rem}
 .filtros-janela{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#000}
 .filtros-janela-header{padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;cursor:pointer;background:#000}
 .filtros-janela-header-left{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
@@ -75,6 +76,8 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .filtros-janela:not(.aberta) .filtros-janela-body{display:none}
 .filtros-janela-body{padding:1rem;border-top:1px solid var(--line)}
 .filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.filtros-refresh-rodape{display:flex;justify-content:center;align-items:center;margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--line)}
+@media (max-width:640px){.filtros-refresh-rodape{justify-content:flex-end}}
 .filter-box{display:flex;flex-direction:column;gap:.4rem}
 .filter-box>label{font-size:.82rem;color:var(--brass);font-weight:400}
 .filtro-caixa-moldura{border:1px solid var(--line);border-radius:6px;padding:.5rem;background:#000}
@@ -236,9 +239,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </span>
 </div>
 <div class="section-body">
-<div class="galeria-acoes-bar" id="barra-acoes-galeria">
-<button id="btn-refresh-fotos" title="Refrescar Atualizações de Terceiros" type="button"><span>🔄</span> Refrescar Atualizações de Terceiros</button>
-</div>
 <div class="filtros-janela" id="box-filtros">
 <div class="filtros-janela-header" role="button" tabindex="0" onclick="toggleFiltrosJanela()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFiltrosJanela();}" aria-expanded="false">
 <span class="filtros-janela-header-left">
@@ -284,6 +284,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div id="list-utilizadores-checkboxes"></div>
 </div>
 </div>
+</div>
+<div class="filtros-refresh-rodape">
+<button id="btn-refresh-fotos" title="Refrescar Atualizações de Terceiros" type="button"><span>🔄</span> Refrescar Atualizações de Terceiros</button>
 </div>
 </div>
 </div>
@@ -421,11 +424,16 @@ var helpTimer=null,ultimoToqueTempo=0,ultimoToqueElemento=null,confirmacaoPenden
 function isConfirmacaoAberta(){var m=document.getElementById("confirm-modal"),a=document.getElementById("alerta-ok-modal");return!!((m&&m.classList.contains("ativa"))||(a&&a.classList.contains("ativa")));}
 function esconderHelp(){var b=document.getElementById("help-balao-flutuante");if(b)b.classList.remove("visivel");}
 function retangulosSobrepoem(a,b,m){m=m||0;return!(a.right+m<=b.left||a.left-m>=b.right||a.bottom+m<=b.top||a.top-m>=b.bottom);}
+function forcarRepinturaCabecalho(){
+var ids=["btn-auth-toggle","btn-registo-header","btn-config","current-user-display"];
+for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(!el)continue;el.style.transform="translateZ(0)";void el.offsetHeight;}
+}
 function atualizarEstadoCabecalhoConfig(){
 var modalAberto=!!(document.getElementById("config-modal")&&document.getElementById("config-modal").classList.contains("ativa"));
 var shells=document.querySelectorAll(".config-section-shell");
 for(var i=0;i<shells.length;i++){var aberta=shells[i].classList.contains("aberta");var hdr=shells[i].querySelector(".config-section-header");if(hdr){hdr.classList.toggle("ativo",aberta);hdr.setAttribute("aria-expanded",String(aberta));}}
 var btnCfg=document.getElementById("btn-config");if(btnCfg)btnCfg.classList.toggle("ativo",modalAberto);
+forcarRepinturaCabecalho();
 }
 function mostrarHelpEmCoords(x,y,el,evtTarget){
 var balao=document.getElementById("help-balao-flutuante");if(!balao||isConfirmacaoAberta())return;
@@ -529,6 +537,8 @@ if(e.key==="Escape"||e.keyCode===27){e.preventDefault();document.getElementById(
 },true);
 document.addEventListener("dragover",function(e){e.preventDefault();});
 document.addEventListener("drop",function(e){e.preventDefault();limparAlvosDragUpload();});
+document.addEventListener("DOMContentLoaded",function(){forcarRepinturaCabecalho();});
+window.addEventListener("pageshow",function(){forcarRepinturaCabecalho();});
 </script>
 
 <script type="module">
@@ -580,7 +590,7 @@ btnRegistoHeader.style.display=listaLocal.length>0?"none":"inline-flex";
 if(usuarioAtual){
 currentUserDisplay.style.display="inline-block";currentUserDisplay.textContent=getNome(usuarioAtual);
 currentUserDisplay.classList.remove("fosco");currentUserDisplay.classList.add("brilho");
-btnAuthToggle.textContent="Logout";btnConfig.style.display="inline-block";
+btnAuthToggle.textContent="Logout";btnConfig.style.display="inline-flex";
 }else{
 currentUserDisplay.style.display="none";currentUserDisplay.textContent="";
 currentUserDisplay.classList.remove("brilho","fosco");
@@ -673,8 +683,8 @@ e.preventDefault();const val=loginUserSelect.value;
 if(!val||val==="__ESCOLHER_OUTRO__"){loginError.textContent="Por favor, selecione um utilizador.";return;}
 await tentarAutenticarUser(cacheutilizadores.find(u=>getCod(u)===val),loginPw.value.trim(),isUtilizadorAssociadoNesteNavegador(val));
 });
-btnFecharLogin.addEventListener("click",()=>{pendenteAposLoginCallback=null;limparAlertaInativoLogin();loginModal.classList.remove("ativa");});
-btnAuthToggle.addEventListener("click",()=>{if(usuarioAtual)sairDePresenca();else abrirFluxoLogin(null);});
+btnFecharLogin.addEventListener("click",()=>{pendenteAposLoginCallback=null;limparAlertaInativoLogin();loginModal.classList.remove("ativa");forcarRepinturaCabecalho();});
+btnAuthToggle.addEventListener("click",()=>{btnAuthToggle.blur();if(usuarioAtual)sairDePresenca();else abrirFluxoLogin(null);});
 window.onAntesPartilhaExigirPresenca=(cb)=>{if(usuarioAtual)cb(getNome(usuarioAtual));else abrirFluxoLogin(cb);};
 
 function prepararEstadoInicialSecaoTrabalhos(){modoNovoTrabAtivo=false;carregarBrowseTrabalhosAdmin();}
@@ -756,9 +766,9 @@ setConfigSectionState("utilizador-config-section",true);configurarProprioUtiliza
 atualizarEstadoCabecalhoConfig();
 }
 
-btnRegistoHeader.addEventListener("click",()=>abrirEcraRegistoOuConfig(true));
-btnConfig.addEventListener("click",()=>abrirEcraRegistoOuConfig(false));
-closeConfig.addEventListener("click",async()=>{configModal.classList.remove("ativa");atualizarEstadoCabecalhoConfig();await carregarDadosSistema();atualizarCabecalhoEstado();});
+btnRegistoHeader.addEventListener("click",()=>{btnRegistoHeader.blur();abrirEcraRegistoOuConfig(true);});
+btnConfig.addEventListener("click",()=>{btnConfig.blur();abrirEcraRegistoOuConfig(false);});
+closeConfig.addEventListener("click",async()=>{closeConfig.blur();configModal.classList.remove("ativa");atualizarEstadoCabecalhoConfig();await carregarDadosSistema();atualizarCabecalhoEstado();});
 
 function marcarBrowseAtivo(container,idAlvo){
 if(!container)return;
@@ -919,7 +929,7 @@ if(error)throw error;
 cacheutilizadores=(data||[]).sort((a,b)=>getNome(a).localeCompare(getNome(b),"pt",{sensitivity:"base"}));
 }catch(err){console.error("Erro ao carregar utilizadores:",err);}
 usuarioAtual=null;setWinBoxState("box-upload",false);setFiltrosJanelaAberta(false);setConfigSectionState("admin-trabalhos-section",false);setConfigSectionState("utilizador-config-section",false);
-atualizarCabecalhoEstado();await carregarDadosSistema();
+atualizarCabecalhoEstado();await carregarDadosSistema();forcarRepinturaCabecalho();
 if(getListaCodigosAssociadosLocais().length>0)abrirFluxoLogin(null);
 }
 
@@ -1081,7 +1091,7 @@ aplicarFiltrosEGeral();
 });
 
 btnRefreshFotos.addEventListener("click",async()=>{
-btnRefreshFotos.classList.add("animating");estado.textContent="A atualizar fotografias da base de dados...";
+btnRefreshFotos.blur();btnRefreshFotos.classList.add("animating");estado.textContent="A atualizar fotografias da base de dados...";
 await carregarFotosEfetivas();btnRefreshFotos.classList.remove("animating");estado.textContent="Álbum atualizado com sucesso!";
 setTimeout(()=>{estado.textContent="";},3000);
 });
@@ -1237,7 +1247,7 @@ async function abrirVisualizadorParado(i=0){
 if(fotosFiltradas.length===0)return;emPausa=true;atualizarBotaoPausa();parar();projetor.classList.add("aberto");mostrar(i);
 try{await projetor.requestFullscreen();}catch{}
 }
-async function fecharProjetor(){parar();projetor.classList.remove("aberto");slide.removeAttribute("src");if(document.fullscreenElement)await document.exitFullscreen();}
+async function fecharProjetor(){parar();projetor.classList.remove("aberto");slide.removeAttribute("src");if(document.fullscreenElement)await document.exitFullscreen();forcarRepinturaCabecalho();}
 
 ficheiro.addEventListener("change",(e)=>{
 if(e.target.files&&e.target.files.length>0){
@@ -1253,7 +1263,7 @@ document.getElementById("btn-arrow-prev").addEventListener("click",navegarAnteri
 document.getElementById("btn-arrow-next").addEventListener("click",navegarSeguinte);
 document.getElementById("sair").addEventListener("click",fecharProjetor);
 pausaBtn.addEventListener("click",()=>{emPausa=!emPausa;atualizarBotaoPausa();if(emPausa)parar();else retomar();});
-document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&projetor.classList.contains("aberto")){parar();projetor.classList.remove("aberto");slide.removeAttribute("src");}});
+document.addEventListener("fullscreenchange",()=>{if(!document.fullscreenElement&&projetor.classList.contains("aberto")){parar();projetor.classList.remove("aberto");slide.removeAttribute("src");forcarRepinturaCabecalho();}});
 document.addEventListener("keydown",(evento)=>{
 if(!projetor.classList.contains("aberto"))return;
 if(evento.key==="ArrowRight")navegarSeguinte();
