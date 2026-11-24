@@ -360,6 +360,15 @@
       white-space: nowrap;
     }
 
+    .galeria-acoes-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.65rem 1rem;
+      margin-bottom: 0.9rem;
+    }
+
     #btn-abrir-projetor-header,
     #btn-limpar-datas,
     #btn-limpa-filtros,
@@ -384,6 +393,10 @@
     }
 
     #btn-abrir-projetor-header {
+      margin-right: auto;
+    }
+
+    #btn-refresh-fotos {
       margin-left: auto;
     }
 
@@ -498,13 +511,13 @@
       background: #000000;
     }
 
-    /* BROWSE PARTILHA FOTOGRAFIAS: SELEÇÃO APENAS COM BORDA DIFERENCIADA; HOVER/TOQUE COMO AGORA */
+    /* BROWSE PARTILHA FOTOGRAFIAS: CÂMARA PRÓXIMA DA DATA E NOME ENCOSTADO À ESQUERDA (OTIMIZADO PARA TELEMÓVEL) */
     .trabalho-opcao {
       display: grid;
-      grid-template-columns: 105px 38px 1fr;
+      grid-template-columns: auto auto 1fr;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 0.75rem;
+      gap: 0.35rem;
+      padding: 0.55rem 0.65rem;
       border-radius: 6px;
       border: 1px solid transparent;
       background: transparent;
@@ -551,9 +564,9 @@
       border-color: var(--line);
     }
 
-    .browse-data-col { font-size: 0.82rem; color: var(--muted); }
-    .browse-simbolo-col { font-size: 1.15rem; text-align: center; }
-    .browse-nome-col { font-size: 0.95rem; color: var(--paper-soft); font-weight: 400; }
+    .browse-data-col { font-size: 0.8rem; color: var(--muted); white-space: nowrap; }
+    .browse-simbolo-col { font-size: 1.05rem; text-align: center; line-height: 1; padding: 0 0.1rem; }
+    .browse-nome-col { font-size: 0.92rem; color: var(--paper-soft); font-weight: 400; min-width: 0; overflow-wrap: anywhere; }
 
     .upload-contador-bar {
       margin-top: 0.65rem;
@@ -1408,12 +1421,16 @@
           </span>
           <h2 class="section-main-title">VISUALIZA Fotografias</h2>
         </span>
-        <button id="btn-refresh-fotos" title="Refrescar Atualizações de Terceiros" type="button">
-          <span>🔄</span> Refrescar Atualizações de Terceiros
-        </button>
       </div>
 
       <div class="section-body">
+        <div class="galeria-acoes-bar" id="barra-acoes-galeria">
+          <button type="button" id="btn-abrir-projetor-header" title="Modo projetor" aria-label="modo projetor">modo projetor</button>
+          <button id="btn-refresh-fotos" title="Refrescar Atualizações de Terceiros" type="button">
+            <span>🔄</span> Refrescar Atualizações de Terceiros
+          </button>
+        </div>
+
         <div class="filtros-janela" id="box-filtros">
           <div class="filtros-janela-header" role="button" tabindex="0" onclick="toggleFiltrosJanela()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleFiltrosJanela();}" aria-expanded="false">
             <span class="filtros-janela-header-left">
@@ -1429,7 +1446,6 @@
             </span>
 
             <div style="display: flex; align-items: center; gap: 0.65rem; margin-left: auto; flex-shrink: 0;">
-              <button type="button" id="btn-abrir-projetor-header" title="Modo projetor" aria-label="modo projetor" onclick="event.stopPropagation();">modo projetor</button>
               <span class="win-control-zone" title="Abrir / Fechar filtros">
                 <span class="win-symbol" id="sym-box-filtros">&#9633;</span>
               </span>
@@ -1738,17 +1754,36 @@
         if (camAlvo) zonaProtegida = camAlvo.getBoundingClientRect();
       }
 
+      var margemLinha = 22;
       var left = Math.min(Math.max(10, x + 12), window.innerWidth - w - 10);
-      var top = y - h - 10;
-      if (top < 10) top = Math.min(y + 14, window.innerHeight - h - 10);
+      var top;
+
+      if (el) {
+        var elRect = el.getBoundingClientRect();
+        var espacoAcima = elRect.top - margemLinha - 10;
+        var espacoAbaixo = window.innerHeight - (elRect.bottom + margemLinha) - 10;
+
+        if (espacoAcima >= h) {
+          top = elRect.top - h - margemLinha;
+        } else if (espacoAbaixo >= h) {
+          top = elRect.bottom + margemLinha;
+        } else if (espacoAcima >= espacoAbaixo) {
+          top = Math.max(10, elRect.top - h - margemLinha);
+        } else {
+          top = Math.min(window.innerHeight - h - 10, elRect.bottom + margemLinha);
+        }
+      } else {
+        top = y - h - margemLinha;
+        if (top < 10) top = Math.min(y + margemLinha, window.innerHeight - h - 10);
+      }
 
       if (zonaProtegida) {
         var boxBalao = { left: left, top: top, right: left + w, bottom: top + h };
-        if (retangulosSobrepoem(boxBalao, zonaProtegida, 6)) {
-          var acimaTop = zonaProtegida.top - h - 8;
-          var abaixoTop = zonaProtegida.bottom + 8;
-          var direitaLeft = zonaProtegida.right + 8;
-          var esquerdaLeft = zonaProtegida.left - w - 8;
+        if (retangulosSobrepoem(boxBalao, zonaProtegida, 8)) {
+          var acimaTop = zonaProtegida.top - h - margemLinha;
+          var abaixoTop = zonaProtegida.bottom + margemLinha;
+          var direitaLeft = zonaProtegida.right + 10;
+          var esquerdaLeft = zonaProtegida.left - w - 10;
 
           if (acimaTop >= 10) {
             top = acimaTop;
@@ -1837,7 +1872,7 @@
       }
     }
 
-function setConfigSectionState(id, aberta) {
+    function setConfigSectionState(id, aberta) {
       var shell = document.getElementById(id);
       if (!shell) return;
       if (aberta) shell.classList.add("aberta");
@@ -2695,6 +2730,10 @@ function setConfigSectionState(id, aberta) {
       }
     };
 
+    function isModoRegistoPublico() {
+      return !usuarioAtual;
+    }
+
     function configurarProprioUtilizadorSemBrowse(userObj) {
       if (!userObj) return;
       modoNovoUserAtivo = false;
@@ -2731,24 +2770,27 @@ function setConfigSectionState(id, aberta) {
     }
 
     function sincronizarEstadoCampoPw() {
+      const emRegistoPublico = isModoRegistoPublico();
       const emCriacao = !!(modoNovoUserAtivo && usuarioAtual && isAdmin(usuarioAtual));
       const emAlteracaoExistente = !!editCodUser.value.trim() && !emCriacao;
 
       editPw.readOnly = false;
+      editPw.required = emRegistoPublico;
       editPw.style.opacity = "1";
       editPw.style.cursor = "text";
 
       if (editInputCodUser) {
-        const codBloqueado = emAlteracaoExistente;
+        const codBloqueado = emRegistoPublico || emAlteracaoExistente;
         editInputCodUser.readOnly = codBloqueado;
         editInputCodUser.style.opacity = codBloqueado ? "0.72" : "1";
         editInputCodUser.style.cursor = codBloqueado ? "not-allowed" : "text";
       }
 
       if (editInputNome) {
-        editInputNome.readOnly = false;
-        editInputNome.style.opacity = "1";
-        editInputNome.style.cursor = "text";
+        const nomeBloqueado = emRegistoPublico;
+        editInputNome.readOnly = nomeBloqueado;
+        editInputNome.style.opacity = nomeBloqueado ? "0.72" : "1";
+        editInputNome.style.cursor = nomeBloqueado ? "not-allowed" : "text";
       }
     }
 
@@ -2771,7 +2813,9 @@ function setConfigSectionState(id, aberta) {
         if (grupoEditNome) grupoEditNome.style.display = "block";
         if (editInputNome) {
           editInputNome.value = getNome(u);
-          setTimeout(() => editInputNome.focus(), 10);
+          if (!isModoRegistoPublico()) {
+            setTimeout(() => editInputNome.focus(), 10);
+          }
         }
       } else {
         if (userBrowseWrapper) {
@@ -2867,15 +2911,9 @@ function setConfigSectionState(id, aberta) {
       }
 
       btnApagarUserAtual.style.display = "none";
-      const nomeRegisto = editInputNome ? editInputNome.value.trim() : estadoInicialUserForm.nome.trim();
-      const codPreenchido = editInputCodUser.value.trim().length > 0;
-      const camposAlteradosRegisto =
-        nomeRegisto !== estadoInicialUserForm.nome.trim() ||
-        editPw.value.trim() !== estadoInicialUserForm.pw.trim() ||
-        editEmail.value.trim() !== estadoInicialUserForm.email.trim() ||
-        editTel.value.trim() !== estadoInicialUserForm.tel.trim();
-
-      btnSaveUser.style.display = (codPreenchido && camposAlteradosRegisto)
+      const codPreenchido = (editCodUser.value || editInputCodUser.value).trim().length > 0;
+      const pwPreenchida = editPw.value.trim().length > 0;
+      btnSaveUser.style.display = (codPreenchido && pwPreenchida)
         ? "inline-flex"
         : "none";
     }
@@ -2902,8 +2940,10 @@ function setConfigSectionState(id, aberta) {
       labelUserBrowse.textContent = "Selecionar Utilizador";
       grupoEditCodUser.style.display = "block";
       grupoEditPw.style.display = "block";
-      atualizarDestaqueOuCampoNome(null, false, true);
-      carregarBrowseUtilizadores(userAlvo || cacheutilizadores[0] || null, true, false);
+      const alvoInicial = userAlvo || cacheutilizadores[0] || null;
+      atualizarDestaqueOuCampoNome(alvoInicial, false, true);
+      carregarBrowseUtilizadores(alvoInicial, true, false);
+      if (editPw) setTimeout(() => editPw.focus(), 20);
       verificarAlteracoesUserForm();
     }
 
@@ -3010,6 +3050,9 @@ function setConfigSectionState(id, aberta) {
           registoFeedback.textContent = "";
           preencherFormularioUtilizador(u, modoLimpoRegisto);
           atualizarDestaqueOuCampoNome(u, false, false);
+          if (modoLimpoRegisto && editPw) {
+            setTimeout(() => editPw.focus(), 10);
+          }
           verificarAlteracoesUserForm();
         });
         userBrowseContainer.append(item);
@@ -3034,6 +3077,7 @@ function setConfigSectionState(id, aberta) {
       if (u && !modoNovoUserAtivo) {
         const nomeU = getNome(u);
         editCodUser.value = getCod(u);
+        if (editInputNome) editInputNome.value = nomeU;
         if (modoLimpoRegisto) {
           editInputCodUser.value = getCod(u);
           editPw.value = "";
@@ -3062,6 +3106,7 @@ function setConfigSectionState(id, aberta) {
         marcarBrowseAtivo(userBrowseContainer, getCod(u));
       } else {
         editCodUser.value = "";
+        if (editInputNome) editInputNome.value = "";
         editInputCodUser.value = "";
         editPw.value = "";
         editEmail.value = "";
@@ -3216,21 +3261,44 @@ function setConfigSectionState(id, aberta) {
         return;
       }
 
-      const nomeFinal = nomeEditado || getNome(alvoUser);
+      if (!usuarioAtual) {
+        if (!pwDigitada) {
+          registoFeedback.style.color = "var(--danger)";
+          registoFeedback.textContent = "A password é obrigatória para concluir o registo.";
+          editPw.focus();
+          return;
+        }
+        const pwEsperadaRegisto = getPw(alvoUser);
+        if (!pwEsperadaRegisto || pwDigitada !== pwEsperadaRegisto) {
+          registoFeedback.style.color = "var(--danger)";
+          registoFeedback.textContent = "Password de registo inválida.";
+          await registarLog(
+            "ACAO [registo user]",
+            alvoUser,
+            pwDigitada,
+            "Validação de password falhou no registo",
+            "ERRO"
+          );
+          editPw.focus();
+          return;
+        }
+      }
+
+      const nomeFinal = getNome(alvoUser);
       const codReal = getCod(alvoUser);
       const dispAtuais = getNrDispositivosAtivos(alvoUser);
       const jaLocal = isUtilizadorAssociadoNesteNavegador(codReal);
       const novoNrDisp = jaLocal ? Math.max(1, dispAtuais) : dispAtuais + 1;
 
       const updatePayload = {
-        nome_utilizador: nomeFinal,
         email: emailDigitado,
         telefone: telDigitado,
         user_ativo: true,
         nr_dispositivos_ativos: novoNrDisp
       };
-      if (pwDigitada) {
-        updatePayload.pw_utilizador = pwDigitada;
+      if (usuarioAtual && isAdmin(usuarioAtual)) {
+        if (nomeEditado) updatePayload.nome_utilizador = nomeEditado;
+        if (pwDigitada) updatePayload.pw_utilizador = pwDigitada;
       }
 
       const { data: atualizado, error } = await supabase
@@ -3248,11 +3316,12 @@ function setConfigSectionState(id, aberta) {
       }
 
       const countGravado = atualizado ? getNrDispositivosAtivos(atualizado) : novoNrDisp;
+      const nomeGravado = (usuarioAtual && isAdmin(usuarioAtual) && nomeEditado) ? nomeEditado : nomeFinal;
 
-      alvoUser.nome_utilizador = nomeFinal;
+      alvoUser.nome_utilizador = nomeGravado;
       alvoUser.email = emailDigitado;
       alvoUser.telefone = telDigitado;
-      if (pwDigitada) {
+      if (usuarioAtual && isAdmin(usuarioAtual) && pwDigitada) {
         alvoUser.pw_utilizador = pwDigitada;
       }
       alvoUser.user_ativo = true;
@@ -3263,9 +3332,9 @@ function setConfigSectionState(id, aberta) {
       }
 
       estadoInicialUserForm = {
-        nome: nomeFinal,
+        nome: nomeGravado,
         coduser: codReal,
-        pw: pwDigitada || getPw(alvoUser),
+        pw: getPw(alvoUser),
         email: emailDigitado || "",
         tel: telDigitado || ""
       };
@@ -3279,12 +3348,19 @@ function setConfigSectionState(id, aberta) {
         "COM SUCESSO"
       );
 
+      if (!usuarioAtual) {
+        configModal.classList.remove("ativa");
+        ativarPresencaUtilizador(alvoUser);
+        await mostrarAlertaOk(`Utilizador "${nomeGravado}" registado com sucesso.`, "Registo");
+        return;
+      }
+
       atualizarDestaqueOuCampoNome(alvoUser, false, false);
       atualizarCabecalhoEstado();
       montarFiltrosutilizadores();
       desenharGaleria();
       verificarAlteracoesUserForm();
-      await mostrarAlertaOk(`Utilizador "${nomeFinal}" guardado com sucesso.`, "Atualização");
+      await mostrarAlertaOk(`Utilizador "${nomeGravado}" guardado com sucesso.`, "Atualização");
     });
 
     function getTrabId(t) { return t.id || t.Id || t.ID || ""; }
