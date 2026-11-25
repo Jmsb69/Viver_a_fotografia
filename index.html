@@ -49,11 +49,10 @@ body{position:relative;margin:0;min-height:100vh;background-color:#000000;color:
 .btn-fechar-icone:hover{background:transparent!important;color:var(--paper-strong);transform:scale(1.06)}
 .btn-fechar-icone svg{width:20px;height:20px;display:block;fill:none}
 main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;gap:1.25rem}
-.section-shell{background:#000;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.section-header-btn,.section-header-static{width:100%;background:#000;border:0;padding:.9rem 1.15rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:var(--brass);text-align:left;cursor:pointer;outline:none}
-.section-header-btn:hover,.section-header-static:hover{background:#000}
-.section-header-btn:focus,.section-header-btn:focus-visible,.section-header-btn:active{background:#000;outline:none}
-.section-header-title-area{display:inline-flex;align-items:center;gap:.65rem;padding-bottom:.12rem;border-bottom:1px solid transparent;transition:border-bottom-color .15s ease}
+.section-shell{background:#000000;border:1px solid var(--line);border-radius:10px;overflow:hidden;width:100%;max-width:100%;min-width:0}
+.section-header-btn,.section-header-static{appearance:none;-webkit-appearance:none;width:100%;background:#000000!important;background-color:#000000!important;border:0;box-shadow:none;padding:.9rem 1.15rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:var(--brass);text-align:left;cursor:pointer;outline:none}
+.section-header-btn:hover,.section-header-static:hover,.section-header-btn:focus,.section-header-btn:focus-visible,.section-header-btn:active,.section-header-btn.selecionado{background:#000000!important;background-color:#000000!important;outline:none;box-shadow:none}
+.section-header-title-area{display:inline-flex;align-items:center;gap:.65rem;padding-bottom:.12rem;border-bottom:1px solid transparent;transition:border-bottom-color .15s ease;min-width:0}
 .section-header-btn.selecionado .section-header-title-area{border-bottom-color:var(--brass-soft)}
 .header-icon,.win-control-zone,.win-symbol,.filtro-icone-svg{color:var(--soft-white)!important;fill:none;stroke:currentColor;filter:none!important;text-shadow:none!important}
 .header-icon svg,.filtro-icone-svg svg{width:20px;height:20px;display:block;fill:none}
@@ -62,41 +61,43 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .win-symbol svg{width:16px;height:16px;display:block;fill:none}
 .section-main-title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--brass);letter-spacing:.03em}
 .section-shell:not(.aberta) .section-body{display:none}
-.section-body{padding:1rem 1.15rem 1.25rem;border-top:1px solid var(--line)}
+.section-body{padding:1rem 1.15rem 1.25rem;border-top:1px solid var(--line);background:#000000;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
 .upload-subtitle{margin:0 0 .65rem;font-size:.9rem;color:var(--muted)}
-.trabalhos-curso-lista{display:flex;flex-direction:column;gap:.35rem}
-.trabalho-opcao{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:.85rem;padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;cursor:pointer;color:var(--paper-soft);font-size:.92rem;outline:none}
+.trabalhos-curso-lista{display:flex;flex-direction:column;gap:.35rem;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.trabalho-opcao{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:.85rem;width:100%;max-width:100%;min-width:0;padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;cursor:pointer;color:var(--paper-soft);font-size:.92rem;outline:none}
 .trabalho-opcao:hover,.trabalho-opcao.drag-alvo{border-color:var(--line-hover);background:rgba(212,163,89,.07);color:var(--paper-strong)}
 .trabalho-opcao.selecionado,.trabalho-opcao.destacado{border-color:var(--brass-soft);background:rgba(212,163,89,.05);color:var(--paper-strong)}
 .trabalho-opcao.atenuado{opacity:.78}
 .browse-data-col{font-size:.82rem;color:var(--muted);white-space:nowrap;min-width:96px}
-.browse-nome-col{text-align:left;width:100%;min-width:0;overflow-wrap:anywhere}
-.upload-contador-bar{display:none;flex-wrap:wrap;align-items:center;gap:.35rem;margin-top:.85rem;padding:.55rem .75rem;border-radius:6px;border:1px solid var(--line);font-size:.86rem;color:var(--paper-soft)}
+.browse-nome-col{text-align:left;width:100%;max-width:100%;min-width:0;overflow-wrap:anywhere;word-break:break-word}
+.upload-contador-bar{display:none;flex-wrap:wrap;align-items:center;gap:.35rem;margin-top:.85rem;padding:.55rem .75rem;border-radius:6px;border:1px solid var(--line);font-size:.86rem;color:var(--paper-soft);width:100%;max-width:100%}
 .upload-contador-bar.visivel-logado{display:flex}
 .upload-contador-bar.em-preview{border-style:dashed;border-color:var(--brass-soft)}
 .upload-contador-numero,.upload-contador-tema-destaque{color:var(--brass)}
 .upload-contador-preview-tag{color:var(--muted);font-size:.8rem}
-.filtros-janela{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#000}
-.filtros-janela-header{padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;cursor:pointer;background:#000}
-.filtros-janela-header-left{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.filtros-janela{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#000000;width:100%;max-width:100%;min-width:0}
+.filtros-janela-header{padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;cursor:pointer;background:#000000}
+.filtros-janela-header-left{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;min-width:0}
 .filtros-label-grupo{display:inline-flex;align-items:center;gap:.5rem}
 .submenu-title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.25rem;font-weight:600;color:var(--brass)}
 .count{font-size:.84rem;color:var(--muted)}
 .filtros-janela:not(.aberta) .filtros-janela-body{display:none}
-.filtros-janela-body{padding:1rem;border-top:1px solid var(--line)}
-.filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
+.filtros-janela-body{padding:1rem;border-top:1px solid var(--line);width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;width:100%;max-width:100%;min-width:0}
 .filtros-refresh-rodape{display:flex;justify-content:center;align-items:center;margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--line)}
 @media (max-width:640px){.filtros-refresh-rodape{justify-content:flex-end}.trabalho-opcao{grid-template-columns:max-content minmax(0,1fr);gap:.65rem;padding:.55rem .6rem}.browse-data-col{min-width:88px}}
-.filter-box{display:flex;flex-direction:column;gap:.4rem}
+.filter-box{display:flex;flex-direction:column;gap:.4rem;width:100%;max-width:100%;min-width:0}
 .filter-box>label{font-size:.82rem;color:var(--brass);font-weight:400}
-.filtro-caixa-moldura{border:1px solid var(--line);border-radius:6px;padding:.5rem;background:#000}
-.scroll-select-box{max-height:185px;overflow-y:auto;display:flex;flex-direction:column;gap:.2rem}
-.browse-linha-opcao{display:flex;align-items:center;gap:.55rem;padding:.32rem .45rem;border-radius:4px;color:var(--paper-soft);font-size:.86rem}
+.filtro-caixa-moldura{border:1px solid var(--line);border-radius:6px;padding:.5rem;background:#000000;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.scroll-select-box{max-height:185px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:.2rem;width:100%;max-width:100%;min-width:0}
+#list-trabalhos-checkboxes,#list-utilizadores-checkboxes{display:flex;flex-direction:column;gap:.2rem;width:100%;max-width:100%;min-width:0}
+.browse-linha-opcao{display:flex;align-items:center;gap:.55rem;width:100%;max-width:100%;min-width:0;padding:.32rem .45rem;border-radius:4px;color:var(--paper-soft);font-size:.86rem}
+.browse-linha-opcao label{flex:1 1 auto;min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
 .browse-linha-opcao.selecionado{color:var(--paper-strong);background:transparent}
-.browse-linha-opcao input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-width:16px;margin:0;border-radius:4px;background-color:#2c2a27;border:1px solid rgba(212,163,89,0.28);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background-color .15s ease,border-color .15s ease}
+.browse-linha-opcao input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-width:16px;flex:0 0 16px;margin:0;border-radius:4px;background-color:#2c2a27;border:1px solid rgba(212,163,89,0.28);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background-color .15s ease,border-color .15s ease}
 .browse-linha-opcao input[type="checkbox"]:hover{border-color:var(--brass-soft)}
 .browse-linha-opcao input[type="checkbox"]:checked{background-color:var(--brass);border-color:var(--brass);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23000000' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round' d='M3.2 8.4l3.1 3.1 6.5-6.8'/></svg>");background-repeat:no-repeat;background-position:center;background-size:12px 12px}
-input[type="date"]{background:#000;border:1px solid var(--line);color:var(--paper-soft);border-radius:4px;padding:.3rem .4rem;width:100%;font-family:inherit;font-size:.82rem}
+input[type="date"]{background:#000000;border:1px solid var(--line);color:var(--paper-soft);border-radius:4px;padding:.3rem .4rem;width:100%;max-width:100%;min-width:0;font-family:inherit;font-size:.82rem}
 input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.15);cursor:pointer}
 .botoes-filtro-acao{display:flex;flex-direction:column;align-items:center;gap:.45rem}
 .btn-filtro-par{min-width:170px}
@@ -105,13 +106,13 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 .section-group-date{font-size:.84rem;color:var(--muted)}
 .section-group-title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.35rem;font-weight:600;color:var(--brass)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem}
-.card{position:relative;margin:0;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#000;aspect-ratio:4/3;cursor:pointer}
+.card{position:relative;margin:0;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#000000;aspect-ratio:4/3;cursor:pointer}
 .card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}
 .card:hover img{transform:scale(1.03)}
 .card-meta-top,.card-meta-bottom{position:absolute;left:0;right:0;padding:.4rem .6rem;font-size:.76rem;color:var(--paper);pointer-events:none}
 .card-meta-top{top:0;background:linear-gradient(to bottom,rgba(0,0,0,.72),transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-meta-bottom{bottom:0;background:linear-gradient(to top,rgba(0,0,0,.78),transparent)}
-.delete-btn{position:absolute;top:.45rem;right:.45rem;z-index:2;background:rgba(0,0,0,.78);border:1px solid var(--line);border-radius:5px;padding:.25rem .4rem;cursor:pointer;font-size:.85rem}
+.delete-btn{appearance:none;-webkit-appearance:none;position:absolute;top:.45rem;right:.45rem;z-index:2;background:rgba(0,0,0,.78);border:1px solid var(--line);border-radius:5px;padding:.25rem .4rem;cursor:pointer;font-size:.85rem}
 .empty{color:var(--muted);font-size:.92rem}
 #help-balao-flutuante{position:fixed;z-index:900;pointer-events:none;opacity:0;transition:opacity .15s;background:var(--help-grey);border:1px solid rgba(20,18,16,.28);color:var(--help-ink);padding:.7rem .95rem;border-radius:8px;font-size:.8rem;font-weight:300;line-height:1.55;text-align:center;max-width:calc(100vw - 20px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
 #help-balao-flutuante.visivel{opacity:1}
@@ -126,8 +127,8 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 #login-modal{background:rgba(0,0,0,.14);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px)}
 #login-modal .config-content{background:rgba(24,22,19,.56);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(212,163,89,.34);box-shadow:0 18px 46px rgba(0,0,0,.36)}
 #login-modal input[type="password"]{background:rgba(18,17,15,.58)!important;border-color:rgba(212,163,89,.28)!important}
-.login-browse-janela{border:1px solid rgba(212,163,89,.24);border-radius:8px;overflow:hidden;background:rgba(20,19,17,.48)}
-.login-browse-lista{display:flex;flex-direction:column;gap:.25rem;max-height:170px;overflow-y:auto;padding:.5rem;background:rgba(20,19,17,.48);scrollbar-width:thin;scrollbar-color:#7a756d #141311}
+.login-browse-janela{border:1px solid rgba(212,163,89,.24);border-radius:8px;overflow:hidden;background:rgba(20,19,17,.48);width:100%;max-width:100%;min-width:0}
+.login-browse-lista{display:flex;flex-direction:column;gap:.25rem;width:100%;max-width:100%;min-width:0;max-height:170px;overflow-y:auto;overflow-x:hidden;padding:.5rem;background:rgba(20,19,17,.48);scrollbar-width:thin;scrollbar-color:#7a756d #141311}
 .login-browse-lista::-webkit-scrollbar{width:11px}
 .login-browse-lista::-webkit-scrollbar-track{background:#141311}
 .login-browse-lista::-webkit-scrollbar-thumb{background:#7a756d;border-radius:6px;border:2px solid #141311}
@@ -135,7 +136,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 .login-browse-lista::-webkit-scrollbar-button:single-button{background-color:#141311;display:block;height:13px;width:13px;border:1px solid rgba(255,255,255,.14)}
 .login-browse-lista::-webkit-scrollbar-button:single-button:vertical:decrement{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path fill='%23989288' d='M5 2L8.5 7h-7z'/></svg>");background-repeat:no-repeat;background-position:center}
 .login-browse-lista::-webkit-scrollbar-button:single-button:vertical:increment{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'><path fill='%23989288' d='M5 8L1.5 3h7z'/></svg>");background-repeat:no-repeat;background-position:center}
-.login-user-opcao{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.4rem .65rem;border-radius:6px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--paper-soft);font-size:.88rem;font-weight:300;outline:none;transition:background .15s ease,border-color .15s ease,color .15s ease}
+.login-user-opcao{display:flex;align-items:center;justify-content:center;gap:.5rem;width:100%;max-width:100%;min-width:0;padding:.4rem .65rem;border-radius:6px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--paper-soft);font-size:.88rem;font-weight:300;outline:none;overflow-wrap:anywhere;word-break:break-word;transition:background .15s ease,border-color .15s ease,color .15s ease}
 .login-user-opcao:hover:not(.selecionado){background:rgba(212,163,89,.06);border-color:var(--line);color:var(--paper)}
 .login-user-opcao.selecionado,.login-user-opcao:focus{background:transparent;border-color:var(--brass-soft);color:var(--paper-strong);font-weight:400}
 .login-user-opcao.selecionado:hover,.login-user-opcao:focus:hover{background:rgba(212,163,89,.06)}
@@ -145,33 +146,35 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 .confirm-alvo{display:flex;flex-direction:column;gap:.2rem;padding:.7rem;border-radius:6px;background:rgba(255,255,255,.55);border:1px solid rgba(20,18,16,.22);margin-bottom:1.1rem}
 .confirm-alvo-nome{font-weight:600;font-size:1.04rem;color:var(--help-ink)}
 .confirm-acoes{display:flex;justify-content:center;gap:.8rem}
-.confirm-btn{padding:.5rem 1.35rem;border-radius:6px;border:1px solid rgba(20,18,16,.35);background:rgba(20,18,16,.08);color:var(--help-ink);font-weight:500;cursor:pointer;font-size:.9rem;transition:background .2s,color .2s}
+.confirm-btn{appearance:none;-webkit-appearance:none;padding:.5rem 1.35rem;border-radius:6px;border:1px solid rgba(20,18,16,.35);background:rgba(20,18,16,.08);color:var(--help-ink);font-weight:500;cursor:pointer;font-size:.9rem;transition:background .2s,color .2s}
 .confirm-btn:hover{background:var(--help-ink);color:var(--help-grey)}
-.config-content{background:#000;border:1px solid var(--line);border-radius:10px;padding:1.5rem;width:100%;max-width:720px;max-height:90vh;overflow-y:auto}
-.config-section-shell{background:#000;border:1px solid var(--line);border-radius:8px;overflow:hidden}
-.config-section-header{width:100%;background:#000;border:0;border-bottom:1px solid transparent;padding:.85rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:var(--brass);text-align:left;cursor:pointer;filter:none;text-shadow:none;transition:border-bottom-color .15s ease,color .15s ease}
-.config-section-header h3{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.38rem;color:var(--brass);letter-spacing:.04em;filter:none;text-shadow:none;transition:color .15s ease}
+.config-content{background:#000000;border:1px solid var(--line);border-radius:10px;padding:1.5rem;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;overflow-x:hidden}
+.config-section-shell{background:#000000;border:1px solid var(--line);border-radius:8px;overflow:hidden;width:100%;max-width:100%;min-width:0}
+.config-section-header{appearance:none;-webkit-appearance:none;width:100%;background:#000000!important;background-color:#000000!important;border:0;border-bottom:1px solid transparent;padding:.85rem 1.1rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:var(--brass)!important;text-align:left;cursor:pointer;filter:none;text-shadow:none;transition:border-bottom-color .15s ease,color .15s ease}
+.config-section-header h3{margin:0;font-family:'Cormorant Garamond',serif;font-size:1.38rem;color:var(--brass)!important;letter-spacing:.04em;filter:none;text-shadow:none;transition:color .15s ease}
 .config-section-header:hover{border-bottom-color:var(--line-hover)}
 .config-section-shell.aberta .config-section-header{border-bottom-color:var(--line)}
-#config-modal.ativa #config-modal-titulo,#config-modal.ativa #btn-config,.config-section-shell.aberta .config-section-header,.config-section-shell.aberta .config-section-header h3,.config-section-header.ativo,.config-section-header.ativo h3,.config-section-header[aria-expanded="true"],.config-section-header[aria-expanded="true"] h3{color:var(--soft-white)!important;filter:none!important;text-shadow:none!important}
+#config-modal.ativa #config-modal-titulo,#config-modal.ativa #btn-config{color:var(--soft-white);filter:none;text-shadow:none}
+.config-section-shell.aberta .config-section-header,.config-section-shell.aberta .config-section-header h3,.config-section-header.ativo,.config-section-header.ativo h3,.config-section-header[aria-expanded="true"],.config-section-header[aria-expanded="true"] h3{color:var(--brass)!important;filter:none;text-shadow:none}
 .config-section-shell:not(.aberta) .config-section-body{display:none}
-.config-section-body{padding:1.15rem;background:#000}
+.config-section-body{padding:1.15rem;background:#000000;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
 .config-section-body label{color:var(--brass)!important;font-weight:400!important;font-size:.82rem;letter-spacing:.04em}
-.config-nome-destaque{display:none;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.45rem .75rem;border-radius:6px;background:transparent;border:1px solid var(--brass-soft);color:var(--paper-strong);font-weight:400;font-size:.92rem}
+.config-section-body .form-group{width:100%;max-width:100%;min-width:0}
+.config-nome-destaque{display:none;align-items:center;gap:.5rem;margin-bottom:.75rem;padding:.45rem .75rem;border-radius:6px;background:transparent;border:1px solid var(--brass-soft);color:var(--paper-strong);font-weight:400;font-size:.92rem;max-width:100%;min-width:0}
 .config-nome-destaque.visivel{display:inline-flex}
-.config-browse-box{max-height:170px;overflow-y:auto;display:flex;flex-direction:column;gap:.25rem;border:1px solid var(--line);border-radius:6px;background:#000;padding:.5rem}
-.config-browse-item{padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--paper-soft);cursor:pointer;font-size:.95rem;font-weight:400;outline:none;transition:background .15s ease,border-color .15s ease,color .15s ease,opacity .15s ease}
+.config-browse-box{max-height:158px;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:.2rem;border:1px solid var(--line);border-radius:6px;background:#000000;padding:.4rem;width:100%;max-width:100%;min-width:0}
+.config-browse-item{width:100%;max-width:100%;min-width:0;padding:.44rem .7rem;border-radius:6px;border:1px solid transparent;background:transparent;color:var(--paper-soft);cursor:pointer;font-size:.93rem;font-weight:400;outline:none;overflow-wrap:anywhere;word-break:break-word;transition:background .15s ease,border-color .15s ease,color .15s ease,opacity .15s ease}
 .config-browse-item:hover:not(.ativo){opacity:.92;background:rgba(212,163,89,.05);border-color:var(--line);color:var(--paper)}
 .config-browse-item.ativo,.config-browse-item:focus{opacity:1;background:transparent;border-color:var(--brass-soft);color:var(--paper-strong);font-weight:500;box-shadow:none}
 .config-browse-item.ativo:hover,.config-browse-item:focus:hover{background:rgba(212,163,89,.05)}
-.projetor{position:fixed;inset:0;z-index:1200;background:#000;display:none;align-items:center;justify-content:center}
+.projetor{position:fixed;inset:0;z-index:1200;background:#000000;display:none;align-items:center;justify-content:center}
 .projetor.aberto{display:flex}
 .projetor img{max-width:94vw;max-height:84vh;object-fit:contain;border:1px solid var(--line);border-radius:8px}
 .projetor-header{position:absolute;top:1rem;left:1.25rem;font-family:"Cormorant Garamond",serif;font-size:1.2rem;color:var(--brass)}
 .projetor-bottom-right{position:absolute;bottom:3.4rem;right:1.25rem;font-size:.85rem;color:var(--muted)}
-.projetor-bar{position:absolute;bottom:0;left:0;right:0;padding:.75rem 1.25rem;background:#000;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:.88rem}
+.projetor-bar{position:absolute;bottom:0;left:0;right:0;padding:.75rem 1.25rem;background:#000000;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:.88rem}
 .projetor-bar .actions{display:flex;align-items:center;gap:.65rem}
-.nav-arrow{position:absolute;top:50%;transform:translateY(-50%);background:#000;border:1px solid var(--line);color:var(--paper);font-size:2rem;width:46px;height:64px;border-radius:8px;cursor:pointer}
+.nav-arrow{appearance:none;-webkit-appearance:none;position:absolute;top:50%;transform:translateY(-50%);background:#000000;border:1px solid var(--line);color:var(--paper);font-size:2rem;width:46px;height:64px;border-radius:8px;cursor:pointer}
 .nav-arrow-prev{left:1rem}
 .nav-arrow-next{right:1rem}
 </style>
@@ -212,7 +215,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </div>
 <div id="login-pw-group" style="text-align:center;">
 <label for="login-pw" style="display:block;font-size:.82rem;color:var(--muted);font-weight:400;letter-spacing:.04em;margin-bottom:.35rem;text-align:center;">Password de Registo</label>
-<input type="password" id="login-pw" placeholder="Password" style="width:100%;padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper-soft);">
+<input type="password" id="login-pw" placeholder="Password" style="width:100%;padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper-soft);">
 </div>
 <button id="btn-login-entrar" type="submit">Entrar</button>
 <p id="login-error" style="color:var(--danger);font-size:.84rem;margin:0;text-align:center;"></p>
@@ -280,9 +283,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div style="display:flex;flex-direction:column;gap:.65rem;">
 <div class="filtro-caixa-moldura" style="display:flex;flex-direction:column;gap:.5rem;height:auto;box-sizing:border-box;justify-content:flex-start;align-items:stretch;">
 <div style="display:flex;gap:.4rem;align-items:center;width:100%;">
-<div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:.35rem;"><label style="font-size:.75rem;color:var(--muted);font-weight:400;margin:0 0 .2rem 0;">Data Início</label><input type="date" id="filter-data-inicio"></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:.35rem;min-width:0;"><label style="font-size:.75rem;color:var(--muted);font-weight:400;margin:0 0 .2rem 0;">Data Início</label><input type="date" id="filter-data-inicio"></div>
 <span style="color:var(--muted);align-self:center;">-</span>
-<div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:.35rem;"><label style="font-size:.75rem;color:var(--muted);font-weight:400;margin:0 0 .2rem 0;">Data Fim</label><input type="date" id="filter-data-fim"></div>
+<div style="flex:1;display:flex;flex-direction:column;align-items:flex-start;margin:0;padding:.35rem;min-width:0;"><label style="font-size:.75rem;color:var(--muted);font-weight:400;margin:0 0 .2rem 0;">Data Fim</label><input type="date" id="filter-data-fim"></div>
 </div>
 <div class="botoes-filtro-acao">
 <button class="btn-filtro-par" id="btn-limpar-datas" type="button">Limpar datas</button>
@@ -333,10 +336,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div class="config-content">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.35rem;">
 <span class="section-header-title-area">
-<span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+<span class="header-icon" id="config-modal-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
 <h2 id="config-modal-titulo" style="margin:0;font-family:'Cormorant Garamond',serif;color:var(--brass);">Painel de Configurações</h2>
 </span>
-<button type="button" class="win-control-zone" id="close-config" title="Fechar" aria-label="Fechar" style="background:transparent;border:0;cursor:pointer;"><span class="win-symbol" id="sym-close-config"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v3h3M13 3L9 7M7 12V9H4M3 13l4-4"/></svg></span></button>
+<button type="button" class="win-control-zone" id="close-config" title="Fechar" aria-label="Fechar" style="appearance:none;-webkit-appearance:none;background:transparent;border:0;cursor:pointer;"><span class="win-symbol" id="sym-close-config"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v3h3M13 3L9 7M7 12V9H4M3 13l4-4"/></svg></span></button>
 </div>
 <div style="display:grid;gap:1.25rem;">
 <div class="config-section-shell" id="admin-trabalhos-section" style="display:none;">
@@ -358,7 +361,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </div>
 <div class="form-group" id="grupo-edit-trab-nome" style="margin:0;grid-column:span 2;display:none;">
 <label for="edit-input-trab-nome" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Nome da Aula, Tema ou Trabalho</label>
-<input type="text" id="edit-input-trab-nome" placeholder="Nome da aula, tema ou trabalho" style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<input type="text" id="edit-input-trab-nome" placeholder="Nome da aula, tema ou trabalho" style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
 <div class="form-group" style="margin:0;">
 <label for="edit-trab-data" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Data do Trabalho</label>
@@ -366,7 +369,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </div>
 <div class="form-group" style="margin:0;">
 <label for="edit-trab-limite" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Máximo de fotografias por Fotógrafo</label>
-<input type="number" id="edit-trab-limite" value="10" min="1" required style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<input type="number" id="edit-trab-limite" value="10" min="1" required style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
 <label style="display:flex;align-items:center;gap:.5rem;grid-column:span 2;margin-top:.4rem;color:var(--brass);font-weight:400;font-size:.82rem;letter-spacing:.04em;"><input type="checkbox" id="edit-trab-ativo" checked> Trabalho Ativo</label>
 <div style="grid-column:span 2;display:flex;justify-content:flex-end;align-items:center;gap:.75rem;margin-top:.5rem;">
@@ -394,24 +397,24 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div id="user-browse-container" class="config-browse-box" role="listbox" aria-label="Selecionar utilizador"></div>
 </div>
 <div class="form-group" id="grupo-edit-nome" style="margin:0;grid-column:span 2;display:none;">
-<label for="edit-input-nome" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Nome do Utilizador</label>
-<input type="text" id="edit-input-nome" placeholder="Nome do utilizador" style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<label for="edit-input-nome" id="label-edit-nome" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Nome do Utilizador</label>
+<input type="text" id="edit-input-nome" placeholder="Nome do utilizador" style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
 <div class="form-group" id="grupo-edit-coduser" style="margin:0;">
 <label for="edit-input-coduser" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Código de Utilizador</label>
-<input type="text" id="edit-input-coduser" placeholder="Ex.: js1" style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<input type="text" id="edit-input-coduser" placeholder="Ex.: js1" style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
-<div class="form-group" id="grupo-edit-pw" style="margin:0;">
-<label for="edit-pw" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Password de Registo</label>
-<input type="password" id="edit-pw" placeholder="Password de Registo" style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<div class="form-group" id="grupo-edit-pw" style="margin:0;grid-column:span 2;">
+<label for="edit-pw" id="label-edit-pw" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Password de Primeiro Registo</label>
+<input type="password" id="edit-pw" placeholder="Password de Primeiro Registo" style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
-<div class="form-group" style="margin:0;">
+<div class="form-group" id="grupo-edit-email" style="margin:0;">
 <label for="edit-email" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Email (opcional)</label>
-<input type="email" id="edit-email" placeholder="Endereço de Mail" style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<input type="email" id="edit-email" placeholder="Endereço de Mail" style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
-<div class="form-group" style="margin:0;">
+<div class="form-group" id="grupo-edit-tel" style="margin:0;">
 <label for="edit-tel" style="font-size:.82rem;color:var(--brass);font-weight:400;letter-spacing:.04em;margin-bottom:.3rem;display:block;">Telefone (opcional)</label>
-<input type="text" id="edit-tel" placeholder="Número de Telefone" style="padding:.6rem;background:#000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
+<input type="text" id="edit-tel" placeholder="Número de Telefone" style="padding:.6rem;background:#000000;border:1px solid var(--line);border-radius:4px;color:var(--paper);width:100%;">
 </div>
 <p id="registo-feedback" style="grid-column:span 2;margin:0;font-size:.88rem;color:var(--brass);"></p>
 <div style="grid-column:span 2;display:flex;justify-content:flex-end;align-items:center;gap:.75rem;margin-top:.4rem;">
@@ -441,6 +444,9 @@ return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width=
 function svgSetasFechar(){
 return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v3h3M13 3L9 7M7 12V9H4M3 13l4-4"/></svg>';
 }
+function svgEngrenagemConfig(){
+return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+}
 function atualizarIconeSetasElemento(symEl,ativo){
 if(!symEl)return;
 symEl.innerHTML=ativo?svgSetasFechar():svgSetasObliquas();
@@ -453,16 +459,26 @@ var ids=["btn-auth-toggle","btn-registo-header","btn-config","current-user-displ
 for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(!el)continue;el.style.transform="translateZ(0)";void el.offsetHeight;}
 }
 function atualizarEstadoCabecalhoConfig(){
-var modalAberto=!!(document.getElementById("config-modal")&&document.getElementById("config-modal").classList.contains("ativa"));
+var modalEl=document.getElementById("config-modal");
+var modalAberto=!!(modalEl&&modalEl.classList.contains("ativa"));
 var shells=document.querySelectorAll(".config-section-shell");
 for(var i=0;i<shells.length;i++){
 var aberta=shells[i].classList.contains("aberta");
 var hdr=shells[i].querySelector(".config-section-header");
-if(hdr){hdr.classList.toggle("ativo",aberta);hdr.classList.toggle("selecionado",aberta);hdr.setAttribute("aria-expanded",String(aberta));}
+if(hdr){
+hdr.classList.toggle("ativo",aberta);
+hdr.classList.toggle("selecionado",aberta);
+hdr.setAttribute("aria-expanded",String(aberta));
+hdr.style.color="var(--brass)";
+var h3Sec=hdr.querySelector("h3");
+if(h3Sec)h3Sec.style.color="var(--brass)";
+}
 var symSec=shells[i].querySelector(".win-symbol");
 atualizarIconeSetasElemento(symSec,aberta);
 }
 var btnCfg=document.getElementById("btn-config");if(btnCfg)btnCfg.classList.toggle("ativo",modalAberto);
+var modalIcon=document.getElementById("config-modal-icon");
+if(modalIcon)modalIcon.innerHTML=svgEngrenagemConfig();
 var symClose=document.getElementById("sym-close-config");atualizarIconeSetasElemento(symClose,true);
 forcarRepinturaCabecalho();
 }
@@ -614,7 +630,7 @@ if(btnAlertaOk)btnAlertaOk.addEventListener("click",()=>{if(typeof resolverAlert
 
 const loginModal=document.getElementById("login-modal"),loginForm=document.getElementById("login-form"),loginUserBrowse=document.getElementById("login-user-browse"),loginUserSelect=document.getElementById("login-user-select"),loginPwGroup=document.getElementById("login-pw-group"),loginDescricao=document.getElementById("login-descricao"),loginPw=document.getElementById("login-pw"),loginError=document.getElementById("login-error"),btnLoginEntrar=document.getElementById("btn-login-entrar"),btnLoginRegistoInativo=document.getElementById("btn-login-registo-inativo"),btnFecharLogin=document.getElementById("btn-fechar-login");
 const currentUserDisplay=document.getElementById("current-user-display"),btnRegistoHeader=document.getElementById("btn-registo-header"),btnAuthToggle=document.getElementById("btn-auth-toggle"),btnConfig=document.getElementById("btn-config");
-const configModal=document.getElementById("config-modal"),configModalTitulo=document.getElementById("config-modal-titulo"),closeConfig=document.getElementById("close-config"),userBrowseWrapper=document.getElementById("user-browse-wrapper"),labelUserBrowse=document.getElementById("label-user-browse"),userBrowseContainer=document.getElementById("user-browse-container"),userNomeRealcado=document.getElementById("config-user-nome-realcado"),adminTrabalhosSection=document.getElementById("admin-trabalhos-section"),adminTrabBrowseWrapper=document.getElementById("admin-trab-browse-wrapper"),adminTrabBrowseContainer=document.getElementById("admin-trab-browse-container"),trabNomeRealcado=document.getElementById("config-trab-nome-realcado"),grupoEditTrabNome=document.getElementById("grupo-edit-trab-nome"),editInputTrabNome=document.getElementById("edit-input-trab-nome"),btnApagarUserAtual=document.getElementById("btn-apagar-user-atual"),btnNovoUserModo=document.getElementById("btn-novo-user-modo"),editCodUser=document.getElementById("edit-cod-user"),grupoEditNome=document.getElementById("grupo-edit-nome"),editInputNome=document.getElementById("edit-input-nome"),grupoEditCodUser=document.getElementById("grupo-edit-coduser"),editInputCodUser=document.getElementById("edit-input-coduser"),grupoEditPw=document.getElementById("grupo-edit-pw"),editPw=document.getElementById("edit-pw"),editEmail=document.getElementById("edit-email"),editTel=document.getElementById("edit-tel"),registoFeedback=document.getElementById("registo-feedback"),btnSaveUser=document.getElementById("btn-save-user");
+const configModal=document.getElementById("config-modal"),configModalTitulo=document.getElementById("config-modal-titulo"),closeConfig=document.getElementById("close-config"),userBrowseWrapper=document.getElementById("user-browse-wrapper"),labelUserBrowse=document.getElementById("label-user-browse"),userBrowseContainer=document.getElementById("user-browse-container"),userNomeRealcado=document.getElementById("config-user-nome-realcado"),adminTrabalhosSection=document.getElementById("admin-trabalhos-section"),adminTrabBrowseWrapper=document.getElementById("admin-trab-browse-wrapper"),adminTrabBrowseContainer=document.getElementById("admin-trab-browse-container"),trabNomeRealcado=document.getElementById("config-trab-nome-realcado"),grupoEditTrabNome=document.getElementById("grupo-edit-trab-nome"),editInputTrabNome=document.getElementById("edit-input-trab-nome"),btnApagarUserAtual=document.getElementById("btn-apagar-user-atual"),btnNovoUserModo=document.getElementById("btn-novo-user-modo"),editCodUser=document.getElementById("edit-cod-user"),grupoEditNome=document.getElementById("grupo-edit-nome"),labelEditNome=document.getElementById("label-edit-nome"),editInputNome=document.getElementById("edit-input-nome"),grupoEditCodUser=document.getElementById("grupo-edit-coduser"),editInputCodUser=document.getElementById("edit-input-coduser"),grupoEditPw=document.getElementById("grupo-edit-pw"),labelEditPw=document.getElementById("label-edit-pw"),editPw=document.getElementById("edit-pw"),grupoEditEmail=document.getElementById("grupo-edit-email"),editEmail=document.getElementById("edit-email"),grupoEditTel=document.getElementById("grupo-edit-tel"),editTel=document.getElementById("edit-tel"),registoFeedback=document.getElementById("registo-feedback"),btnSaveUser=document.getElementById("btn-save-user");
 const btnApagarTrabAtual=document.getElementById("btn-apagar-trab-atual"),btnNovoTrabModo=document.getElementById("btn-novo-trab-modo"),editTrabId=document.getElementById("edit-trab-id"),editTrabNome=document.getElementById("edit-trab-nome"),editTrabData=document.getElementById("edit-trab-data"),editTrabLimite=document.getElementById("edit-trab-limite"),editTrabAtivo=document.getElementById("edit-trab-ativo"),btnSaveTrab=document.getElementById("btn-save-trab");
 const contador=document.getElementById("contador"),btnRefreshFotos=document.getElementById("btn-refresh-fotos"),headerProjetaFotografias=document.getElementById("header-projeta-fotografias"),estado=document.getElementById("estado"),ficheiro=document.getElementById("ficheiro"),uploadFicheirosSelecionados=document.getElementById("upload-ficheiros-selecionados"),uploadAvisoLimite=document.getElementById("upload-aviso-limite"),projetor=document.getElementById("projetor"),slide=document.getElementById("slide"),legenda=document.getElementById("legenda"),pausaBtn=document.getElementById("pausa"),galeriaContainer=document.getElementById("galeria-container"),trabalhoCursoContainer=document.getElementById("trabalho-curso-container"),uploadTrabalhoVal=document.getElementById("upload-trabalho-val");
 
@@ -740,18 +756,43 @@ btnFecharLogin.addEventListener("click",()=>{pendenteAposLoginCallback=null;limp
 btnAuthToggle.addEventListener("click",()=>{btnAuthToggle.blur();if(usuarioAtual)sairDePresenca();else abrirFluxoLogin(null);});
 window.onAntesPartilhaExigirPresenca=(cb)=>{if(usuarioAtual)cb(getNome(usuarioAtual));else abrirFluxoLogin(cb);};
 
-function prepararEstadoInicialSecaoTrabalhos(){modoNovoTrabAtivo=false;carregarBrowseTrabalhosAdmin();}
-function prepararEstadoInicialSecaoUtilizadores(){modoNovoUserAtivo=false;registoFeedback.textContent="";if(usuarioAtual&&isAdmin(usuarioAtual))carregarBrowseUtilizadores(null,false,true);else if(usuarioAtual)configurarProprioUtilizadorSemBrowse(usuarioAtual);}
-window.onAbrirSecaoTrabalhosConfig=()=>{if(usuarioAtual&&isAdmin(usuarioAtual))prepararEstadoInicialSecaoTrabalhos();};
-window.onAbrirSecaoUtilizadoresConfig=()=>{if(usuarioAtual&&isAdmin(usuarioAtual))prepararEstadoInicialSecaoUtilizadores();else if(usuarioAtual)configurarProprioUtilizadorSemBrowse(usuarioAtual);};
 function isModoRegistoPublico(){return!usuarioAtual;}
+function isModoManutencaoUtilizadores(){return!!usuarioAtual;}
+
+function sincronizarTituloSecaoUtilizador(){
+const secUserTitulo=document.getElementById("sec-user-titulo");
+if(secUserTitulo)secUserTitulo.textContent=isModoRegistoPublico()?"Registo de Utilizador":"Manutenção de Utilizadores";
+}
+
+function prepararEstadoInicialSecaoTrabalhos(){modoNovoTrabAtivo=false;carregarBrowseTrabalhosAdmin();}
+function prepararEstadoInicialSecaoUtilizadores(){
+modoNovoUserAtivo=false;registoFeedback.textContent="";
+sincronizarTituloSecaoUtilizador();
+if(isModoRegistoPublico()){carregarBrowseUtilizadores(null,true,true);return;}
+if(usuarioAtual&&isAdmin(usuarioAtual))carregarBrowseUtilizadores(null,false,true);
+else if(usuarioAtual)configurarProprioUtilizadorSemBrowse(usuarioAtual);
+}
+window.onAbrirSecaoTrabalhosConfig=()=>{if(usuarioAtual&&isAdmin(usuarioAtual))prepararEstadoInicialSecaoTrabalhos();};
+window.onAbrirSecaoUtilizadoresConfig=()=>{
+sincronizarTituloSecaoUtilizador();
+if(isModoRegistoPublico()){prepararEstadoInicialSecaoUtilizadores();return;}
+if(usuarioAtual&&isAdmin(usuarioAtual))prepararEstadoInicialSecaoUtilizadores();
+else if(usuarioAtual)configurarProprioUtilizadorSemBrowse(usuarioAtual);
+};
 
 function configurarProprioUtilizadorSemBrowse(userObj){
 if(!userObj)return;modoNovoUserAtivo=false;registoFeedback.textContent="";btnNovoUserModo.style.display="none";btnApagarUserAtual.style.display="none";
+configModal.classList.remove("modo-registo-inicial");
+sincronizarTituloSecaoUtilizador();
 userBrowseWrapper.style.display="none";userBrowseContainer.innerHTML="";
 if(userNomeRealcado){userNomeRealcado.textContent="";userNomeRealcado.classList.remove("visivel");userNomeRealcado.style.display="none";}
-if(grupoEditNome)grupoEditNome.style.display="block";if(editInputNome)editInputNome.value=getNome(userObj);
-grupoEditCodUser.style.display="block";grupoEditPw.style.display="block";sincronizarEstadoCampoPw();
+if(grupoEditNome)grupoEditNome.style.display="block";if(labelEditNome)labelEditNome.textContent="Nome do Utilizador";if(editInputNome)editInputNome.value=getNome(userObj);
+if(grupoEditCodUser)grupoEditCodUser.style.display="block";
+if(grupoEditPw){grupoEditPw.style.display="block";grupoEditPw.style.gridColumn="";}
+if(labelEditPw)labelEditPw.textContent="Password de Registo";
+if(grupoEditEmail)grupoEditEmail.style.display="block";
+if(grupoEditTel)grupoEditTel.style.display="block";
+sincronizarEstadoCampoPw();
 editCodUser.value=getCod(userObj);editInputCodUser.value=getCod(userObj);editPw.value=getPw(userObj);editEmail.value=getEmail(userObj);editTel.value=getTel(userObj);
 estadoInicialUserForm={nome:getNome(userObj),coduser:getCod(userObj),pw:getPw(userObj),email:getEmail(userObj),tel:getTel(userObj)};
 btnSaveUser.textContent="Gravar Alterações";verificarAlteracoesUserForm();
@@ -759,9 +800,26 @@ btnSaveUser.textContent="Gravar Alterações";verificarAlteracoesUserForm();
 
 function sincronizarEstadoCampoPw(){
 const emReg=isModoRegistoPublico(),emCriacao=!!(modoNovoUserAtivo&&usuarioAtual&&isAdmin(usuarioAtual)),emAlt=!!editCodUser.value.trim()&&!emCriacao;
+sincronizarTituloSecaoUtilizador();
 editPw.readOnly=false;editPw.required=emReg;editPw.style.opacity="1";editPw.style.cursor="text";
+if(labelEditPw)labelEditPw.textContent=emReg?"Password de Primeiro Registo":"Password de Registo";
+if(editPw)editPw.placeholder=emReg?"Password de Primeiro Registo":"Password de Registo";
+if(grupoEditPw)grupoEditPw.style.gridColumn=emReg?"span 2":"";
+if(grupoEditCodUser)grupoEditCodUser.style.display=emReg?"none":"block";
+if(grupoEditEmail)grupoEditEmail.style.display=emReg?"none":"block";
+if(grupoEditTel)grupoEditTel.style.display=emReg?"none":"block";
 if(editInputCodUser){const b=emReg||emAlt;editInputCodUser.readOnly=b;editInputCodUser.style.opacity=b?".72":"1";editInputCodUser.style.cursor=b?"not-allowed":"text";}
-if(editInputNome){editInputNome.readOnly=emReg;editInputNome.style.opacity=emReg?".72":"1";editInputNome.style.cursor=emReg?"not-allowed":"text";}
+if(editInputNome){editInputNome.readOnly=emReg;editInputNome.style.opacity=emReg?".72":"1";editInputNome.style.cursor=emReg?"pointer":"text";editInputNome.title=emReg?"Clique para alterar o utilizador selecionado":"";}
+}
+
+if(editInputNome){
+editInputNome.addEventListener("click",()=>{
+if(isModoRegistoPublico()){
+registoFeedback.textContent="";
+carregarBrowseUtilizadores(null,true,true);
+setTimeout(()=>{const primeiro=userBrowseContainer.querySelector(".config-browse-item");if(primeiro)primeiro.focus();},10);
+}
+});
 }
 
 function atualizarDestaqueOuCampoNome(u,eNovo,mostrarBrowseQuandoVazio=false){
@@ -790,29 +848,37 @@ if(editInputNome)editInputNome.addEventListener("input",verificarAlteracoesUserF
 [editInputCodUser,editPw,editEmail,editTel].forEach(el=>el.addEventListener("input",verificarAlteracoesUserForm));
 
 function abrirEcraRegistoUtilizadorEspecifico(userAlvo=null){
-registoFeedback.textContent="";configModal.classList.add("ativa");configModalTitulo.textContent="Registo de Utilizador";
-document.getElementById("sec-user-titulo").textContent="Manutenção de Utilizadores";
-setConfigSectionState("utilizador-config-section",false);setConfigSectionState("admin-trabalhos-section",false);
+registoFeedback.textContent="";
+configModal.classList.add("ativa","modo-registo-inicial");
+configModalTitulo.textContent="Painel de Configurações";
+sincronizarTituloSecaoUtilizador();
+setConfigSectionState("admin-trabalhos-section",false);setConfigSectionState("utilizador-config-section",true);
 modoNovoUserAtivo=false;modoNovoTrabAtivo=false;btnNovoUserModo.style.display="none";adminTrabalhosSection.style.display="none";btnApagarUserAtual.style.display="none";
-userBrowseWrapper.style.display="block";labelUserBrowse.textContent="Selecionar Utilizador";grupoEditCodUser.style.display="block";grupoEditPw.style.display="block";
-const alvo=userAlvo||cacheutilizadores[0]||null;
-atualizarDestaqueOuCampoNome(alvo,false,true);carregarBrowseUtilizadores(alvo,true,false);
+labelUserBrowse.textContent="Selecionar Utilizador";
+if(userAlvo){
+grupoEditCodUser.style.display="none";grupoEditPw.style.display="block";
+carregarBrowseUtilizadores(userAlvo,true,false);
 if(editPw)setTimeout(()=>editPw.focus(),20);
+}else{
+carregarBrowseUtilizadores(null,true,true);
+setTimeout(()=>{const primeiro=userBrowseContainer.querySelector(".config-browse-item");if(primeiro)primeiro.focus();},20);
+}
 verificarAlteracoesUserForm();atualizarEstadoCabecalhoConfig();
 }
 
 function abrirEcraRegistoOuConfig(modoRegisto=true){
 registoFeedback.textContent="";configModal.classList.add("ativa");
+if(modoRegisto&&!usuarioAtual){abrirEcraRegistoUtilizadorEspecifico(null);return;}
+configModal.classList.remove("modo-registo-inicial");
 setConfigSectionState("admin-trabalhos-section",false);setConfigSectionState("utilizador-config-section",false);
-if(modoRegisto&&!usuarioAtual){abrirEcraRegistoUtilizadorEspecifico(cacheutilizadores[0]||null);return;}
 if(usuarioAtual&&isAdmin(usuarioAtual)){
-configModalTitulo.textContent="Painel de Configurações";document.getElementById("sec-user-titulo").textContent="Manutenção de Utilizadores";
+configModalTitulo.textContent="Painel de Configurações";sincronizarTituloSecaoUtilizador();
 modoNovoUserAtivo=false;modoNovoTrabAtivo=false;btnNovoUserModo.style.display="none";
 adminTrabalhosSection.style.display="block";adminTrabBrowseWrapper.style.display="block";adminTrabBrowseContainer.style.display="block";
 userBrowseWrapper.style.display="block";labelUserBrowse.textContent="Selecionar Utilizador";grupoEditCodUser.style.display="block";grupoEditPw.style.display="block";
 carregarBrowseUtilizadores(null,false,true);carregarBrowseTrabalhosAdmin();verificarAlteracoesUserForm();
 }else{
-configModalTitulo.textContent="Configurações";document.getElementById("sec-user-titulo").textContent="Manutenção de Utilizadores";
+configModalTitulo.textContent="Configurações";sincronizarTituloSecaoUtilizador();
 adminTrabalhosSection.style.display="none";adminTrabBrowseWrapper.style.display="none";adminTrabBrowseContainer.innerHTML="";
 setConfigSectionState("utilizador-config-section",true);configurarProprioUtilizadorSemBrowse(usuarioAtual);
 }
@@ -821,7 +887,7 @@ atualizarEstadoCabecalhoConfig();
 
 btnRegistoHeader.addEventListener("click",()=>{btnRegistoHeader.blur();abrirEcraRegistoOuConfig(true);});
 btnConfig.addEventListener("click",()=>{btnConfig.blur();abrirEcraRegistoOuConfig(false);});
-closeConfig.addEventListener("click",async()=>{closeConfig.blur();configModal.classList.remove("ativa");atualizarEstadoCabecalhoConfig();await carregarDadosSistema();atualizarCabecalhoEstado();});
+closeConfig.addEventListener("click",async()=>{closeConfig.blur();configModal.classList.remove("ativa","modo-registo-inicial");atualizarEstadoCabecalhoConfig();await carregarDadosSistema();atualizarCabecalhoEstado();});
 
 function marcarBrowseAtivo(container,idAlvo){
 if(!container)return;
@@ -840,11 +906,26 @@ userBrowseContainer.append(itemCriar);
 cacheutilizadores.forEach(u=>{
 const cod=getCod(u),nome=getNome(u),item=document.createElement("div");
 item.className="config-browse-item";item.tabIndex=0;item.setAttribute("role","option");item.setAttribute("data-id",cod);item.textContent=nome;
-item.addEventListener("click",()=>{modoNovoUserAtivo=false;registoFeedback.textContent="";preencherFormularioUtilizador(u,modoLimpoRegisto);atualizarDestaqueOuCampoNome(u,false,false);if(modoLimpoRegisto&&editPw)setTimeout(()=>editPw.focus(),10);verificarAlteracoesUserForm();});
+const selecionarEste=()=>{modoNovoUserAtivo=false;registoFeedback.textContent="";preencherFormularioUtilizador(u,modoLimpoRegisto);atualizarDestaqueOuCampoNome(u,false,false);if(modoLimpoRegisto&&editPw)setTimeout(()=>editPw.focus(),10);verificarAlteracoesUserForm();};
+item.addEventListener("click",selecionarEste);
+item.addEventListener("keydown",(ev)=>{
+const itens=Array.from(userBrowseContainer.querySelectorAll(".config-browse-item")),pos=itens.indexOf(item);
+if(ev.key==="ArrowDown"){ev.preventDefault();itens[(pos+1)%itens.length].focus();}
+else if(ev.key==="ArrowUp"){ev.preventDefault();itens[(pos-1+itens.length)%itens.length].focus();}
+else if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();selecionarEste();}
+});
 userBrowseContainer.append(item);
 });
-if(semSelecaoInicial){preencherFormularioUtilizador(null,false);marcarBrowseAtivo(userBrowseContainer,"");atualizarDestaqueOuCampoNome(null,false,true);}
-else{preencherFormularioUtilizador(userSelecionar,modoLimpoRegisto);if(userSelecionar)atualizarDestaqueOuCampoNome(userSelecionar,false,false);}
+if(semSelecaoInicial){
+preencherFormularioUtilizador(null,false);
+marcarBrowseAtivo(userBrowseContainer,"");
+atualizarDestaqueOuCampoNome(null,false,true);
+if(isModoRegistoPublico()){grupoEditCodUser.style.display="none";grupoEditPw.style.display="none";}
+}else{
+if(isModoRegistoPublico()){grupoEditCodUser.style.display="none";grupoEditPw.style.display="block";}
+preencherFormularioUtilizador(userSelecionar,modoLimpoRegisto);
+if(userSelecionar)atualizarDestaqueOuCampoNome(userSelecionar,false,false);
+}
 verificarAlteracoesUserForm();
 }
 
@@ -853,7 +934,8 @@ sincronizarEstadoCampoPw();
 if(u&&!modoNovoUserAtivo){
 const nomeU=getNome(u);editCodUser.value=getCod(u);if(editInputNome)editInputNome.value=nomeU;
 editInputCodUser.value=getCod(u);editPw.value=modoLimpoRegisto?"":getPw(u);editEmail.value=getEmail(u);editTel.value=getTel(u);
-btnSaveUser.textContent=`Gravar ${nomeU}`;
+if(isModoRegistoPublico()){grupoEditCodUser.style.display="none";grupoEditPw.style.display="block";btnSaveUser.textContent="Concluir Registo e Entrar";}
+else{btnSaveUser.textContent=`Gravar ${nomeU}`;}
 estadoInicialUserForm={nome:nomeU,coduser:getCod(u),pw:getPw(u),email:getEmail(u),tel:getTel(u)};
 btnApagarUserAtual.style.display=(usuarioAtual&&isAdmin(usuarioAtual))?"inline-flex":"none";
 marcarBrowseAtivo(userBrowseContainer,getCod(u));
@@ -911,27 +993,26 @@ await mostrarAlertaOk(`Utilizador "${nomeEditado}" criado com sucesso.`,"Inserç
 const alvoUser=cacheutilizadores.find(u=>getCod(u).toLowerCase()===codFixo.toLowerCase());
 if(!alvoUser){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Utilizador não encontrado na tabela.";await registarLog("ACAO [registo user]",{coduser:codFixo,nome_utilizador:nomeEditado},pwDigitada,"Utilizador não encontrado","ERRO");return;}
 if(!usuarioAtual){
-if(!pwDigitada){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="A password é obrigatória para concluir o registo.";editPw.focus();return;}
+if(!pwDigitada){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="A password de primeiro registo é obrigatória.";editPw.focus();return;}
 const pwEsp=getPw(alvoUser);
-if(!pwEsp||pwDigitada!==pwEsp){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Password de registo inválida.";await registarLog("ACAO [registo user]",alvoUser,pwDigitada,"Validação de password falhou no registo","ERRO");editPw.focus();return;}
+if(!pwEsp||pwDigitada!==pwEsp){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Password de primeiro registo inválida.";await registarLog("ACAO [registo user]",alvoUser,pwDigitada,"Validação de password falhou no registo","ERRO");editPw.focus();return;}
 }
 
 const nomeFinal=getNome(alvoUser),codReal=getCod(alvoUser),dispAtuais=getNrDispositivosAtivos(alvoUser),jaLocal=isUtilizadorAssociadoNesteNavegador(codReal),novoNrDisp=jaLocal?Math.max(1,dispAtuais):dispAtuais+1;
-const updatePayload={email:emailDigitado,telefone:telDigitado,user_ativo:true,nr_dispositivos_ativos:novoNrDisp};
-if(usuarioAtual&&isAdmin(usuarioAtual)){if(nomeEditado)updatePayload.nome_utilizador=nomeEditado;if(pwDigitada)updatePayload.pw_utilizador=pwDigitada;}
+const updatePayload={user_ativo:true,nr_dispositivos_ativos:novoNrDisp};
+if(usuarioAtual&&isAdmin(usuarioAtual)){updatePayload.email=emailDigitado;updatePayload.telefone=telDigitado;if(nomeEditado)updatePayload.nome_utilizador=nomeEditado;if(pwDigitada)updatePayload.pw_utilizador=pwDigitada;}
 const {data:atualizado,error}=await supabase.from("utilizadores").update(updatePayload).eq("coduser",codReal).select().maybeSingle();
 if(error){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Erro ao gravar utilizador: "+error.message;await registarLog("ACAO [registo user]",alvoUser,pwDigitada,error.message,"ERRO");return;}
 
 const countGravado=atualizado?getNrDispositivosAtivos(atualizado):novoNrDisp,nomeGravado=(usuarioAtual&&isAdmin(usuarioAtual)&&nomeEditado)?nomeEditado:nomeFinal;
-alvoUser.nome_utilizador=nomeGravado;alvoUser.email=emailDigitado;alvoUser.telefone=telDigitado;
-if(usuarioAtual&&isAdmin(usuarioAtual)&&pwDigitada)alvoUser.pw_utilizador=pwDigitada;
+alvoUser.nome_utilizador=nomeGravado;if(usuarioAtual&&isAdmin(usuarioAtual)){alvoUser.email=emailDigitado;alvoUser.telefone=telDigitado;if(pwDigitada)alvoUser.pw_utilizador=pwDigitada;}
 alvoUser.user_ativo=true;alvoUser.nr_dispositivos_ativos=countGravado;
 if(usuarioAtual&&getCod(usuarioAtual)===codReal)usuarioAtual=alvoUser;
-estadoInicialUserForm={nome:nomeGravado,coduser:codReal,pw:getPw(alvoUser),email:emailDigitado||"",tel:telDigitado||""};
+estadoInicialUserForm={nome:nomeGravado,coduser:codReal,pw:getPw(alvoUser),email:getEmail(alvoUser),tel:getTel(alvoUser)};
 adicionarCodigoAssociadoLocal(codReal);
 await registarLog("ACAO [registo user]",alvoUser,pwDigitada,`user_ativo=true | nr_dispositivos_ativos=${countGravado}`,"COM SUCESSO");
 
-if(!usuarioAtual){configModal.classList.remove("ativa");atualizarEstadoCabecalhoConfig();ativarPresencaUtilizador(alvoUser);await mostrarAlertaOk(`Utilizador "${nomeGravado}" registado com sucesso.`,"Registo");return;}
+if(!usuarioAtual){configModal.classList.remove("ativa","modo-registo-inicial");atualizarEstadoCabecalhoConfig();ativarPresencaUtilizador(alvoUser);await mostrarAlertaOk(`Utilizador "${nomeGravado}" registado com sucesso.`,"Registo");return;}
 atualizarDestaqueOuCampoNome(alvoUser,false,false);atualizarCabecalhoEstado();montarFiltrosutilizadores();desenharGaleria();verificarAlteracoesUserForm();
 await mostrarAlertaOk(`Utilizador "${nomeGravado}" guardado com sucesso.`,"Atualização");
 });
@@ -983,7 +1064,11 @@ cacheutilizadores=(data||[]).sort((a,b)=>getNome(a).localeCompare(getNome(b),"pt
 }catch(err){console.error("Erro ao carregar utilizadores:",err);}
 usuarioAtual=null;setWinBoxState("box-upload",false);setFiltrosJanelaAberta(false);setConfigSectionState("admin-trabalhos-section",false);setConfigSectionState("utilizador-config-section",false);
 atualizarCabecalhoEstado();await carregarDadosSistema();forcarRepinturaCabecalho();
-if(getListaCodigosAssociadosLocais().length>0)abrirFluxoLogin(null);
+if(getListaCodigosAssociadosLocais().length>0){
+abrirFluxoLogin(null);
+}else if(cacheutilizadores.length>0){
+abrirEcraRegistoUtilizadorEspecifico(null);
+}
 }
 
 async function carregarBrowseTrabalhosAdmin(){
