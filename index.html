@@ -39,10 +39,15 @@ body{position:relative;margin:0;min-height:100vh;background-color:#000000;color:
 #btn-auth-toggle,#btn-registo-header,#btn-config{background:#090909;color:var(--brass);border:1px solid rgba(212,163,89,.38);opacity:1;filter:none;text-shadow:none}
 #btn-config.ativo,#config-modal.ativa #btn-config{color:var(--soft-white);border-color:var(--brass-soft);background:#12110e}
 .btn:hover,#btn-auth-toggle:hover,#btn-registo-header:hover,#btn-config:hover,.btn-filtro-par:hover,.btn-outline-white:hover,#btn-refresh-fotos:hover{border-color:var(--brass-soft);color:var(--paper-strong);background:#12110e}
-#btn-login-entrar,.btn-action-green-dynamic{border-color:rgba(79,157,105,.55);color:#cdebd7}
-#btn-login-entrar:hover,.btn-action-green-dynamic:hover{border-color:var(--success);background:rgba(79,157,105,.16)}
+#btn-login-entrar{justify-self:center;width:fit-content;min-width:0;padding:.5rem 1.35rem;background:#090909;color:var(--brass);border:1px solid rgba(212,163,89,.36)}
+#btn-login-entrar:hover{border-color:var(--brass-soft);color:var(--paper-strong);background:#12110e}
+.btn-action-green-dynamic{border-color:rgba(79,157,105,.55);color:#cdebd7}
+.btn-action-green-dynamic:hover{border-color:var(--success);background:rgba(79,157,105,.16)}
 .btn-action-danger{border-color:rgba(217,83,79,.55);color:#f5c2c0}
 .btn-action-danger:hover{border-color:var(--danger);background:rgba(217,83,79,.16)}
+.btn-fechar-icone{appearance:none;-webkit-appearance:none;background:transparent!important;border:0!important;box-shadow:none!important;color:var(--soft-white);padding:.25rem;border-radius:6px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:color .15s ease,transform .15s ease}
+.btn-fechar-icone:hover{background:transparent!important;color:var(--paper-strong);transform:scale(1.06)}
+.btn-fechar-icone svg{width:20px;height:20px;display:block;fill:none}
 main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem 3rem;display:grid;gap:1.25rem}
 .section-shell{background:#000;border:1px solid var(--line);border-radius:10px;overflow:hidden}
 .section-header-btn,.section-header-static{width:100%;background:#000;border:0;padding:.9rem 1.15rem;display:flex;align-items:center;justify-content:space-between;gap:.75rem;color:var(--brass);text-align:left;cursor:pointer;outline:none}
@@ -50,20 +55,22 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .section-header-btn:focus,.section-header-btn:focus-visible,.section-header-btn:active{background:#000;outline:none}
 .section-header-title-area{display:inline-flex;align-items:center;gap:.65rem;padding-bottom:.12rem;border-bottom:1px solid transparent;transition:border-bottom-color .15s ease}
 .section-header-btn.selecionado .section-header-title-area{border-bottom-color:var(--brass-soft)}
-.header-icon,.win-control-zone,.win-symbol,.filtro-icone-svg{color:var(--soft-white)!important;fill:currentColor;stroke:currentColor;filter:none!important;text-shadow:none!important}
+.header-icon,.win-control-zone,.win-symbol,.filtro-icone-svg{color:var(--soft-white)!important;fill:none;stroke:currentColor;filter:none!important;text-shadow:none!important}
 .header-icon svg,.filtro-icone-svg svg{width:20px;height:20px;display:block;fill:none}
+.win-control-zone{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;flex:0 0 24px}
+.win-symbol{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;line-height:1}
+.win-symbol svg{width:16px;height:16px;display:block;fill:none}
 .section-main-title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--brass);letter-spacing:.03em}
-.win-symbol{font-size:1.15rem;line-height:1}
 .section-shell:not(.aberta) .section-body{display:none}
 .section-body{padding:1rem 1.15rem 1.25rem;border-top:1px solid var(--line)}
 .upload-subtitle{margin:0 0 .65rem;font-size:.9rem;color:var(--muted)}
 .trabalhos-curso-lista{display:flex;flex-direction:column;gap:.35rem}
-.trabalho-opcao{display:grid;grid-template-columns:110px 32px 1fr;align-items:center;gap:.5rem;padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;cursor:pointer;color:var(--paper-soft);font-size:.92rem;outline:none}
+.trabalho-opcao{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:.85rem;padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;cursor:pointer;color:var(--paper-soft);font-size:.92rem;outline:none}
 .trabalho-opcao:hover,.trabalho-opcao.drag-alvo{border-color:var(--line-hover);background:rgba(212,163,89,.07);color:var(--paper-strong)}
 .trabalho-opcao.selecionado,.trabalho-opcao.destacado{border-color:var(--brass-soft);background:rgba(212,163,89,.05);color:var(--paper-strong)}
 .trabalho-opcao.atenuado{opacity:.78}
-.browse-data-col{font-size:.82rem;color:var(--muted)}
-.browse-simbolo-col{text-align:center;font-size:1rem}
+.browse-data-col{font-size:.82rem;color:var(--muted);white-space:nowrap;min-width:96px}
+.browse-nome-col{text-align:left;width:100%;min-width:0;overflow-wrap:anywhere}
 .upload-contador-bar{display:none;flex-wrap:wrap;align-items:center;gap:.35rem;margin-top:.85rem;padding:.55rem .75rem;border-radius:6px;border:1px solid var(--line);font-size:.86rem;color:var(--paper-soft)}
 .upload-contador-bar.visivel-logado{display:flex}
 .upload-contador-bar.em-preview{border-style:dashed;border-color:var(--brass-soft)}
@@ -79,13 +86,16 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .filtros-janela-body{padding:1rem;border-top:1px solid var(--line)}
 .filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem}
 .filtros-refresh-rodape{display:flex;justify-content:center;align-items:center;margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--line)}
-@media (max-width:640px){.filtros-refresh-rodape{justify-content:flex-end}}
+@media (max-width:640px){.filtros-refresh-rodape{justify-content:flex-end}.trabalho-opcao{grid-template-columns:max-content minmax(0,1fr);gap:.65rem;padding:.55rem .6rem}.browse-data-col{min-width:88px}}
 .filter-box{display:flex;flex-direction:column;gap:.4rem}
 .filter-box>label{font-size:.82rem;color:var(--brass);font-weight:400}
 .filtro-caixa-moldura{border:1px solid var(--line);border-radius:6px;padding:.5rem;background:#000}
 .scroll-select-box{max-height:185px;overflow-y:auto;display:flex;flex-direction:column;gap:.2rem}
-.browse-linha-opcao{display:flex;align-items:center;gap:.45rem;padding:.32rem .45rem;border-radius:4px;color:var(--paper-soft);font-size:.86rem}
-.browse-linha-opcao.selecionado{color:var(--paper-strong);background:rgba(212,163,89,.06)}
+.browse-linha-opcao{display:flex;align-items:center;gap:.55rem;padding:.32rem .45rem;border-radius:4px;color:var(--paper-soft);font-size:.86rem}
+.browse-linha-opcao.selecionado{color:var(--paper-strong);background:transparent}
+.browse-linha-opcao input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-width:16px;margin:0;border-radius:4px;background-color:#2c2a27;border:1px solid rgba(212,163,89,0.28);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background-color .15s ease,border-color .15s ease}
+.browse-linha-opcao input[type="checkbox"]:hover{border-color:var(--brass-soft)}
+.browse-linha-opcao input[type="checkbox"]:checked{background-color:var(--brass);border-color:var(--brass);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23000000' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round' d='M3.2 8.4l3.1 3.1 6.5-6.8'/></svg>");background-repeat:no-repeat;background-position:center;background-size:12px 12px}
 input[type="date"]{background:#000;border:1px solid var(--line);color:var(--paper-soft);border-radius:4px;padding:.3rem .4rem;width:100%;font-family:inherit;font-size:.82rem}
 input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.15);cursor:pointer}
 .botoes-filtro-acao{display:flex;flex-direction:column;align-items:center;gap:.45rem}
@@ -103,11 +113,12 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 .card-meta-bottom{bottom:0;background:linear-gradient(to top,rgba(0,0,0,.78),transparent)}
 .delete-btn{position:absolute;top:.45rem;right:.45rem;z-index:2;background:rgba(0,0,0,.78);border:1px solid var(--line);border-radius:5px;padding:.25rem .4rem;cursor:pointer;font-size:.85rem}
 .empty{color:var(--muted);font-size:.92rem}
-#help-balao-flutuante{position:fixed;z-index:900;pointer-events:none;opacity:0;transition:opacity .15s;background:var(--help-grey);border:1px solid rgba(20,18,16,.28);color:var(--help-ink);padding:.7rem .95rem;border-radius:8px;font-size:.8rem;line-height:1.55;text-align:center;max-width:calc(100vw - 20px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+#help-balao-flutuante{position:fixed;z-index:900;pointer-events:none;opacity:0;transition:opacity .15s;background:var(--help-grey);border:1px solid rgba(20,18,16,.28);color:var(--help-ink);padding:.7rem .95rem;border-radius:8px;font-size:.8rem;font-weight:300;line-height:1.55;text-align:center;max-width:calc(100vw - 20px);box-shadow:0 12px 30px rgba(0,0,0,.45)}
 #help-balao-flutuante.visivel{opacity:1}
-.help-cabecalho-linha{display:block;color:var(--help-ink);font-weight:700;letter-spacing:.06em;margin-bottom:.25rem;text-align:center}
+.help-cabecalho-linha{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;color:var(--help-ink);font-weight:700;letter-spacing:.06em;margin-bottom:.25rem;text-align:center}
+.help-subtitulo-linha{display:block;color:var(--help-ink);font-weight:500;font-size:.79rem;margin-bottom:.3rem;text-align:center}
 .help-setas-finas{width:17px;height:20px;vertical-align:middle;color:var(--help-ink)}
-.help-duplo-linha{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;color:var(--help-ink)}
+.help-duplo-linha{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;color:var(--help-ink);font-weight:300}
 .help-camara-grande{font-size:1.35rem;line-height:1}
 .confirm-overlay,.config-modal{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:1rem}
 #alerta-ok-modal{z-index:1300}
@@ -159,6 +170,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 .projetor-header{position:absolute;top:1rem;left:1.25rem;font-family:"Cormorant Garamond",serif;font-size:1.2rem;color:var(--brass)}
 .projetor-bottom-right{position:absolute;bottom:3.4rem;right:1.25rem;font-size:.85rem;color:var(--muted)}
 .projetor-bar{position:absolute;bottom:0;left:0;right:0;padding:.75rem 1.25rem;background:#000;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:.88rem}
+.projetor-bar .actions{display:flex;align-items:center;gap:.65rem}
 .nav-arrow{position:absolute;top:50%;transform:translateY(-50%);background:#000;border:1px solid var(--line);color:var(--paper);font-size:2rem;width:46px;height:64px;border-radius:8px;cursor:pointer}
 .nav-arrow-prev{left:1rem}
 .nav-arrow-next{right:1rem}
@@ -189,7 +201,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div class="config-content" style="max-width:460px;">
 <div style="position:relative;display:flex;justify-content:center;align-items:center;margin-bottom:1rem;">
 <h2 id="login-modal-titulo" style="margin:0;font-family:'Cormorant Garamond',serif;color:var(--brass);text-align:center;">Autenticação</h2>
-<button class="btn" id="btn-fechar-login" type="button" style="position:absolute;right:0;">Fechar</button>
+<button class="btn-fechar-icone" id="btn-fechar-login" type="button" title="Fechar" aria-label="Fechar" style="position:absolute;right:0;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
 </div>
 <p id="login-descricao" style="font-size:.88rem;color:var(--muted);margin-top:0;text-align:center;">Escolha o utilizador e, se necessário, introduza a password de registo.</p>
 <form id="login-form" style="display:grid;gap:.9rem;">
@@ -216,7 +228,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></span>
 <h2 class="section-main-title">PARTILHA Fotografias</h2>
 </span>
-<span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-box-upload">&#9633;</span></span>
+<span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-box-upload"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg></span></span>
 </button>
 <div class="section-body">
 <p class="upload-subtitle">Seleciona Aula, Tema ou Trabalho</p>
@@ -251,7 +263,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="count" id="contador">selecionam 0 fotografias de um total de 0 .</span>
 </span>
 <div style="display:flex;align-items:center;gap:.65rem;margin-left:auto;flex-shrink:0;">
-<span class="win-control-zone" title="Abrir / Fechar filtros"><span class="win-symbol" id="sym-box-filtros">&#9633;</span></span>
+<span class="win-control-zone" title="Abrir / Fechar filtros"><span class="win-symbol" id="sym-box-filtros"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg></span></span>
 </div>
 </div>
 <div class="filtros-janela-body">
@@ -298,7 +310,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </section>
 </main>
 
-<div id="help-balao-flutuante"><span class="help-cabecalho-linha">PARTILHA FOTOGRAFIAS</span>Posicionar <svg class="help-setas-finas" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.5v13M4.8 3.7L7 1.5l2.2 2.2M4.8 12.3L7 14.5l2.2-2.2"/></svg> &lt;Enter&gt;<br><span class="help-duplo-linha"><span class="help-duplo-label">&lt;Duplo Click&gt;</span><span class="help-camara-grande" aria-hidden="true">&#128247;</span><span class="help-duplo-label">&lt;Duplo Toque&gt;</span></span><br>&lt;Arrastar Ficheiro(s) e largar&gt;</div>
+<div id="help-balao-flutuante"><span class="help-cabecalho-linha"><span class="help-camara-grande" aria-hidden="true">&#128247;</span>Ajuda a partilhar fotografias</span><br><span class="help-subtitulo-linha">Para selecionar uma da Aulas , Temas ou Trabalhos...</span><svg class="help-setas-finas" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.5v13M4.8 3.7L7 1.5l2.2 2.2M4.8 12.3L7 14.5l2.2-2.2"/></svg> Posicionar &lt;Enter&gt;<br><span class="help-duplo-linha"><span class="help-duplo-label">&lt;Duplo Click&gt;</span><span class="help-duplo-label">&lt;Duplo Toque&gt;</span></span><br>&lt;Arrastar Ficheiro(s) e largar&gt;</div>
 
 <div class="confirm-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-titulo-texto">
 <div class="confirm-box">
@@ -324,7 +336,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
 <h2 id="config-modal-titulo" style="margin:0;font-family:'Cormorant Garamond',serif;color:var(--brass);">Painel de Configurações</h2>
 </span>
-<button type="button" class="win-control-zone" id="close-config" title="Abrir / Fechar" style="background:transparent;border:0;cursor:pointer;"><span class="win-symbol" id="sym-close-config">&#8722;</span></button>
+<button type="button" class="win-control-zone" id="close-config" title="Fechar" aria-label="Fechar" style="background:transparent;border:0;cursor:pointer;"><span class="win-symbol" id="sym-close-config"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v3h3M13 3L9 7M7 12V9H4M3 13l4-4"/></svg></span></button>
 </div>
 <div style="display:grid;gap:1.25rem;">
 <div class="config-section-shell" id="admin-trabalhos-section" style="display:none;">
@@ -333,7 +345,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span>
 <h3 id="sec-trab-titulo">Manutenção de Aulas, Temas e Trabalhos de Fotografia</h3>
 </span>
-<span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-admin-trabalhos-section">&#9633;</span></span>
+<span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-admin-trabalhos-section"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg></span></span>
 </button>
 <div class="config-section-body">
 <button type="button" class="btn-outline-white" id="btn-novo-trab-modo" style="display:none;"></button>
@@ -370,7 +382,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="header-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
 <h3 id="sec-user-titulo">Manutenção de Utilizadores</h3>
 </span>
-<span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-utilizador-config-section">&#9633;</span></span>
+<span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-utilizador-config-section"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg></span></span>
 </button>
 <div class="config-section-body">
 <div style="display:flex;justify-content:flex-end;margin-bottom:.5rem;"><button type="button" class="btn-outline-white" id="btn-novo-user-modo" style="display:none;">+ Novo Utilizador</button></div>
@@ -418,11 +430,21 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <button class="nav-arrow nav-arrow-prev" id="btn-arrow-prev" type="button" aria-label="Fotografia anterior">‹</button>
 <button class="nav-arrow nav-arrow-next" id="btn-arrow-next" type="button" aria-label="Fotografia seguinte">›</button>
 <div class="projetor-bottom-right" id="projetor-bottom-right"></div>
-<div class="projetor-bar"><span id="legenda"></span><div class="actions"><button class="btn" id="pausa" type="button">⏸ Pause</button><button class="btn" id="sair" type="button">Sair</button></div></div>
+<div class="projetor-bar"><span id="legenda"></span><div class="actions"><button class="btn" id="pausa" type="button">⏸ Pause</button><button class="btn-fechar-icone" id="sair" type="button" title="Fechar" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div></div>
 </section>
 
 <script>
 var helpTimer=null,ultimoToqueTempo=0,ultimoToqueElemento=null,confirmacaoPendente=null,ficheirosPendentesDrop=null;
+function svgSetasObliquas(){
+return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg>';
+}
+function svgSetasFechar(){
+return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4v3h3M13 3L9 7M7 12V9H4M3 13l4-4"/></svg>';
+}
+function atualizarIconeSetasElemento(symEl,ativo){
+if(!symEl)return;
+symEl.innerHTML=ativo?svgSetasFechar():svgSetasObliquas();
+}
 function isConfirmacaoAberta(){var m=document.getElementById("confirm-modal"),a=document.getElementById("alerta-ok-modal");return!!((m&&m.classList.contains("ativa"))||(a&&a.classList.contains("ativa")));}
 function esconderHelp(){var b=document.getElementById("help-balao-flutuante");if(b)b.classList.remove("visivel");}
 function retangulosSobrepoem(a,b,m){m=m||0;return!(a.right+m<=b.left||a.left-m>=b.right||a.bottom+m<=b.top||a.top-m>=b.bottom);}
@@ -433,19 +455,44 @@ for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(!el)cont
 function atualizarEstadoCabecalhoConfig(){
 var modalAberto=!!(document.getElementById("config-modal")&&document.getElementById("config-modal").classList.contains("ativa"));
 var shells=document.querySelectorAll(".config-section-shell");
-for(var i=0;i<shells.length;i++){var aberta=shells[i].classList.contains("aberta");var hdr=shells[i].querySelector(".config-section-header");if(hdr){hdr.classList.toggle("ativo",aberta);hdr.setAttribute("aria-expanded",String(aberta));}}
+for(var i=0;i<shells.length;i++){
+var aberta=shells[i].classList.contains("aberta");
+var hdr=shells[i].querySelector(".config-section-header");
+if(hdr){hdr.classList.toggle("ativo",aberta);hdr.classList.toggle("selecionado",aberta);hdr.setAttribute("aria-expanded",String(aberta));}
+var symSec=shells[i].querySelector(".win-symbol");
+atualizarIconeSetasElemento(symSec,aberta);
+}
 var btnCfg=document.getElementById("btn-config");if(btnCfg)btnCfg.classList.toggle("ativo",modalAberto);
+var symClose=document.getElementById("sym-close-config");atualizarIconeSetasElemento(symClose,true);
 forcarRepinturaCabecalho();
 }
 function mostrarHelpEmCoords(x,y,el,evtTarget){
 var balao=document.getElementById("help-balao-flutuante");if(!balao||isConfirmacaoAberta())return;
 balao.classList.add("visivel");var rect=balao.getBoundingClientRect(),w=rect.width,h=rect.height,isMobile=window.innerWidth<=640;
-if(isMobile){var leftMobile=10,topMobile=8;if(el){var rMob=el.getBoundingClientRect();topMobile=Math.max(8,rMob.top-h-28);if(rMob.top-h-28<8&&rMob.bottom+24+h<=window.innerHeight-8)topMobile=rMob.bottom+24;}balao.style.left=Math.min(leftMobile,Math.max(8,window.innerWidth-w-8))+"px";balao.style.top=Math.min(Math.max(8,topMobile),Math.max(8,window.innerHeight-h-8))+"px";return;}
-var zonaProtegida=null;if(el){var cam=el.querySelector(".browse-simbolo-col");if(cam)zonaProtegida=cam.getBoundingClientRect();}
-if(!zonaProtegida&&evtTarget&&evtTarget.closest){var camAlvo=evtTarget.closest(".browse-simbolo-col");if(camAlvo)zonaProtegida=camAlvo.getBoundingClientRect();}
+if(isMobile){
+var margemEcran=8,gap=14,leftMobile=Math.min(margemEcran,Math.max(margemEcran,window.innerWidth-w-margemEcran));
+var alvoRect=null;
+if(el){alvoRect=el.getBoundingClientRect();}
+else if(evtTarget&&evtTarget.closest){var rowAlvo=evtTarget.closest(".trabalho-opcao");if(rowAlvo)alvoRect=rowAlvo.getBoundingClientRect();}
+if(!alvoRect){var selItem=document.querySelector("#trabalho-curso-container .trabalho-opcao.selecionado, #trabalho-curso-container .trabalho-opcao.destacado");if(selItem)alvoRect=selItem.getBoundingClientRect();}
+var listaEl=document.getElementById("trabalho-curso-container"),listaRect=listaEl?listaEl.getBoundingClientRect():null;
+var refTop=alvoRect?alvoRect.top:(listaRect?listaRect.top:y);
+var refBottom=alvoRect?alvoRect.bottom:(listaRect?listaRect.bottom:y);
+var espacoAcima=refTop-gap-margemEcran;
+var espacoAbaixo=window.innerHeight-(refBottom+gap)-margemEcran;
+var topMobile;
+if(espacoAcima>=h){topMobile=refTop-h-gap;}
+else if(espacoAbaixo>=h){topMobile=refBottom+gap;}
+else if(listaRect&&(listaRect.top-gap-margemEcran)>=h){topMobile=listaRect.top-h-gap;}
+else if(listaRect&&(window.innerHeight-(listaRect.bottom+gap)-margemEcran)>=h){topMobile=listaRect.bottom+gap;}
+else if(espacoAcima>=espacoAbaixo){topMobile=margemEcran;}
+else{topMobile=window.innerHeight-h-margemEcran;}
+balao.style.left=leftMobile+"px";
+balao.style.top=Math.min(Math.max(margemEcran,topMobile),Math.max(margemEcran,window.innerHeight-h-margemEcran))+"px";
+return;
+}
 var margemLinha=22,left=Math.min(Math.max(10,x+12),window.innerWidth-w-10),top;
 if(el){var elRect=el.getBoundingClientRect(),espacoAcima=elRect.top-margemLinha-10,espacoAbaixo=window.innerHeight-(elRect.bottom+margemLinha)-10;if(espacoAcima>=h)top=elRect.top-h-margemLinha;else if(espacoAbaixo>=h)top=elRect.bottom+margemLinha;else if(espacoAcima>=espacoAbaixo)top=Math.max(10,elRect.top-h-margemLinha);else top=Math.min(window.innerHeight-h-10,elRect.bottom+margemLinha);}else{top=y-h-margemLinha;if(top<10)top=Math.min(y+margemLinha,window.innerHeight-h-10);}
-if(zonaProtegida){var boxBalao={left:left,top:top,right:left+w,bottom:top+h};if(retangulosSobrepoem(boxBalao,zonaProtegida,8)){var acimaTop=zonaProtegida.top-h-margemLinha,abaixoTop=zonaProtegida.bottom+margemLinha,direitaLeft=zonaProtegida.right+10,esquerdaLeft=zonaProtegida.left-w-10;if(acimaTop>=10)top=acimaTop;else if(abaixoTop+h<=window.innerHeight-10)top=abaixoTop;else if(direitaLeft+w<=window.innerWidth-10)left=direitaLeft;else if(esquerdaLeft>=10)left=esquerdaLeft;}}
 balao.style.left=left+"px";balao.style.top=top+"px";
 }
 function posicionarHelpNoEvento(e,el){
@@ -458,9 +505,10 @@ function getOpcoesTrabalhoUpload(){var l=document.getElementById("trabalho-curso
 function limparAlvosDragUpload(){var o=getOpcoesTrabalhoUpload();for(var i=0;i<o.length;i++)o[i].classList.remove("drag-alvo");}
 function setWinBoxState(id,aberta){
 if(id==="box-galeria"){var g=document.getElementById("box-galeria");if(g)g.classList.add("aberta");return;}
-var s=document.getElementById(id);if(!s)return;if(aberta)s.classList.add("aberta");else s.classList.remove("aberta");
-var hdr=s.querySelector(".section-header-btn");if(hdr){hdr.classList.toggle("selecionado",!!aberta);if(!aberta&&typeof hdr.blur==="function")hdr.blur();}
-var sym=document.getElementById("sym-"+id);if(sym)sym.innerHTML=aberta?"&#8722;":"&#9633;";
+var s=document.getElementById(id);if(!s)return;var isAberta=!!aberta;
+if(isAberta)s.classList.add("aberta");else s.classList.remove("aberta");
+var hdr=s.querySelector(".section-header-btn");if(hdr){hdr.classList.toggle("selecionado",isAberta);if(!isAberta&&typeof hdr.blur==="function")hdr.blur();}
+var sym=document.getElementById("sym-"+id);atualizarIconeSetasElemento(sym,isAberta);
 }
 function sincronizarCabecalhosConfig(){
 var ids=["admin-trabalhos-section","utilizador-config-section"],algumaAberta=false;
@@ -469,21 +517,23 @@ for(var j=0;j<ids.length;j++){var shell=document.getElementById(ids[j]);if(!shel
 atualizarEstadoCabecalhoConfig();
 }
 function setConfigSectionState(id,aberta){
-var shell=document.getElementById(id);if(!shell)return;if(aberta)shell.classList.add("aberta");else shell.classList.remove("aberta");
-var sym=document.getElementById("sym-"+id);if(sym)sym.innerHTML=aberta?"&#8722;":"&#9633;";
+var shell=document.getElementById(id);if(!shell)return;var isAberta=!!aberta;
+if(isAberta)shell.classList.add("aberta");else shell.classList.remove("aberta");
+var sym=document.getElementById("sym-"+id);atualizarIconeSetasElemento(sym,isAberta);
 sincronizarCabecalhosConfig();
 }
 function toggleConfigSection(id){
 var shell=document.getElementById(id);if(!shell)return;var vaiAbrir=!shell.classList.contains("aberta");
-if(vaiAbrir){var outroId=id==="admin-trabalhos-section"?"utilizador-config-section":"admin-trabalhos-section";var outroShell=document.getElementById(outroId);if(outroShell){outroShell.classList.remove("aberta");var outroSym=document.getElementById("sym-"+outroId);if(outroSym)outroSym.innerHTML="&#9633;";}}
+if(vaiAbrir){var outroId=id==="admin-trabalhos-section"?"utilizador-config-section":"admin-trabalhos-section";var outroShell=document.getElementById(outroId);if(outroShell){outroShell.classList.remove("aberta");var outroSym=document.getElementById("sym-"+outroId);atualizarIconeSetasElemento(outroSym,false);}}
 setConfigSectionState(id,vaiAbrir);
 if(vaiAbrir&&id==="admin-trabalhos-section"&&typeof window.onAbrirSecaoTrabalhosConfig==="function")window.onAbrirSecaoTrabalhosConfig();
 if(vaiAbrir&&id==="utilizador-config-section"&&typeof window.onAbrirSecaoUtilizadoresConfig==="function")window.onAbrirSecaoUtilizadoresConfig();
 }
 function setFiltrosJanelaAberta(aberta){
-var janela=document.getElementById("box-filtros"),titulo=document.getElementById("titulo-filtros-janela"),sym=document.getElementById("sym-box-filtros"),btn=janela?janela.querySelector(".filtros-janela-header"):null;
-if(janela){if(aberta)janela.classList.add("aberta");else janela.classList.remove("aberta");}
-if(titulo)titulo.textContent="Filtros Ativos";if(sym)sym.innerHTML=aberta?"&#8722;":"&#9633;";if(btn)btn.setAttribute("aria-expanded",aberta?"true":"false");
+var isAberta=!!aberta,janela=document.getElementById("box-filtros"),titulo=document.getElementById("titulo-filtros-janela"),sym=document.getElementById("sym-box-filtros"),btn=janela?janela.querySelector(".filtros-janela-header"):null;
+if(janela){if(isAberta)janela.classList.add("aberta");else janela.classList.remove("aberta");}
+if(titulo)titulo.textContent="Filtros Ativos";atualizarIconeSetasElemento(sym,isAberta);
+if(btn){btn.classList.toggle("selecionado",isAberta);btn.setAttribute("aria-expanded",isAberta?"true":"false");}
 }
 function toggleWinBox(id){
 if(id==="box-galeria"){setWinBoxState("box-galeria",true);return;}
@@ -1010,9 +1060,8 @@ div.className="trabalho-opcao";div.tabIndex=0;div.setAttribute("role","option");
 if(idx===0){div.classList.add("destacado","selecionado");div.setAttribute("aria-selected","true");uploadTrabalhoVal.value=nomeTrab;renderizarContadorUpload(nomeTrab,false);}
 else{div.classList.add("atenuado");div.setAttribute("aria-selected","false");}
 const spanData=document.createElement("span");spanData.className="browse-data-col";spanData.textContent=dataTrab;
-const spanSimbolo=document.createElement("span");spanSimbolo.className="browse-simbolo-col";spanSimbolo.title="Maquina fotografica";spanSimbolo.innerHTML="&#128247;";
 const spanNome=document.createElement("span");spanNome.className="browse-nome-col";spanNome.textContent=nomeTrab;
-div.append(spanData,spanSimbolo,spanNome);
+div.append(spanData,spanNome);
 div.addEventListener("mouseenter",()=>{if(typeof window.onTrabalhoUploadHover==="function")window.onTrabalhoUploadHover(nomeTrab);});
 div.addEventListener("click",()=>{selecionarOpcaoUploadVisual(div);posicionarHelpNoEvento(null,div);});
 div.addEventListener("dblclick",()=>solicitarConfirmacaoPartilha(nomeTrab,dataTrab,"selecionar",div));
