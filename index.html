@@ -237,9 +237,9 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div class="section-body">
 <p class="upload-subtitle">Seleciona Aula, Tema ou Trabalho</p>
 <div class="trabalhos-curso-lista" id="trabalho-curso-container" role="listbox" aria-label="Aula, Tema ou Trabalho"></div>
-<div id="ios-upload-acao" style="display:none;margin-top:.75rem;align-items:center;gap:.65rem;flex-wrap:wrap;">
-<label for="ficheiro" class="btn" style="position:relative;overflow:hidden;cursor:pointer;">
-📷 Tirar ou Escolher Fotografia
+<div id="ios-upload-acao" style="display:none;margin-top:.55rem;">
+<label for="ficheiro" id="lbl-escolher-foto-ios" style="position:relative;display:inline-block;overflow:hidden;cursor:pointer;color:var(--brass);font-size:.88rem;">
+<span id="ios-tema-label-texto">Selecionar fotografia</span>
 <input id="ficheiro" type="file" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px;">
 </label>
 </div>
@@ -451,10 +451,20 @@ var isIOSUA=/iPhone|iPad|iPod/i.test(ua);
 var isIPadOS=navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1;
 return isIOSUA||isIPadOS;
 }
-function aplicarModoUploadIOS(){
+function atualizarLabelUploadIOS(nomeTema){
 var box=document.getElementById("ios-upload-acao");
-if(!box)return;
-box.style.display=isDispositivoAppleIOS()?"flex":"none";
+var txt=document.getElementById("ios-tema-label-texto");
+if(!box||!txt)return;
+var ativo=isDispositivoAppleIOS();
+box.style.display=ativo?"block":"none";
+if(ativo){
+var limpo=(nomeTema||"").trim();
+txt.textContent=limpo?limpo:"Selecionar fotografia";
+}
+}
+function aplicarModoUploadIOS(){
+var inpHidden=document.getElementById("upload-trabalho-val");
+atualizarLabelUploadIOS(inpHidden?inpHidden.value:"");
 }
 function svgSetasObliquas(){
 return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg>';
@@ -575,6 +585,7 @@ if(id==="box-upload"){var shell=document.getElementById("box-upload");if(!shell)
 function toggleFiltrosJanela(){var janela=document.getElementById("box-filtros"),vaiAbrir=!(janela&&janela.classList.contains("aberta"));setFiltrosJanelaAberta(vaiAbrir);if(vaiAbrir){setWinBoxState("box-upload",false);esconderHelp();}}
 function selecionarOpcaoUploadVisual(el){
 if(!el)return;var nomeTrab=el.getAttribute("data-tema")||"",inpHidden=document.getElementById("upload-trabalho-val");if(inpHidden)inpHidden.value=nomeTrab;
+atualizarLabelUploadIOS(nomeTrab);
 var itens=getOpcoesTrabalhoUpload();for(var i=0;i<itens.length;i++){if(itens[i]===el){itens[i].classList.add("selecionado","destacado");itens[i].classList.remove("atenuado");itens[i].setAttribute("aria-selected","true");}else{itens[i].classList.remove("selecionado","destacado");itens[i].classList.add("atenuado");itens[i].setAttribute("aria-selected","false");}}
 if(typeof window.onTrabalhoUploadSelecionado==="function")window.onTrabalhoUploadSelecionado(nomeTrab);
 }
@@ -1245,7 +1256,7 @@ if(editInputTrabNome)editInputTrabNome.addEventListener("input",()=>{editTrabNom
 
 window.onTrabalhoUploadHover=(n)=>{if(!usuarioAtual)return;const h=(n||"").trim();if(!h)return;renderizarContadorUpload(h,h.toLowerCase()!==(uploadTrabalhoVal.value||"").trim().toLowerCase());};
 window.onTrabalhoUploadHoverLeave=()=>{if(usuarioAtual)renderizarContadorUpload(uploadTrabalhoVal.value,false);};
-window.onTrabalhoUploadSelecionado=(n)=>{uploadAvisoLimite.style.display="none";renderizarContadorUpload(n,false);};
+window.onTrabalhoUploadSelecionado=(n)=>{uploadAvisoLimite.style.display="none";atualizarLabelUploadIOS(n);renderizarContadorUpload(n,false);};
 window.onConfirmarUploadFicheiros=(f)=>{atualizarNomesSelecionados(f);validarEEnviar(f);};
 
 async function init(){
@@ -1356,11 +1367,11 @@ async function atualizarContadorUploadAtual(n){await renderizarContadorUpload(n,
 function montarTrabalhosEmCurso(){
 trabalhoCursoContainer.replaceChildren();
 const ativos=cacheTrabalhos.filter(t=>getTrabAtivo(t)===true);
-if(ativos.length===0){trabalhoCursoContainer.innerHTML='<span style="color:var(--muted);font-size:.9rem;">Sem trabalhos ativos disponíveis.</span>';uploadTrabalhoVal.value="";renderizarContadorUpload("",false);return;}
+if(ativos.length===0){trabalhoCursoContainer.innerHTML='<span style="color:var(--muted);font-size:.9rem;">Sem trabalhos ativos disponíveis.</span>';uploadTrabalhoVal.value="";atualizarLabelUploadIOS("");renderizarContadorUpload("",false);return;}
 [...ativos].sort((a,b)=>new Date(getTrabData(b)||"1970-01-01")-new Date(getTrabData(a)||"1970-01-01")).forEach((t,idx)=>{
 const nomeTrab=getTrabNome(t),dataTrab=getTrabData(t),div=document.createElement("div");
 div.className="trabalho-opcao";div.tabIndex=0;div.setAttribute("role","option");div.setAttribute("data-tema",nomeTrab);div.setAttribute("data-data",dataTrab);
-if(idx===0){div.classList.add("destacado","selecionado");div.setAttribute("aria-selected","true");uploadTrabalhoVal.value=nomeTrab;renderizarContadorUpload(nomeTrab,false);}
+if(idx===0){div.classList.add("destacado","selecionado");div.setAttribute("aria-selected","true");uploadTrabalhoVal.value=nomeTrab;atualizarLabelUploadIOS(nomeTrab);renderizarContadorUpload(nomeTrab,false);}
 else{div.classList.add("atenuado");div.setAttribute("aria-selected","false");}
 const spanData=document.createElement("span");spanData.className="browse-data-col";spanData.textContent=dataTrab;
 const spanNome=document.createElement("span");spanNome.className="browse-nome-col";spanNome.textContent=nomeTrab;
@@ -1660,7 +1671,7 @@ const ext=(file.name||"").split(".").pop().toLowerCase();
 return["jpg","jpeg","png","gif","webp","avif","bmp","heic","heif"].includes(ext);
 }
 
-function comprimirImagem(file,maxWidth=1024,quality=.65){
+function comprimirImagem(file,maxWidth=1200,quality=.72){
 return new Promise((resolve)=>{
 if(!file)return resolve(file);
 const ext=(file.name||"").split(".").pop().toLowerCase();
@@ -1735,7 +1746,7 @@ return;
 let enviadas=0,falha="";
 for(const imagem of imagens){
 estado.textContent=`A enviar ${enviadas+1} de ${imagens.length} para o trabalho "${trabalhoSelecionado}"…`;
-const imgComp=await comprimirImagem(imagem,1024,0.65);
+const imgComp=await comprimirImagem(imagem,1200,0.72);
 const fileNameSafe=caminhoSeguro(imgComp.name||imagem.name||"foto.jpg");
 const extSafe=fileNameSafe.split(".").pop().toLowerCase();
 const tipoInferido=extSafe==="png"?"image/png":extSafe==="webp"?"image/webp":extSafe==="gif"?"image/gif":extSafe==="heic"?"image/heic":extSafe==="heif"?"image/heif":"image/jpeg";
