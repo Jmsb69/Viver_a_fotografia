@@ -94,9 +94,9 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .browse-linha-opcao{display:flex;align-items:center;gap:.55rem;width:100%;max-width:100%;min-width:0;padding:.32rem .45rem;border-radius:4px;color:var(--paper-soft);font-size:.86rem}
 .browse-linha-opcao label{flex:1 1 auto;min-width:0;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
 .browse-linha-opcao.selecionado{color:var(--paper-strong);background:transparent}
-.browse-linha-opcao input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-width:16px;flex:0 0 16px;margin:0;border-radius:4px;background-color:#2c2a27;border:1px solid rgba(212,163,89,0.28);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background-color .15s ease,border-color .15s ease}
-.browse-linha-opcao input[type="checkbox"]:hover{border-color:var(--brass-soft)}
-.browse-linha-opcao input[type="checkbox"]:checked{background-color:var(--brass);border-color:var(--brass);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23000000' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round' d='M3.2 8.4l3.1 3.1 6.5-6.8'/></svg>");background-repeat:no-repeat;background-position:center;background-size:12px 12px}
+.browse-linha-opcao input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:16px;height:16px;min-width:16px;flex:0 0 16px;margin:0;border-radius:4px;background-color:#3a3732;border:1px solid rgba(243,237,226,0.28);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background-color .15s ease,border-color .15s ease}
+.browse-linha-opcao input[type="checkbox"]:hover{background-color:#49453f;border-color:rgba(212,163,89,0.52)}
+.browse-linha-opcao input[type="checkbox"]:checked{background-color:rgba(212,163,89,0.56);border-color:rgba(212,163,89,0.72);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='none' stroke='%23000000' stroke-width='2.3' stroke-linecap='round' stroke-linejoin='round' d='M3.2 8.4l3.1 3.1 6.5-6.8'/></svg>");background-repeat:no-repeat;background-position:center;background-size:12px 12px}
 input[type="date"]{background:#000000;border:1px solid var(--line);color:var(--paper-soft);border-radius:4px;padding:.3rem .4rem;width:100%;max-width:100%;min-width:0;font-family:inherit;font-size:.82rem}
 input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.15);cursor:pointer}
 .botoes-filtro-acao{display:flex;flex-direction:column;align-items:center;gap:.45rem}
@@ -274,7 +274,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div class="filter-box">
 <label>Tema dos trabalhos</label>
 <div class="scroll-select-box filtro-caixa-moldura" id="filter-trabalhos-container">
-<div class="browse-linha-opcao selecionado" id="linha-all-trabalhos"><input type="checkbox" id="check-all-trabalhos" checked><label for="check-all-trabalhos" style="cursor:pointer;width:100%;margin:0;font-weight:400;">Selecionar todos</label></div>
+<div class="browse-linha-opcao" id="linha-all-trabalhos"><input type="checkbox" id="check-all-trabalhos"><label for="check-all-trabalhos" style="cursor:pointer;width:100%;margin:0;font-weight:400;">Selecionar todos</label></div>
 <div id="list-trabalhos-checkboxes"></div>
 </div>
 </div>
@@ -453,7 +453,6 @@ symEl.innerHTML=ativo?svgSetasFechar():svgSetasObliquas();
 }
 function isConfirmacaoAberta(){var m=document.getElementById("confirm-modal"),a=document.getElementById("alerta-ok-modal");return!!((m&&m.classList.contains("ativa"))||(a&&a.classList.contains("ativa")));}
 function esconderHelp(){var b=document.getElementById("help-balao-flutuante");if(b)b.classList.remove("visivel");}
-function retangulosSobrepoem(a,b,m){m=m||0;return!(a.right+m<=b.left||a.left-m>=b.right||a.bottom+m<=b.top||a.top-m>=b.bottom);}
 function forcarRepinturaCabecalho(){
 var ids=["btn-auth-toggle","btn-registo-header","btn-config","current-user-display"];
 for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(!el)continue;el.style.transform="translateZ(0)";void el.offsetHeight;}
@@ -614,10 +613,94 @@ window.addEventListener("pageshow",function(){forcarRepinturaCabecalho();});
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.81.1/+esm";
 const SUPABASE_URL="https://fzhtckqsysvsxqfriizg.supabase.co",SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6aHRja3FzeXN2c3hxZnJpaXpnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQzNTYzNDQsImV4cCI6MjEwOTkzMjM0NH0.aJto0t-G6aWIQpLmOXSRG31I-mY4YJnFMJZdMoZBu6M";
 const BUCKET="fotografias",INTERVALO=5000,STORAGE_KEY_ASSOCIADOS_LISTA="viver_fotografia_associados_lista",STORAGE_KEY_ULTIMO_ATIVO="viver_fotografia_ultimo_ativo",STORAGE_KEY_DISPOSITIVO_ID="viver_fotografia_device_id";
+const DB_NAME="ViverFotografiaCacheDB",DB_VERSION=1,STORE_FOTOS="fotos_cache";
 const supabase=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 
-let usuarioAtual=null,utilizadorInativoPendente=null,pendenteAposLoginCallback=null,cacheutilizadores=[],cacheTrabalhos=[],cacheFotos=[],fotosFiltradas=[],indice=0,temporizador=null,emPausa=true,modoNovoUserAtivo=false,modoNovoTrabAtivo=false;
+let usuarioAtual=null,utilizadorInativoPendente=null,pendenteAposLoginCallback=null,cacheutilizadores=[],cacheTrabalhos=[],cacheFotos=[],fotosFiltradas=[],indice=0,temporizador=null,emPausa=true,modoNovoUserAtivo=false,modoNovoTrabAtivo=false,filtroInicialAplicado=false;
 let estadoInicialUserForm={nome:"",coduser:"",pw:"",email:"",tel:""},estadoInicialTrabForm={nome:"",data:"",limite:10,ativo:true},contadorRequestSeq=0,resolverAlertaOk=null;
+
+function abrirCacheDB(){
+return new Promise((resolve,reject)=>{
+if(!("indexedDB" in window))return resolve(null);
+const req=indexedDB.open(DB_NAME,DB_VERSION);
+req.onupgradeneeded=()=>{
+const db=req.result;
+if(!db.objectStoreNames.contains(STORE_FOTOS)){
+db.createObjectStore(STORE_FOTOS,{keyPath:"path"});
+}
+};
+req.onsuccess=()=>resolve(req.result);
+req.onerror=()=>reject(req.error);
+});
+}
+
+async function lerTodasFotosCacheLocal(){
+try{
+const db=await abrirCacheDB();
+if(!db)return[];
+return await new Promise((resolve,reject)=>{
+const tx=db.transaction(STORE_FOTOS,"readonly");
+const store=tx.objectStore(STORE_FOTOS);
+const req=store.getAll();
+req.onsuccess=()=>resolve(req.result||[]);
+req.onerror=()=>reject(req.error);
+});
+}catch(_){return[];}
+}
+
+async function gravarFotosCacheLocal(registos){
+try{
+const db=await abrirCacheDB();
+if(!db||!registos||!registos.length)return;
+await new Promise((resolve,reject)=>{
+const tx=db.transaction(STORE_FOTOS,"readwrite");
+const store=tx.objectStore(STORE_FOTOS);
+registos.forEach(r=>{
+const limpo={
+path:r.path,
+blob:(r.blob instanceof Blob)?r.blob:null,
+trabalho:r.trabalho||"Trabalho Geral",
+user:r.user||"desconhecido",
+created_at:r.created_at||new Date().toISOString(),
+oculta:Boolean(r.oculta)
+};
+store.put(limpo);
+});
+tx.oncomplete=()=>resolve();
+tx.onerror=()=>reject(tx.error);
+});
+}catch(_){}
+}
+
+async function removerFotosCacheLocal(paths){
+try{
+const db=await abrirCacheDB();
+if(!db||!paths||!paths.length)return;
+await new Promise((resolve,reject)=>{
+const tx=db.transaction(STORE_FOTOS,"readwrite");
+const store=tx.objectStore(STORE_FOTOS);
+paths.forEach(p=>store.delete(p));
+tx.oncomplete=()=>resolve();
+tx.onerror=()=>reject(tx.error);
+});
+}catch(_){}
+}
+
+function hidratarUrlVisualFoto(reg){
+if(reg&&reg.blob instanceof Blob){
+return URL.createObjectURL(reg.blob);
+}
+return reg?.url||"";
+}
+
+async function descarregarBlobImagem(url){
+try{
+if(!url)return null;
+const resp=await fetch(url);
+if(!resp.ok)return null;
+return await resp.blob();
+}catch(_){return null;}
+}
 
 const alertaOkModal=document.getElementById("alerta-ok-modal"),alertaOkTitulo=document.getElementById("alerta-ok-titulo"),alertaOkMensagem=document.getElementById("alerta-ok-mensagem"),btnAlertaOk=document.getElementById("btn-alerta-ok");
 function mostrarAlertaOk(mensagem,titulo="Atualização"){
@@ -639,15 +722,66 @@ function getNome(u){return u?(u.nome_utilizador||u.Nome_Utilizador||u.nome||u.No
 function getPw(u){if(!u)return"";const v=u.pw_utilizador??u.PW_Utilizador??u.pw??u.PW??"";return v==null?"":String(v).trim();}
 function isUserAtivo(u){if(!u)return false;if(typeof u.user_ativo==="boolean")return u.user_ativo;if(typeof u.User_Ativo==="boolean")return u.User_Ativo;if(typeof u.ativado==="boolean")return u.ativado;return Boolean(u.user_ativo??u.User_Ativo??u.ativado??false);}
 function getNrDispositivosAtivos(u){if(!u)return 0;const n=parseInt(u.nr_dispositivos_ativos??u.Nr_Dispositivos_Ativos??0,10);return Number.isFinite(n)&&n>=0?n:0;}
+function getDataLogin(u){if(!u)return"";const v=u.data_login??u.Data_Login??"";return v?String(v).slice(0,10):"";}
+function getContaLogin(u){if(!u)return 0;const n=parseInt(u.conta_login??u.Conta_Login??0,10);return Number.isFinite(n)&&n>=0?n:0;}
+function getContaDiasLogin(u){if(!u)return 0;const n=parseInt(u.conta_dias_login??u.Conta_Dias_Login??0,10);return Number.isFinite(n)&&n>=0?n:0;}
+function getDataHojeIso(){const d=new Date();const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,"0");const day=String(d.getDate()).padStart(2,"0");return `${y}-${m}-${day}`;}
 function getEmail(u){return u?(u.email||u.Endereço_Mail||u.Endwreço_Mail||""):"";}
 function getTel(u){return u?(u.telefone||u.Número_Telefone||""):"";}
 function isAdminTecnico(u){return!!(u&&(u.indicador_administrador_tecnico===true||u.Indicador_Administrador_Tecnico===true));}
 function isAdmin(u){return!!(u&&(u.indicador_administrador===true||u.Indicador_Administrador===true||u.admin===true||isAdminTecnico(u)));}
 function getDescricaoDispositivo(){let d=localStorage.getItem(STORAGE_KEY_DISPOSITIVO_ID);if(!d){d="dev-"+Math.random().toString(36).substring(2,10);localStorage.setItem(STORAGE_KEY_DISPOSITIVO_ID,d);}return `${d} (${navigator.platform||"browser"})`;}
-async function registarLog(acao,userObj,pwUsada,detalheExtra,resultado="COM SUCESSO"){
-const isErro=resultado==="ERRO";
-try{await supabase.from("logs_utilizadores").insert([{timestamp:new Date().toISOString(),acao,coduser:isErro?(getCod(userObj)||""):null,pw_utilizador:isErro?(pwUsada||""):null,nome:getNome(userObj)||"",dispositivo:detalheExtra?`${getDescricaoDispositivo()} | ${detalheExtra}`:getDescricaoDispositivo(),resultado}]);}catch(_){}
+
+async function atualizarMetricasLoginUtilizador(userRecord,extraCampos={}){
+const cod=(userRecord?.coduser||userRecord?.CodUser||getCod(userRecord)||"").trim();
+if(!cod)return userRecord;
+const hojeIso=getDataHojeIso();
+const dataAnterior=getDataLogin(userRecord);
+const dataDiferente=dataAnterior!==hojeIso;
+const novoContaLogin=getContaLogin(userRecord)+1;
+const novoContaDiasLogin=dataDiferente?getContaDiasLogin(userRecord)+1:getContaDiasLogin(userRecord);
+const payload={
+...extraCampos,
+conta_login:novoContaLogin,
+conta_dias_login:novoContaDiasLogin
+};
+if(dataDiferente){
+payload.data_login=hojeIso;
 }
+const {data:atualizado,error}=await supabase.from("utilizadores").update(payload).eq("coduser",cod).select().maybeSingle();
+if(error||!atualizado)return userRecord;
+Object.assign(userRecord,atualizado);
+userRecord.data_login=getDataLogin(atualizado)||(dataDiferente?hojeIso:dataAnterior);
+userRecord.conta_login=getContaLogin(atualizado);
+userRecord.conta_dias_login=getContaDiasLogin(atualizado);
+const idxCache=cacheutilizadores.findIndex(u=>getCod(u)===getCod(userRecord));
+if(idxCache!==-1)cacheutilizadores[idxCache]=userRecord;
+return userRecord;
+}
+
+function normalizarErroLog(erroTexto){
+const t=erroTexto==null?"":String(erroTexto).trim();
+return t||"erro desconhecido";
+}
+
+async function registarLog(acao,userObj,pwUsada,erroTexto,resultado="COM SUCESSO"){
+const isErro=resultado==="ERRO";
+const detalheErro=isErro?normalizarErroLog(erroTexto):(erroTexto?String(erroTexto).trim():"");
+const baseDispositivo=getDescricaoDispositivo();
+const dispositivoFinal=detalheErro?`${baseDispositivo} | ${detalheErro}`:baseDispositivo;
+try{
+await supabase.from("logs_utilizadores").insert([{
+timestamp:new Date().toISOString(),
+acao,
+coduser:getCod(userObj)||"",
+pw_utilizador:isErro?(pwUsada||""):null,
+nome:getNome(userObj)||"",
+dispositivo:dispositivoFinal,
+resultado
+}]);
+}catch(_){}
+}
+
 function getListaCodigosAssociadosLocais(){let l=[];try{const r=localStorage.getItem(STORAGE_KEY_ASSOCIADOS_LISTA);if(r){const p=JSON.parse(r);if(Array.isArray(p))l=p.filter(c=>typeof c==="string"&&c.trim().length>0);}}catch(_){l=[];}return Array.from(new Set(l));}
 function guardarListaCodigosAssociadosLocais(l){localStorage.setItem(STORAGE_KEY_ASSOCIADOS_LISTA,JSON.stringify(Array.from(new Set(l.filter(Boolean)))));}
 function adicionarCodigoAssociadoLocal(c){if(!c)return;guardarListaCodigosAssociadosLocais([c,...getListaCodigosAssociadosLocais().filter(x=>x!==c)]);}
@@ -730,21 +864,34 @@ if(entradas.length>0&&entradas[0].value!=="__ESCOLHER_OUTRO__"){loginUserSelect.
 
 btnLoginRegistoInativo.addEventListener("click",()=>{const u=utilizadorInativoPendente;pendenteAposLoginCallback=null;loginModal.classList.remove("ativa");abrirEcraRegistoUtilizadorEspecifico(u||null);});
 
-async function tentarAutenticarUser(userRecord,pwDigitada,ignoraPwSeJaAssociado=false){
+async function tentarAutenticarUser(userRecord,pwDigitada,ignoraPwSeJaAssociado=false,ignoraUpdateDbNoArranque=false){
 limparAlertaInativoLogin();
-if(!userRecord){loginError.textContent="Utilizador não encontrado.";return;}
+if(!userRecord){
+loginError.textContent="Utilizador não encontrado.";
+await registarLog("login",null,pwDigitada,"","ERRO");
+return false;
+}
 if(!isUserAtivo(userRecord)){
 utilizadorInativoPendente=userRecord;loginError.textContent="Este utilizador ainda não está ativo na tabela utilizadores. Faça primeiro o Registo.";
 btnLoginRegistoInativo.textContent=`Registar ${getNome(userRecord)} para uso pleno da app`;btnLoginRegistoInativo.style.display="inline-flex";
 if(btnLoginEntrar)btnLoginEntrar.style.display="none";
-await registarLog("ACAO [login]",userRecord,pwDigitada,"Utilizador não ativo (user_ativo=false)","ERRO");return;
+await registarLog("login",userRecord,pwDigitada,"user inativo","ERRO");
+return false;
 }
 const cod=getCod(userRecord),jaAssoc=isUtilizadorAssociadoNesteNavegador(cod),pwEsperada=getPw(userRecord);
 if(!ignoraPwSeJaAssociado&&!jaAssoc&&pwEsperada&&pwDigitada!==pwEsperada){
 loginError.textContent="Password de registo incorreta.";
-await registarLog("ACAO [login]",userRecord,pwDigitada,"Password incorreta","ERRO");return;
+await registarLog("login",userRecord,pwDigitada,"pw invalida","ERRO");
+return false;
 }
-adicionarCodigoAssociadoLocal(cod);ativarPresencaUtilizador(userRecord);
+adicionarCodigoAssociadoLocal(cod);
+ativarPresencaUtilizador(userRecord);
+forcarRepinturaCabecalho();
+if(!ignoraUpdateDbNoArranque){
+await atualizarMetricasLoginUtilizador(userRecord);
+atualizarCabecalhoEstado();
+}
+return true;
 }
 
 loginForm.addEventListener("submit",async(e)=>{
@@ -982,7 +1129,7 @@ await mostrarAlertaOk("Alterações guardadas com sucesso.","Alteração");retur
 
 if(modoNovoUserAtivo&&usuarioAtual&&isAdmin(usuarioAtual)){
 if(!nomeEditado||!codFixo){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Preencha o nome e o código do novo utilizador.";return;}
-const {data:criado,error}=await supabase.from("utilizadores").insert([{nome_utilizador:nomeEditado,coduser:codFixo,pw_utilizador:pwDigitada||null,email:emailDigitado,telefone:telDigitado,user_ativo:true,nr_dispositivos_ativos:0}]).select().maybeSingle();
+const {data:criado,error}=await supabase.from("utilizadores").insert([{nome_utilizador:nomeEditado,coduser:codFixo,pw_utilizador:pwDigitada||null,email:emailDigitado,telefone:telDigitado,user_ativo:true,nr_dispositivos_ativos:0,conta_login:0,conta_dias_login:0}]).select().maybeSingle();
 if(error){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Erro ao criar utilizador: "+error.message;return;}
 const {data:listaAtualizada}=await supabase.from("utilizadores").select("*");
 cacheutilizadores=(listaAtualizada||[]).sort((a,b)=>getNome(a).localeCompare(getNome(b),"pt",{sensitivity:"base"}));
@@ -991,26 +1138,47 @@ await mostrarAlertaOk(`Utilizador "${nomeEditado}" criado com sucesso.`,"Inserç
 }
 
 const alvoUser=cacheutilizadores.find(u=>getCod(u).toLowerCase()===codFixo.toLowerCase());
-if(!alvoUser){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Utilizador não encontrado na tabela.";await registarLog("ACAO [registo user]",{coduser:codFixo,nome_utilizador:nomeEditado},pwDigitada,"Utilizador não encontrado","ERRO");return;}
+if(!alvoUser){
+registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Utilizador não encontrado na tabela.";
+await registarLog("registo",{coduser:codFixo,nome_utilizador:nomeEditado},pwDigitada,"","ERRO");
+return;
+}
+
 if(!usuarioAtual){
-if(!pwDigitada){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="A password de primeiro registo é obrigatória.";editPw.focus();return;}
 const pwEsp=getPw(alvoUser);
-if(!pwEsp||pwDigitada!==pwEsp){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Password de primeiro registo inválida.";await registarLog("ACAO [registo user]",alvoUser,pwDigitada,"Validação de password falhou no registo","ERRO");editPw.focus();return;}
+if(!pwDigitada||!pwEsp||pwDigitada!==pwEsp){
+registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Password de primeiro registo inválida.";
+await registarLog("registo",alvoUser,pwDigitada,"pw invalida","ERRO");
+editPw.focus();return;
+}
+}else if(pwDigitada){
+const pwEsp=getPw(alvoUser);
+if(pwEsp&&pwDigitada!==pwEsp){
+registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Password de registo inválida.";
+await registarLog("registo",alvoUser,pwDigitada,"pw invalida","ERRO");
+editPw.focus();return;
+}
 }
 
 const nomeFinal=getNome(alvoUser),codReal=getCod(alvoUser),dispAtuais=getNrDispositivosAtivos(alvoUser),jaLocal=isUtilizadorAssociadoNesteNavegador(codReal),novoNrDisp=jaLocal?Math.max(1,dispAtuais):dispAtuais+1;
 const updatePayload={user_ativo:true,nr_dispositivos_ativos:novoNrDisp};
 if(usuarioAtual&&isAdmin(usuarioAtual)){updatePayload.email=emailDigitado;updatePayload.telefone=telDigitado;if(nomeEditado)updatePayload.nome_utilizador=nomeEditado;if(pwDigitada)updatePayload.pw_utilizador=pwDigitada;}
 const {data:atualizado,error}=await supabase.from("utilizadores").update(updatePayload).eq("coduser",codReal).select().maybeSingle();
-if(error){registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Erro ao gravar utilizador: "+error.message;await registarLog("ACAO [registo user]",alvoUser,pwDigitada,error.message,"ERRO");return;}
+if(error){
+registoFeedback.style.color="var(--danger)";registoFeedback.textContent="Erro ao gravar utilizador: "+error.message;
+await registarLog("registo",alvoUser,pwDigitada,error.message||"","ERRO");
+return;
+}
 
 const countGravado=atualizado?getNrDispositivosAtivos(atualizado):novoNrDisp,nomeGravado=(usuarioAtual&&isAdmin(usuarioAtual)&&nomeEditado)?nomeEditado:nomeFinal;
 alvoUser.nome_utilizador=nomeGravado;if(usuarioAtual&&isAdmin(usuarioAtual)){alvoUser.email=emailDigitado;alvoUser.telefone=telDigitado;if(pwDigitada)alvoUser.pw_utilizador=pwDigitada;}
 alvoUser.user_ativo=true;alvoUser.nr_dispositivos_ativos=countGravado;
+if(atualizado)Object.assign(alvoUser,atualizado);
+await atualizarMetricasLoginUtilizador(alvoUser);
 if(usuarioAtual&&getCod(usuarioAtual)===codReal)usuarioAtual=alvoUser;
 estadoInicialUserForm={nome:nomeGravado,coduser:codReal,pw:getPw(alvoUser),email:getEmail(alvoUser),tel:getTel(alvoUser)};
 adicionarCodigoAssociadoLocal(codReal);
-await registarLog("ACAO [registo user]",alvoUser,pwDigitada,`user_ativo=true | nr_dispositivos_ativos=${countGravado}`,"COM SUCESSO");
+await registarLog("registo",alvoUser,null,"","COM SUCESSO");
 
 if(!usuarioAtual){configModal.classList.remove("ativa","modo-registo-inicial");atualizarEstadoCabecalhoConfig();ativarPresencaUtilizador(alvoUser);await mostrarAlertaOk(`Utilizador "${nomeGravado}" registado com sucesso.`,"Registo");return;}
 atualizarDestaqueOuCampoNome(alvoUser,false,false);atualizarCabecalhoEstado();montarFiltrosutilizadores();desenharGaleria();verificarAlteracoesUserForm();
@@ -1062,9 +1230,34 @@ const {data,error}=await supabase.from("utilizadores").select("*");
 if(error)throw error;
 cacheutilizadores=(data||[]).sort((a,b)=>getNome(a).localeCompare(getNome(b),"pt",{sensitivity:"base"}));
 }catch(err){console.error("Erro ao carregar utilizadores:",err);}
-usuarioAtual=null;setWinBoxState("box-upload",false);setFiltrosJanelaAberta(false);setConfigSectionState("admin-trabalhos-section",false);setConfigSectionState("utilizador-config-section",false);
-atualizarCabecalhoEstado();await carregarDadosSistema();forcarRepinturaCabecalho();
-if(getListaCodigosAssociadosLocais().length>0){
+
+usuarioAtual=null;
+setWinBoxState("box-upload",false);
+setFiltrosJanelaAberta(false);
+setConfigSectionState("admin-trabalhos-section",false);
+setConfigSectionState("utilizador-config-section",false);
+
+const listaLocal=getListaCodigosAssociadosLocais();
+const usersAssocValidos=listaLocal
+.map(cod=>cacheutilizadores.find(u=>String(getCod(u)).trim()===String(cod).trim()))
+.filter(Boolean);
+
+if(usersAssocValidos.length===1){
+const uUnico=usersAssocValidos[0];
+adicionarCodigoAssociadoLocal(getCod(uUnico));
+ativarPresencaUtilizador(uUnico);
+await carregarDadosSistema();
+atualizarCabecalhoEstado();
+forcarRepinturaCabecalho();
+atualizarMetricasLoginUtilizador(uUnico).then(()=>atualizarCabecalhoEstado());
+return;
+}
+
+atualizarCabecalhoEstado();
+await carregarDadosSistema();
+forcarRepinturaCabecalho();
+
+if(usersAssocValidos.length>1){
 abrirFluxoLogin(null);
 }else if(cacheutilizadores.length>0){
 abrirEcraRegistoUtilizadorEspecifico(null);
@@ -1165,16 +1358,28 @@ trabalhoCursoContainer.append(div);
 });
 }
 
+function getTrabalhosOrdenadosPorDataDesc(){
+const ativos=cacheTrabalhos.filter(t=>getTrabAtivo(t)===true);
+const base=ativos.length>0?ativos:cacheTrabalhos;
+return [...base].sort((a,b)=>new Date(getTrabData(b)||"1970-01-01")-new Date(getTrabData(a)||"1970-01-01"));
+}
+
 function montarFiltrosTrabalhos(){
 const checkAll=document.getElementById("check-all-trabalhos"),linhaAllTrab=document.getElementById("linha-all-trabalhos");
-if(checkAll)checkAll.checked=true;if(linhaAllTrab)linhaAllTrab.classList.add("selecionado");
 const container=document.getElementById("list-trabalhos-checkboxes");container.innerHTML="";
+const ordenados=getTrabalhosOrdenadosPorDataDesc();
+const nomesDoisPrimeiros=new Set(ordenados.slice(0,2).map(t=>getTrabNome(t).trim().toLowerCase()));
+const marcarDoisPrimeiros=!filtroInicialAplicado&&nomesDoisPrimeiros.size>0;
+
 cacheTrabalhos.forEach(t=>{
-const nomeTrab=getTrabNome(t),divLinha=document.createElement("div");divLinha.className="browse-linha-opcao";
+const nomeTrab=getTrabNome(t),divLinha=document.createElement("div");
+const deveMarcar=marcarDoisPrimeiros&&nomesDoisPrimeiros.has(nomeTrab.trim().toLowerCase());
+divLinha.className="browse-linha-opcao"+(deveMarcar?" selecionado":"");
 const checkboxId=`trab-chk-${Math.random().toString(36).substring(2,9)}`;
-divLinha.innerHTML=`<input type="checkbox" class="filtro-trab-item" id="${checkboxId}" value="${nomeTrab}"><label for="${checkboxId}" style="cursor:pointer;width:100%;margin:0;font-weight:300;">${nomeTrab}</label>`;
+divLinha.innerHTML=`<input type="checkbox" class="filtro-trab-item" id="${checkboxId}" value="${nomeTrab}"${deveMarcar?" checked":""}><label for="${checkboxId}" style="cursor:pointer;width:100%;margin:0;font-weight:300;">${nomeTrab}</label>`;
 const cb=divLinha.querySelector("input");
 cb.addEventListener("change",()=>{
+filtroInicialAplicado=true;
 divLinha.classList.toggle("selecionado",cb.checked);
 const anyChecked=Array.from(document.querySelectorAll(".filtro-trab-item")).some(i=>i.checked);
 document.getElementById("check-all-trabalhos").checked=!anyChecked;
@@ -1182,11 +1387,18 @@ linhaAllTrab.classList.toggle("selecionado",!anyChecked);aplicarFiltrosEGeral();
 });
 container.append(divLinha);
 });
+
+const anyInitiallyChecked=Array.from(document.querySelectorAll(".filtro-trab-item")).some(i=>i.checked);
+if(checkAll){
+checkAll.checked=!anyInitiallyChecked;
+if(linhaAllTrab)linhaAllTrab.classList.toggle("selecionado",!anyInitiallyChecked);
 checkAll.addEventListener("change",()=>{
+filtroInicialAplicado=true;
 if(checkAll.checked){linhaAllTrab.classList.add("selecionado");document.querySelectorAll(".filtro-trab-item").forEach(cb=>{cb.checked=false;cb.closest(".browse-linha-opcao").classList.remove("selecionado");});}
 else linhaAllTrab.classList.remove("selecionado");
 aplicarFiltrosEGeral();
 });
+}
 }
 
 function montarFiltrosutilizadores(){
@@ -1217,6 +1429,7 @@ document.getElementById("filter-data-inicio").addEventListener("change",aplicarF
 document.getElementById("filter-data-fim").addEventListener("change",aplicarFiltrosEGeral);
 document.getElementById("btn-limpar-datas").addEventListener("click",()=>{document.getElementById("filter-data-inicio").value="";document.getElementById("filter-data-fim").value="";aplicarFiltrosEGeral();});
 document.getElementById("btn-limpa-filtros").addEventListener("click",()=>{
+filtroInicialAplicado=true;
 document.getElementById("filter-data-inicio").value="";document.getElementById("filter-data-fim").value="";
 const ct=document.getElementById("check-all-trabalhos"),lt=document.getElementById("linha-all-trabalhos");
 if(ct)ct.checked=true;if(lt)lt.classList.add("selecionado");
@@ -1228,8 +1441,8 @@ aplicarFiltrosEGeral();
 });
 
 btnRefreshFotos.addEventListener("click",async()=>{
-btnRefreshFotos.blur();btnRefreshFotos.classList.add("animating");estado.textContent="A atualizar fotografias da base de dados...";
-await carregarFotosEfetivas();btnRefreshFotos.classList.remove("animating");estado.textContent="Álbum atualizado com sucesso!";
+btnRefreshFotos.blur();btnRefreshFotos.classList.add("animating");estado.textContent="A reconciliar fotografias da base de dados com a cache do dispositivo...";
+await carregarFotosEfetivas();btnRefreshFotos.classList.remove("animating");estado.textContent="Álbum reconciliado com sucesso!";
 setTimeout(()=>{estado.textContent="";},3000);
 });
 
@@ -1243,15 +1456,92 @@ headerProjetaFotografias.addEventListener("keydown",(e)=>{if(e.key==="Enter"||e.
 }
 
 async function carregarFotosEfetivas(){
-const {data:dbFotos}=await supabase.from("fotografias").select("*"),{data:storageFiles}=await supabase.storage.from(BUCKET).list("",{limit:500}),mapaDb={};
+const registosCache=await lerTodasFotosCacheLocal();
+const mapaCache=new Map();
+registosCache.forEach(r=>{if(r&&r.path)mapaCache.set(r.path,r);});
+
+if(mapaCache.size>0&&cacheFotos.length===0){
+cacheFotos=registosCache.map(r=>({...r,url:hidratarUrlVisualFoto(r),oculta:Boolean(r.oculta)}));
+aplicarFiltrosEGeral();
+}
+
+const [{data:dbFotos},{data:storageFiles}]=await Promise.all([
+supabase.from("fotografias").select("*"),
+supabase.storage.from(BUCKET).list("",{limit:500})
+]);
+
+const mapaDb={};
 (dbFotos||[]).forEach(f=>{mapaDb[f.file_name||f.caminho||f.url||f.File_Name||""]=f;});
-cacheFotos=await Promise.all((storageFiles||[]).filter(item=>{
+
+const itensValidosStorage=(storageFiles||[]).filter(item=>{
 if(!item?.name||item.name.startsWith("."))return false;
-return["jpg","jpeg","png","gif","webp","avif","bmp"].includes(item.name.split(".").pop().toLowerCase());
-}).map(async(item)=>{
-const url=await urlDaFoto(item.name),metadados=mapaDb[item.name]||{};
-return{path:item.name,url,trabalho:metadadosCodigo(metadados),user:metadados.coduser||metadados.CodUser||metadados.user||metadados.User||metadados.Utilizador||"desconhecido",created_at:item.created_at||metadados.created_at||new Date().toISOString()};
-}));
+return["jpg","jpeg","png","gif","webp","avif","bmp","heic","heif"].includes(item.name.split(".").pop().toLowerCase());
+});
+
+const pathsAtuais=new Set(itensValidosStorage.map(item=>item.name));
+const paraPersistir=[];
+const resultadoFinal=[];
+
+for(const item of itensValidosStorage){
+const path=item.name;
+const metadados=mapaDb[path]||{};
+const trabalho=metadadosCodigo(metadados);
+const user=metadados.coduser||metadados.CodUser||metadados.user||metadados.User||metadados.Utilizador||"desconhecido";
+const created_at=item.created_at||metadados.created_at||new Date().toISOString();
+const existente=mapaCache.get(path);
+
+if(existente){
+const metadadosMudaram=(existente.trabalho!==trabalho)||(existente.user!==user)||(existente.oculta===true);
+const regAtualizado={
+...existente,
+path,
+trabalho,
+user,
+created_at,
+oculta:false,
+url:existente.url||await urlDaFoto(path)
+};
+if(metadadosMudaram)paraPersistir.push(regAtualizado);
+resultadoFinal.push({
+...regAtualizado,
+url:hidratarUrlVisualFoto(regAtualizado)
+});
+}else{
+const signedOrPublicUrl=await urlDaFoto(path);
+const blob=await descarregarBlobImagem(signedOrPublicUrl);
+const novoReg={
+path,
+url:signedOrPublicUrl,
+blob:blob||null,
+trabalho,
+user,
+created_at,
+oculta:false
+};
+paraPersistir.push(novoReg);
+resultadoFinal.push({
+...novoReg,
+url:hidratarUrlVisualFoto(novoReg)
+});
+}
+}
+
+for(const [path,existente] of mapaCache.entries()){
+if(!pathsAtuais.has(path)){
+const regOculto={...existente,oculta:true};
+if(existente.oculta!==true)paraPersistir.push(regOculto);
+resultadoFinal.push({
+...regOculto,
+url:hidratarUrlVisualFoto(regOculto)
+});
+}
+}
+
+if(paraPersistir.length>0){
+await gravarFotosCacheLocal(paraPersistir);
+}
+
+cacheFotos=resultadoFinal;
 aplicarFiltrosEGeral();
 if(usuarioAtual&&uploadTrabalhoVal.value)atualizarContadorUploadAtual(uploadTrabalhoVal.value);
 }
@@ -1266,6 +1556,7 @@ const trabsSel=Array.from(document.querySelectorAll(".filtro-trab-item")).filter
 const usersSel=Array.from(document.querySelectorAll(".filtro-user-item")).filter(c=>c.checked).map(c=>c.value);
 const dIni=document.getElementById("filter-data-inicio").value,dFim=document.getElementById("filter-data-fim").value;
 const filtradas=cacheFotos.filter(f=>{
+if(f.oculta===true)return false;
 const tf=(f.trabalho||"").trim().toLowerCase(),mTrab=allTrab||trabsSel.length===0||trabsSel.includes(tf),mUser=allUser||usersSel.length===0||usersSel.includes(f.user);
 let mData=true;const fd=(f.created_at||"").split("T")[0];
 if(dIni&&fd<dIni)mData=false;if(dFim&&fd>dFim)mData=false;return mTrab&&mUser&&mData;
@@ -1283,7 +1574,8 @@ desenharGaleria();
 
 function desenharGaleria(){
 galeriaContainer.replaceChildren();
-contador.textContent=`selecionam ${fotosFiltradas.length} fotografias de um total de ${cacheFotos.length} .`;
+const totalVisiveis=cacheFotos.filter(f=>f.oculta!==true).length;
+contador.textContent=`selecionam ${fotosFiltradas.length} fotografias de um total de ${totalVisiveis} .`;
 if(fotosFiltradas.length===0){const v=document.createElement("p");v.className="empty";v.textContent="Nenhuma fotografia encontrada com os filtros selecionados.";galeriaContainer.append(v);return;}
 const grupos=new Map();
 fotosFiltradas.forEach(f=>{const trab=f.trabalho||"Outros";if(!grupos.has(trab))grupos.set(trab,[]);grupos.get(trab).push(f);});
@@ -1312,55 +1604,124 @@ galeriaContainer.append(grid);
 async function apagarFotografia(path){
 if(!usuarioAtual||!confirm("Tem a certeza que pretende apagar esta fotografia?"))return;
 const {error}=await supabase.storage.from(BUCKET).remove([path]);await supabase.from("fotografias").delete().eq("file_name",path);
-if(error)alert("Erro ao apagar: "+error.message);else{await carregarFotosEfetivas();await mostrarAlertaOk("Fotografia eliminada com sucesso.","Eliminação");}
+if(error)alert("Erro ao apagar: "+error.message);
+else{
+await removerFotosCacheLocal([path]);
+cacheFotos=cacheFotos.filter(f=>f.path!==path);
+await carregarFotosEfetivas();
+await mostrarAlertaOk("Fotografia eliminada com sucesso.","Eliminação");
+}
 }
 
-function comprimirImagem(file,maxWidth=1600,quality=.82){
+function isFicheiroImagem(file){
+if(!file)return false;
+if(file.type&&file.type.startsWith("image/"))return true;
+const ext=(file.name||"").split(".").pop().toLowerCase();
+return["jpg","jpeg","png","gif","webp","avif","bmp","heic","heif"].includes(ext);
+}
+
+function comprimirImagem(file,maxWidth=1080,quality=.68){
 return new Promise((resolve)=>{
-if(!file.type.startsWith("image/")||file.type==="image/gif")return resolve(file);
-const reader=new FileReader();reader.onload=(e)=>{
-const img=new Image();img.onload=()=>{
-let w=img.width,h=img.height;if(w>maxWidth){h=Math.round((h*maxWidth)/w);w=maxWidth;}
-const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
-c.toBlob((blob)=>resolve(blob?new File([blob],file.name,{type:"image/jpeg",lastModified:Date.now()}):file),"image/jpeg",quality);
-};img.src=e.target.result;
-};reader.readAsDataURL(file);
+if(!file||file.type==="image/gif")return resolve(file);
+const reader=new FileReader();
+reader.onerror=()=>resolve(file);
+reader.onload=(e)=>{
+const img=new Image();
+img.onerror=()=>{img.src="";resolve(file);};
+img.onload=()=>{
+try{
+let w=img.naturalWidth||img.width||0;
+let h=img.naturalHeight||img.height||0;
+if(!w||!h){img.src="";return resolve(file);}
+if(w>maxWidth){h=Math.round((h*maxWidth)/w);w=maxWidth;}
+const c=document.createElement("canvas");
+c.width=w;c.height=h;
+const ctx=c.getContext("2d");
+if(!ctx){img.src="";return resolve(file);}
+ctx.drawImage(img,0,0,w,h);
+c.toBlob((blob)=>{
+const nomeBase=(file.name||"foto").replace(/\.[^.]+$/,"")+".jpg";
+const finalFile=blob?new File([blob],nomeBase,{type:"image/jpeg",lastModified:Date.now()}):file;
+c.width=0;c.height=0;img.src="";
+resolve(finalFile);
+},"image/jpeg",quality);
+}catch(_){
+img.src="";
+resolve(file);
+}
+};
+img.src=e.target?.result||"";
+};
+reader.readAsDataURL(file);
 });
 }
 
 function caminhoSeguro(nome){
 const p=nome.lastIndexOf("."),ext=p>0?nome.slice(p).toLowerCase().replace(/[^.a-z0-9]/g,""):"";
 const base=(p>0?nome.slice(0,p):nome).normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-zA-Z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,48)||"foto";
-return`${Date.now()}-${base}${ext}`;
+return`${Date.now()}-${base}${ext||".jpg"}`;
 }
 
 function atualizarNomesSelecionados(lista){uploadFicheirosSelecionados.textContent=(lista&&lista.length)?`Selecionado(s): ${Array.from(lista).map(f=>f.name).join(", ")}`:"";}
 
 async function validarEEnviar(lista){
 if(!usuarioAtual){abrirFluxoLogin(()=>validarEEnviar(lista));return;}
-const trabalhoSelecionado=uploadTrabalhoVal.value;
-if(!trabalhoSelecionado){estado.textContent="Aviso: Selecione primeiro uma Aula, Tema ou Trabalho!";return;}
+const trabalhoSelecionado=(uploadTrabalhoVal.value||"").trim();
+if(!trabalhoSelecionado){
+estado.textContent="Aviso: Selecione primeiro uma Aula, Tema ou Trabalho!";
+await mostrarAlertaOk("Selecione primeiro uma Aula, Tema ou Trabalho antes de enviar.","Aviso");
+return;
+}
 uploadAvisoLimite.style.display="none";
-const imagens=[...lista].filter(f=>f.type.startsWith("image/"));
-if(imagens.length===0){estado.textContent="Escolha ficheiros de imagem válidos.";return;}
+const imagens=[...lista].filter(isFicheiroImagem);
+if(imagens.length===0){
+estado.textContent="Escolha ficheiros de imagem válidos.";
+await mostrarAlertaOk("Nenhum ficheiro de imagem válido selecionado.","Aviso");
+return;
+}
 atualizarNomesSelecionados(imagens);
 const limiteMaximo=obterLimiteDoTema(trabalhoSelecionado);
 if(limiteMaximo>0){
 estado.textContent="A verificar limite de fotografias...";
 const {count,error}=await supabase.from("fotografias").select("*",{count:"exact",head:true}).eq("codigo_trabalho",trabalhoSelecionado).eq("coduser",getCod(usuarioAtual));
-if(!error&&(count||0)+imagens.length>limiteMaximo){uploadAvisoLimite.textContent="upload cancelado por limite atingido";uploadAvisoLimite.style.display="block";estado.textContent="";return;}
+if(!error&&(count||0)+imagens.length>limiteMaximo){
+uploadAvisoLimite.textContent="upload cancelado por limite atingido";
+uploadAvisoLimite.style.display="block";
+estado.textContent="";
+await mostrarAlertaOk("Upload cancelado por limite de fotografias atingido neste tema.","Limite");
+return;
+}
 }
 let enviadas=0,falha="";
 for(const imagem of imagens){
 estado.textContent=`A otimizar e enviar ${enviadas+1} de ${imagens.length} para o trabalho "${trabalhoSelecionado}"…`;
-const imgComp=await comprimirImagem(imagem),fileNameSafe=caminhoSeguro(imgComp.name);
-const {error:uploadError}=await supabase.storage.from(BUCKET).upload(fileNameSafe,imgComp,{contentType:"image/jpeg",cacheControl:"3600"});
-if(uploadError){falha=uploadError.message;break;}
-await supabase.from("fotografias").insert([{file_name:fileNameSafe,codigo_trabalho:trabalhoSelecionado,coduser:getCod(usuarioAtual)}]);
+const imgComp=await comprimirImagem(imagem,1080,0.68);
+const fileNameSafe=caminhoSeguro(imgComp.name||imagem.name||"foto.jpg");
+const contentTypeFinal=imgComp.type||imagem.type||"image/jpeg";
+const {error:uploadError}=await supabase.storage.from(BUCKET).upload(fileNameSafe,imgComp,{contentType:contentTypeFinal,cacheControl:"3600"});
+if(uploadError){falha=uploadError.message||"Erro ao enviar para o armazenamento.";break;}
+const {error:dbError}=await supabase.from("fotografias").insert([{file_name:fileNameSafe,codigo_trabalho:trabalhoSelecionado,coduser:getCod(usuarioAtual)}]);
+if(dbError){
+await supabase.storage.from(BUCKET).remove([fileNameSafe]);
+falha=dbError.message||"Erro ao registar fotografia na base de dados.";
+break;
+}
+await gravarFotosCacheLocal([{
+path:fileNameSafe,
+blob:imgComp,
+trabalho:trabalhoSelecionado,
+user:getCod(usuarioAtual),
+created_at:new Date().toISOString(),
+oculta:false
+}]);
 enviadas+=1;
 }
 await carregarFotosEfetivas();
-if(falha){estado.textContent=falha;return;}
+if(falha){
+estado.textContent="Erro no envio: "+falha;
+await mostrarAlertaOk("Não foi possível gravar a fotografia: "+falha,"Erro");
+return;
+}
 estado.textContent="";
 await mostrarAlertaOk(enviadas===1?"Fotografia enviada e associada ao trabalho com sucesso.":`${enviadas} fotografias enviadas e associadas ao trabalho com sucesso.`,"Inserção");
 }
