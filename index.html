@@ -63,7 +63,7 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .section-shell:not(.aberta) .section-body{display:none}
 .section-body{padding:1rem 1.15rem 1.25rem;border-top:1px solid var(--line);background:#000000;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
 .upload-subtitle{margin:0 0 .65rem;font-size:.9rem;color:var(--muted)}
-.trabalhos-curso-lista{display:flex;flex-direction:column;gap:.35rem;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
+.trabalhos-curso-lista{display:flex;flex-direction:column;gap:.35rem;width:100%;max-width:100%;min-width:0;max-height:228px;overflow-y:auto;overflow-x:hidden;padding-right:.2rem}
 .trabalho-opcao{display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:.85rem;width:100%;max-width:100%;min-width:0;padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;cursor:pointer;color:var(--paper-soft);font-size:.92rem;outline:none}
 .trabalho-opcao:hover,.trabalho-opcao.drag-alvo{border-color:var(--line-hover);background:rgba(212,163,89,.07);color:var(--paper-strong)}
 .trabalho-opcao.selecionado,.trabalho-opcao.destacado{border-color:var(--brass-soft);background:rgba(212,163,89,.05);color:var(--paper-strong)}
@@ -81,6 +81,7 @@ main{position:relative;z-index:2;max-width:1120px;margin:0 auto;padding:0 1.5rem
 .filtros-label-grupo{display:inline-flex;align-items:center;gap:.5rem}
 .submenu-title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.25rem;font-weight:600;color:var(--brass)}
 .count{font-size:.84rem;color:var(--muted)}
+.count-var{color:var(--brass);font-weight:500}
 .filtros-janela:not(.aberta) .filtros-janela-body{display:none}
 .filtros-janela-body{padding:1rem;border-top:1px solid var(--line);width:100%;max-width:100%;min-width:0;overflow-x:hidden}
 .filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem;width:100%;max-width:100%;min-width:0}
@@ -236,7 +237,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <div class="section-body">
 <p class="upload-subtitle">Seleciona Aula, Tema ou Trabalho</p>
 <div class="trabalhos-curso-lista" id="trabalho-curso-container" role="listbox" aria-label="Aula, Tema ou Trabalho"></div>
-<input type="hidden" id="upload-trabalho-val" value=""><input id="ficheiro" type="file" accept="image/*" multiple style="display:none;">
+<input type="hidden" id="upload-trabalho-val" value=""><input id="ficheiro" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" style="position:fixed;left:-9999px;width:1px;height:1px;opacity:0;">
 <div class="upload-contador-bar" id="upload-contador-bar" aria-live="polite">
 <span class="upload-contador-texto-fixo">Tens</span><strong class="upload-contador-numero" id="upload-contador-atual">0</strong>
 <span class="upload-contador-texto-fixo">fotografias associadas ao tema</span><strong class="upload-contador-tema-destaque" id="upload-contador-tema">—</strong>
@@ -263,7 +264,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="filtro-icone-svg" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 5 21 5 14 13 14 19 10 21 10 13 3 5"/></svg></span>
 <h3 class="submenu-title" id="titulo-filtros-janela">Filtros Ativos</h3>
 </span>
-<span class="count" id="contador">selecionam 0 fotografias de um total de 0 .</span>
+<span class="count" id="contador">vizualiza <strong class="count-var">0</strong> fotografias de um total de <strong class="count-var">0</strong> .</span>
 </span>
 <div style="display:flex;align-items:center;gap:.65rem;margin-left:auto;flex-shrink:0;">
 <span class="win-control-zone" title="Abrir / Fechar filtros"><span class="win-symbol" id="sym-box-filtros"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg></span></span>
@@ -716,6 +717,11 @@ const currentUserDisplay=document.getElementById("current-user-display"),btnRegi
 const configModal=document.getElementById("config-modal"),configModalTitulo=document.getElementById("config-modal-titulo"),closeConfig=document.getElementById("close-config"),userBrowseWrapper=document.getElementById("user-browse-wrapper"),labelUserBrowse=document.getElementById("label-user-browse"),userBrowseContainer=document.getElementById("user-browse-container"),userNomeRealcado=document.getElementById("config-user-nome-realcado"),adminTrabalhosSection=document.getElementById("admin-trabalhos-section"),adminTrabBrowseWrapper=document.getElementById("admin-trab-browse-wrapper"),adminTrabBrowseContainer=document.getElementById("admin-trab-browse-container"),trabNomeRealcado=document.getElementById("config-trab-nome-realcado"),grupoEditTrabNome=document.getElementById("grupo-edit-trab-nome"),editInputTrabNome=document.getElementById("edit-input-trab-nome"),btnApagarUserAtual=document.getElementById("btn-apagar-user-atual"),btnNovoUserModo=document.getElementById("btn-novo-user-modo"),editCodUser=document.getElementById("edit-cod-user"),grupoEditNome=document.getElementById("grupo-edit-nome"),labelEditNome=document.getElementById("label-edit-nome"),editInputNome=document.getElementById("edit-input-nome"),grupoEditCodUser=document.getElementById("grupo-edit-coduser"),editInputCodUser=document.getElementById("edit-input-coduser"),grupoEditPw=document.getElementById("grupo-edit-pw"),labelEditPw=document.getElementById("label-edit-pw"),editPw=document.getElementById("edit-pw"),grupoEditEmail=document.getElementById("grupo-edit-email"),editEmail=document.getElementById("edit-email"),grupoEditTel=document.getElementById("grupo-edit-tel"),editTel=document.getElementById("edit-tel"),registoFeedback=document.getElementById("registo-feedback"),btnSaveUser=document.getElementById("btn-save-user");
 const btnApagarTrabAtual=document.getElementById("btn-apagar-trab-atual"),btnNovoTrabModo=document.getElementById("btn-novo-trab-modo"),editTrabId=document.getElementById("edit-trab-id"),editTrabNome=document.getElementById("edit-trab-nome"),editTrabData=document.getElementById("edit-trab-data"),editTrabLimite=document.getElementById("edit-trab-limite"),editTrabAtivo=document.getElementById("edit-trab-ativo"),btnSaveTrab=document.getElementById("btn-save-trab");
 const contador=document.getElementById("contador"),btnRefreshFotos=document.getElementById("btn-refresh-fotos"),headerProjetaFotografias=document.getElementById("header-projeta-fotografias"),estado=document.getElementById("estado"),ficheiro=document.getElementById("ficheiro"),uploadFicheirosSelecionados=document.getElementById("upload-ficheiros-selecionados"),uploadAvisoLimite=document.getElementById("upload-aviso-limite"),projetor=document.getElementById("projetor"),slide=document.getElementById("slide"),legenda=document.getElementById("legenda"),pausaBtn=document.getElementById("pausa"),galeriaContainer=document.getElementById("galeria-container"),trabalhoCursoContainer=document.getElementById("trabalho-curso-container"),uploadTrabalhoVal=document.getElementById("upload-trabalho-val");
+
+function atualizarContadorFiltro(filtradasCount,totalCount){
+if(!contador)return;
+contador.innerHTML=`vizualiza <strong class="count-var">${filtradasCount}</strong> fotografias de um total de <strong class="count-var">${totalCount}</strong> .`;
+}
 
 function getCod(u){return u?(u.coduser||u.CodUser||u.id||""):"";}
 function getNome(u){return u?(u.nome_utilizador||u.Nome_Utilizador||u.nome||u.Nome||"Utilizador"):"Utilizador";}
@@ -1575,7 +1581,7 @@ desenharGaleria();
 function desenharGaleria(){
 galeriaContainer.replaceChildren();
 const totalVisiveis=cacheFotos.filter(f=>f.oculta!==true).length;
-contador.textContent=`selecionam ${fotosFiltradas.length} fotografias de um total de ${totalVisiveis} .`;
+atualizarContadorFiltro(fotosFiltradas.length,totalVisiveis);
 if(fotosFiltradas.length===0){const v=document.createElement("p");v.className="empty";v.textContent="Nenhuma fotografia encontrada com os filtros selecionados.";galeriaContainer.append(v);return;}
 const grupos=new Map();
 fotosFiltradas.forEach(f=>{const trab=f.trabalho||"Outros";if(!grupos.has(trab))grupos.set(trab,[]);grupos.get(trab).push(f);});
@@ -1620,39 +1626,39 @@ const ext=(file.name||"").split(".").pop().toLowerCase();
 return["jpg","jpeg","png","gif","webp","avif","bmp","heic","heif"].includes(ext);
 }
 
-function comprimirImagem(file,maxWidth=1080,quality=.68){
+function comprimirImagem(file,maxWidth=1024,quality=.65){
 return new Promise((resolve)=>{
-if(!file||file.type==="image/gif")return resolve(file);
-const reader=new FileReader();
-reader.onerror=()=>resolve(file);
-reader.onload=(e)=>{
+if(!file)return resolve(file);
+const ext=(file.name||"").split(".").pop().toLowerCase();
+const isHeic=ext==="heic"||ext==="heif"||/heic|heif/i.test(file.type||"");
+if(file.type==="image/gif"||isHeic||file.size<=1500000)return resolve(file);
+const objectUrl=URL.createObjectURL(file);
 const img=new Image();
-img.onerror=()=>{img.src="";resolve(file);};
+img.onerror=()=>{URL.revokeObjectURL(objectUrl);resolve(file);};
 img.onload=()=>{
 try{
 let w=img.naturalWidth||img.width||0;
 let h=img.naturalHeight||img.height||0;
-if(!w||!h){img.src="";return resolve(file);}
+if(!w||!h){URL.revokeObjectURL(objectUrl);return resolve(file);}
 if(w>maxWidth){h=Math.round((h*maxWidth)/w);w=maxWidth;}
 const c=document.createElement("canvas");
 c.width=w;c.height=h;
 const ctx=c.getContext("2d");
-if(!ctx){img.src="";return resolve(file);}
+if(!ctx){URL.revokeObjectURL(objectUrl);return resolve(file);}
 ctx.drawImage(img,0,0,w,h);
 c.toBlob((blob)=>{
+URL.revokeObjectURL(objectUrl);
 const nomeBase=(file.name||"foto").replace(/\.[^.]+$/,"")+".jpg";
-const finalFile=blob?new File([blob],nomeBase,{type:"image/jpeg",lastModified:Date.now()}):file;
-c.width=0;c.height=0;img.src="";
+const finalFile=(blob&&blob.size>0)?new File([blob],nomeBase,{type:"image/jpeg",lastModified:Date.now()}):file;
+c.width=0;c.height=0;
 resolve(finalFile);
 },"image/jpeg",quality);
 }catch(_){
-img.src="";
+URL.revokeObjectURL(objectUrl);
 resolve(file);
 }
 };
-img.src=e.target?.result||"";
-};
-reader.readAsDataURL(file);
+img.src=objectUrl;
 });
 }
 
@@ -1694,10 +1700,12 @@ return;
 }
 let enviadas=0,falha="";
 for(const imagem of imagens){
-estado.textContent=`A otimizar e enviar ${enviadas+1} de ${imagens.length} para o trabalho "${trabalhoSelecionado}"…`;
-const imgComp=await comprimirImagem(imagem,1080,0.68);
+estado.textContent=`A enviar ${enviadas+1} de ${imagens.length} para o trabalho "${trabalhoSelecionado}"…`;
+const imgComp=await comprimirImagem(imagem,1024,0.65);
 const fileNameSafe=caminhoSeguro(imgComp.name||imagem.name||"foto.jpg");
-const contentTypeFinal=imgComp.type||imagem.type||"image/jpeg";
+const extSafe=fileNameSafe.split(".").pop().toLowerCase();
+const tipoInferido=extSafe==="png"?"image/png":extSafe==="webp"?"image/webp":extSafe==="gif"?"image/gif":extSafe==="heic"?"image/heic":extSafe==="heif"?"image/heif":"image/jpeg";
+const contentTypeFinal=(imgComp.type&&imgComp.type.startsWith("image/"))?imgComp.type:((imagem.type&&imagem.type.startsWith("image/"))?imagem.type:tipoInferido);
 const {error:uploadError}=await supabase.storage.from(BUCKET).upload(fileNameSafe,imgComp,{contentType:contentTypeFinal,cacheControl:"3600"});
 if(uploadError){falha=uploadError.message||"Erro ao enviar para o armazenamento.";break;}
 const {error:dbError}=await supabase.from("fotografias").insert([{file_name:fileNameSafe,codigo_trabalho:trabalhoSelecionado,coduser:getCod(usuarioAtual)}]);
@@ -1748,10 +1756,15 @@ try{await projetor.requestFullscreen();}catch{}
 async function fecharProjetor(){parar();projetor.classList.remove("aberto");slide.removeAttribute("src");if(document.fullscreenElement)await document.exitFullscreen();forcarRepinturaCabecalho();}
 
 ficheiro.addEventListener("change",(e)=>{
-if(e.target.files&&e.target.files.length>0){
-const ctx=window.contextoSelecaoFicheiro||{};window.contextoSelecaoFicheiro=null;
-const escolhidos=Array.from(e.target.files);e.target.value="";
-apresentarConfirmacaoAposEscolha(ctx.tema||uploadTrabalhoVal.value||"",ctx.data||"",escolhidos,ctx.el||null);
+const files=e.target.files?Array.from(e.target.files):[];
+if(files.length>0){
+const ctx=window.contextoSelecaoFicheiro||{};
+window.contextoSelecaoFicheiro=null;
+e.target.value="";
+const temaAtual=ctx.tema||uploadTrabalhoVal.value||"";
+const elAtual=ctx.el||document.querySelector("#trabalho-curso-container .trabalho-opcao.selecionado");
+const dataAtual=ctx.data||(elAtual?elAtual.getAttribute("data-data"):"")||"";
+apresentarConfirmacaoAposEscolha(temaAtual,dataAtual,files,elAtual);
 }
 });
 
