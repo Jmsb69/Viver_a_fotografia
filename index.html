@@ -10,7 +10,7 @@
 <style>
 :root{--bg:#000000;--surface:#000000;--help-grey:#d8d2c7;--help-ink:#141210;--auth-grey:#000000;--paper:#f3ede2;--paper-soft:rgba(243,237,226,0.72);--paper-strong:#ffffff;--soft-white:rgba(243,237,226,0.78);--muted:#b8ad9e;--brass:#d4a359;--brass-soft:rgba(212,163,89,0.72);--brass-deep:#9c6f2b;--line:rgba(212,163,89,0.14);--line-hover:rgba(212,163,89,0.42);--danger:#d9534f;--success:#4f9d69}
 *{box-sizing:border-box}
-label,.section-header-static,.section-header-btn,.filtros-janela-header,.trabalho-opcao,.browse-linha-opcao,.config-browse-item,.login-user-opcao,.upload-subtitle,.upload-contador-bar,.top-auth-bar,.btn,button{user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+label,.section-header-static,.section-header-btn,.filtros-janela-header,.trabalho-opcao,.browse-linha-opcao,.config-browse-item,.login-user-opcao,.upload-subtitle-row,.upload-contador-bar,.top-auth-bar,.btn,button{user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
 *{scrollbar-width:thin;scrollbar-color:#4a453f var(--bg)}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:var(--bg)}
@@ -69,7 +69,10 @@ body.app-encerrada .hero-banner,body.app-encerrada main,body.app-encerrada #help
 .section-main-title{margin:0;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--brass);letter-spacing:.03em}
 .section-shell:not(.aberta) .section-body{display:none}
 .section-body{padding:1rem 1.15rem 1.25rem;border-top:1px solid var(--line);background:#000000;width:100%;max-width:100%;min-width:0;overflow-x:hidden}
-.upload-subtitle{margin:0 0 .65rem;font-size:.9rem;color:var(--muted)}
+.upload-subtitle-row{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin:0 0 .65rem;width:100%}
+.upload-subtitle{margin:0;font-size:.9rem;color:var(--muted)}
+.btn-ajuda-linha{appearance:none;-webkit-appearance:none;background:#090909;color:var(--brass);border:1px solid rgba(212,163,89,.36);border-radius:6px;padding:.24rem .62rem;font-family:inherit;font-size:.78rem;font-weight:400;cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;flex-shrink:0;transition:border-color .15s ease,color .15s ease,background .15s ease}
+.btn-ajuda-linha:hover,.btn-ajuda-linha.ativo{border-color:var(--brass-soft);color:var(--paper-strong);background:#12110e}
 .trabalhos-curso-lista{display:flex;flex-direction:column;gap:.35rem;width:100%;max-width:100%;min-width:0;max-height:228px;overflow-y:auto;overflow-x:hidden;padding-right:.2rem}
 .trabalho-opcao{position:relative;display:grid;grid-template-columns:max-content minmax(0,1fr);align-items:baseline;gap:.85rem;width:100%;max-width:100%;min-width:0;padding:.55rem .75rem;border-radius:6px;border:1px solid transparent;cursor:pointer;color:var(--paper-strong);font-size:.92rem;outline:none}
 .trabalho-opcao:hover,.trabalho-opcao.drag-alvo{border-color:var(--line-hover);background:rgba(212,163,89,.07);color:var(--paper-strong)}
@@ -253,7 +256,10 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="win-control-zone" title="Abrir / Fechar"><span class="win-symbol" id="sym-box-upload"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg></span></span>
 </button>
 <div class="section-body">
+<div class="upload-subtitle-row">
 <p class="upload-subtitle">Seleciona Aula, Tema ou Trabalho</p>
+<button class="btn-ajuda-linha" id="btn-ajuda-partilha" type="button" title="Como partilhar fotografias" aria-label="Como partilhar fotografias" aria-expanded="false"><span aria-hidden="true">&#128247;</span><span>Ajuda</span></button>
+</div>
 <div class="trabalhos-curso-lista" id="trabalho-curso-container" role="listbox" aria-label="Aula, Tema ou Trabalho"></div>
 <input id="ficheiro" type="file" accept="image/*" style="display:none;">
 <input type="hidden" id="upload-trabalho-val" value="">
@@ -263,7 +269,6 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 <span class="upload-contador-texto-fixo">de um máximo de</span><strong class="upload-contador-numero" id="upload-contador-maximo">10</strong>
 <span class="upload-contador-texto-fixo">fotografias</span><span class="upload-contador-preview-tag" id="upload-contador-preview-tag" style="display:none;">(pré-visualização)</span>
 </div>
-<div id="upload-ficheiros-selecionados" style="font-size:.84rem;color:var(--brass);margin-top:.35rem;font-style:italic;"></div>
 <p id="upload-aviso-limite" style="color:var(--danger);font-size:.85rem;margin:.4rem 0 0 0;display:none;"></p>
 </div>
 </section>
@@ -333,7 +338,7 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </section>
 </main>
 
-<div id="help-balao-flutuante"><span class="help-cabecalho-linha"><span class="help-camara-grande" aria-hidden="true">&#128247;</span>Ajuda a partilhar fotografias</span><br><span class="help-subtitulo-linha">Para selecionar uma da Aulas , Temas ou Trabalhos...</span><svg class="help-setas-finas" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.5v13M4.8 3.7L7 1.5l2.2 2.2M4.8 12.3L7 14.5l2.2-2.2"/></svg> Posicionar &lt;Enter&gt;<br><span class="help-duplo-linha"><span class="help-duplo-label">&lt;Duplo Click&gt;</span><span class="help-duplo-label">&lt;Duplo Toque&gt;</span></span><br>&lt;Arrastar Ficheiro(s) e largar&gt;</div>
+<div id="help-balao-flutuante"><span class="help-cabecalho-linha"><span class="help-camara-grande" aria-hidden="true">&#128247;</span>Ajuda a partilhar fotografias</span><br><span class="help-subtitulo-linha">Para selecionar uma da Aulas , Temas ou Trabalhos...</span><svg class="help-setas-finas" viewBox="0 0 14 16" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 1.5v13M4.8 3.7L7 1.5l2.2 2.2M4.8 12.3L7 14.5l2.2-2.2"/></svg> Posicionar &lt;Enter&gt;<br><span class="help-duplo-linha"><span class="help-duplo-label">&lt;Duplo Click&gt;</span><span class="help-duplo-label">&lt;Toque&gt;</span></span><br>&lt;Arrastar Ficheiro(s) e largar&gt;</div>
 
 <div class="confirm-overlay" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-titulo-texto">
 <div class="confirm-box">
@@ -457,12 +462,15 @@ input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.8) sepia(.1
 </section>
 
 <script>
-var helpTimer=null,ultimoToqueTempo=0,ultimoToqueElemento=null,confirmacaoPendente=null,ficheirosPendentesDrop=null;
+var helpTimer=null,confirmacaoPendente=null,ficheirosPendentesDrop=null;
 function isDispositivoAppleIOS(){
 var ua=navigator.userAgent||"";
 var isIOSUA=/iPhone|iPad|iPod/i.test(ua);
 var isIPadOS=navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1;
 return isIOSUA||isIPadOS;
+}
+function isDispositivoAndroid(){
+return /Android/i.test(navigator.userAgent||"");
 }
 function svgSetasObliquas(){
 return '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.45" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3h3v3M13 3L9 7M6 13H3v-3M3 13l4-4"/></svg>';
@@ -478,7 +486,11 @@ if(!symEl)return;
 symEl.innerHTML=ativo?svgSetasFechar():svgSetasObliquas();
 }
 function isConfirmacaoAberta(){var m=document.getElementById("confirm-modal"),a=document.getElementById("alerta-ok-modal");return!!((m&&m.classList.contains("ativa"))||(a&&a.classList.contains("ativa")));}
-function esconderHelp(){var b=document.getElementById("help-balao-flutuante");if(b)b.classList.remove("visivel");}
+function esconderHelp(){
+if(helpTimer){clearTimeout(helpTimer);helpTimer=null;}
+var b=document.getElementById("help-balao-flutuante");if(b)b.classList.remove("visivel");
+var btn=document.getElementById("btn-ajuda-partilha");if(btn){btn.classList.remove("ativo");btn.setAttribute("aria-expanded","false");}
+}
 function forcarRepinturaCabecalho(){
 var ids=["btn-auth-toggle","btn-registo-header","btn-config","btn-sair-app","current-user-display"];
 for(var i=0;i<ids.length;i++){var el=document.getElementById(ids[i]);if(!el)continue;el.style.transform="translateZ(0)";void el.offsetHeight;}
@@ -508,40 +520,30 @@ if(modalIcon)modalIcon.innerHTML=svgEngrenagemConfig();
 var symClose=document.getElementById("sym-close-config");atualizarIconeSetasElemento(symClose,true);
 forcarRepinturaCabecalho();
 }
-function mostrarHelpEmCoords(x,y,el,evtTarget){
+function mostrarHelpNoBotao(btnEl){
 var balao=document.getElementById("help-balao-flutuante");if(!balao||isConfirmacaoAberta())return;
-balao.classList.add("visivel");var rect=balao.getBoundingClientRect(),w=rect.width,h=rect.height,isMobile=window.innerWidth<=640;
-if(isMobile){
-var margemEcran=8,gap=14,leftMobile=Math.min(margemEcran,Math.max(margemEcran,window.innerWidth-w-margemEcran));
-var alvoRect=null;
-if(el){alvoRect=el.getBoundingClientRect();}
-else if(evtTarget&&evtTarget.closest){var rowAlvo=evtTarget.closest(".trabalho-opcao");if(rowAlvo)alvoRect=rowAlvo.getBoundingClientRect();}
-if(!alvoRect){var selItem=document.querySelector("#trabalho-curso-container .trabalho-opcao.selecionado, #trabalho-curso-container .trabalho-opcao.destacado");if(selItem)alvoRect=selItem.getBoundingClientRect();}
-var listaEl=document.getElementById("trabalho-curso-container"),listaRect=listaEl?listaEl.getBoundingClientRect():null;
-var refTop=alvoRect?alvoRect.top:(listaRect?listaRect.top:y);
-var refBottom=alvoRect?alvoRect.bottom:(listaRect?listaRect.bottom:y);
-var espacoAcima=refTop-gap-margemEcran;
-var espacoAbaixo=window.innerHeight-(refBottom+gap)-margemEcran;
-var topMobile;
-if(espacoAcima>=h){topMobile=refTop-h-gap;}
-else if(espacoAbaixo>=h){topMobile=refBottom+gap;}
-else if(listaRect&&(listaRect.top-gap-margemEcran)>=h){topMobile=listaRect.top-h-gap;}
-else if(listaRect&&(window.innerHeight-(listaRect.bottom+gap)-margemEcran)>=h){topMobile=listaRect.bottom+gap;}
-else if(espacoAcima>=espacoAbaixo){topMobile=margemEcran;}
-else{topMobile=window.innerHeight-h-margemEcran;}
-balao.style.left=leftMobile+"px";
-balao.style.top=Math.min(Math.max(margemEcran,topMobile),Math.max(margemEcran,window.innerHeight-h-margemEcran))+"px";
-return;
+var alvo=btnEl||document.getElementById("btn-ajuda-partilha");if(!alvo)return;
+balao.classList.add("visivel");
+alvo.classList.add("ativo");
+alvo.setAttribute("aria-expanded","true");
+var rect=balao.getBoundingClientRect(),w=rect.width,h=rect.height,r=alvo.getBoundingClientRect();
+var margem=10;
+var left=Math.min(Math.max(margem,r.right-w),window.innerWidth-w-margem);
+var top=r.bottom+8;
+if(top+h>window.innerHeight-margem){
+top=Math.max(margem,r.top-h-8);
 }
-var margemLinha=22,left=Math.min(Math.max(10,x+12),window.innerWidth-w-10),top;
-if(el){var elRect=el.getBoundingClientRect(),espacoAcima=elRect.top-margemLinha-10,espacoAbaixo=window.innerHeight-(elRect.bottom+margemLinha)-10;if(espacoAcima>=h)top=elRect.top-h-margemLinha;else if(espacoAbaixo>=h)top=elRect.bottom+margemLinha;else if(espacoAcima>=espacoAbaixo)top=Math.max(10,elRect.top-h-margemLinha);else top=Math.min(window.innerHeight-h-10,elRect.bottom+margemLinha);}else{top=y-h-margemLinha;if(top<10)top=Math.min(y+margemLinha,window.innerHeight-h-10);}
-balao.style.left=left+"px";balao.style.top=top+"px";
+balao.style.left=left+"px";
+balao.style.top=top+"px";
+if(helpTimer)clearTimeout(helpTimer);
+helpTimer=setTimeout(esconderHelp,4500);
 }
-function posicionarHelpNoEvento(e,el){
+function alternarHelpNoBotao(e,btnEl){
+if(e){e.preventDefault();e.stopPropagation();}
 if(isConfirmacaoAberta()){esconderHelp();return;}
-var x=0,y=0,evtTarget=e?e.target:null;
-if(e&&e.touches&&e.touches.length){x=e.touches[0].clientX;y=e.touches[0].clientY;}else if(e&&typeof e.clientX==="number"){x=e.clientX;y=e.clientY;}else if(el){var r=el.getBoundingClientRect();x=r.left+Math.min(r.width*.65,220);y=r.top;}
-mostrarHelpEmCoords(x,y,el,evtTarget);if(helpTimer)clearTimeout(helpTimer);helpTimer=setTimeout(esconderHelp,3200);
+var balao=document.getElementById("help-balao-flutuante");
+if(balao&&balao.classList.contains("visivel"))esconderHelp();
+else mostrarHelpNoBotao(btnEl);
 }
 function getOpcoesTrabalhoUpload(){var l=document.getElementById("trabalho-curso-container");return l?Array.prototype.slice.call(l.getElementsByClassName("trabalho-opcao")):[];}
 function limparAlvosDragUpload(){var o=getOpcoesTrabalhoUpload();for(var i=0;i<o.length;i++)o[i].classList.remove("drag-alvo");}
@@ -579,7 +581,7 @@ if(btn){btn.classList.toggle("selecionado",isAberta);btn.setAttribute("aria-expa
 }
 function toggleWinBox(id){
 if(id==="box-galeria"){setWinBoxState("box-galeria",true);return;}
-if(id==="box-upload"){var shell=document.getElementById("box-upload");if(!shell)return;var vaiAbrir=!shell.classList.contains("aberta");setWinBoxState("box-upload",vaiAbrir);if(vaiAbrir){setFiltrosJanelaAberta(false);setTimeout(function(){var o=getOpcoesTrabalhoUpload();if(o.length){selecionarOpcaoUploadVisual(o[0]);o[0].focus();posicionarHelpNoEvento(null,o[0]);}},20);}else esconderHelp();}
+if(id==="box-upload"){var shell=document.getElementById("box-upload");if(!shell)return;var vaiAbrir=!shell.classList.contains("aberta");setWinBoxState("box-upload",vaiAbrir);if(vaiAbrir){setFiltrosJanelaAberta(false);setTimeout(function(){var o=getOpcoesTrabalhoUpload();if(o.length){selecionarOpcaoUploadVisual(o[0]);o[0].focus();}},20);}else esconderHelp();}
 }
 function toggleFiltrosJanela(){var janela=document.getElementById("box-filtros"),vaiAbrir=!(janela&&janela.classList.contains("aberta"));setFiltrosJanelaAberta(vaiAbrir);if(vaiAbrir){setWinBoxState("box-upload",false);esconderHelp();}}
 function selecionarOpcaoUploadVisual(el){
@@ -614,26 +616,45 @@ if(!pend)return;if(filesDrop&&filesDrop.length&&typeof window.onConfirmarUploadF
 });
 document.getElementById("btn-confirm-nao").addEventListener("click",function(){
 var pend=confirmacaoPendente;confirmacaoPendente=null;ficheirosPendentesDrop=null;fecharConfirmacaoModal();
-if(pend&&pend.el&&typeof pend.el.focus==="function")setTimeout(function(){pend.el.focus({preventScroll:true});posicionarHelpNoEvento(null,pend.el);},10);
+if(pend&&pend.el&&typeof pend.el.focus==="function")setTimeout(function(){pend.el.focus({preventScroll:true});},10);
 });
 function handleTouchTap(e,tema,dataItem,el){
 if(isDispositivoAppleIOS()){selecionarOpcaoUploadVisual(el);return;}
-var agora=Date.now();if(ultimoToqueElemento===el&&(agora-ultimoToqueTempo)<420){e.preventDefault();ultimoToqueTempo=0;ultimoToqueElemento=null;solicitarConfirmacaoPartilha(tema,dataItem,"selecionar",el);}else{ultimoToqueTempo=agora;ultimoToqueElemento=el;}
+if(isDispositivoAndroid()){
+e.preventDefault();
+solicitarConfirmacaoPartilha(tema,dataItem,"selecionar",el);
+}
 }
 function handleTrabalhoKeydown(e,tema,dataItem,el){
 if(isConfirmacaoAberta())return;var itens=getOpcoesTrabalhoUpload(),idx=itens.indexOf(el);
-if(e.key==="ArrowDown"||e.keyCode===40){if(itens.length){e.preventDefault();var prox=itens[(idx+1)%itens.length];selecionarOpcaoUploadVisual(prox);prox.focus();posicionarHelpNoEvento(null,prox);}return;}
-if(e.key==="ArrowUp"||e.keyCode===38){if(itens.length){e.preventDefault();var ant=itens[(idx-1+itens.length)%itens.length];selecionarOpcaoUploadVisual(ant);ant.focus();posicionarHelpNoEvento(null,ant);}return;}
+if(e.key==="ArrowDown"||e.keyCode===40){if(itens.length){e.preventDefault();var prox=itens[(idx+1)%itens.length];selecionarOpcaoUploadVisual(prox);prox.focus();}return;}
+if(e.key==="ArrowUp"||e.keyCode===38){if(itens.length){e.preventDefault();var ant=itens[(idx-1+itens.length)%itens.length];selecionarOpcaoUploadVisual(ant);ant.focus();}return;}
 if(e.key==="Enter"||e.keyCode===13){e.preventDefault();solicitarConfirmacaoPartilha(tema,dataItem,"selecionar",el);}
 }
+document.addEventListener("click",function(e){
+var balao=document.getElementById("help-balao-flutuante");
+var btnAjuda=document.getElementById("btn-ajuda-partilha");
+if(balao&&balao.classList.contains("visivel")){
+if((btnAjuda&&btnAjuda.contains(e.target))||balao.contains(e.target))return;
+esconderHelp();
+}
+});
 document.addEventListener("keydown",function(e){
 var alertaOk=document.getElementById("alerta-ok-modal");if(alertaOk&&alertaOk.classList.contains("ativa")){if(e.key==="Enter"||e.keyCode===13||e.key==="Escape"||e.keyCode===27){e.preventDefault();var btnOk=document.getElementById("btn-alerta-ok");if(btnOk)btnOk.click();}return;}
+if(e.key==="Escape"||e.keyCode===27)esconderHelp();
 var modal=document.getElementById("confirm-modal");if(!(modal&&modal.classList.contains("ativa")))return;
 if(e.key==="Escape"||e.keyCode===27){e.preventDefault();document.getElementById("btn-confirm-nao").click();}
 },true);
 document.addEventListener("dragover",function(e){e.preventDefault();});
 document.addEventListener("drop",function(e){e.preventDefault();limparAlvosDragUpload();});
-document.addEventListener("DOMContentLoaded",function(){forcarRepinturaCabecalho();});
+document.addEventListener("DOMContentLoaded",function(){
+var btnAjuda=document.getElementById("btn-ajuda-partilha");
+if(btnAjuda){
+btnAjuda.addEventListener("click",function(ev){alternarHelpNoBotao(ev,btnAjuda);});
+btnAjuda.addEventListener("touchend",function(ev){alternarHelpNoBotao(ev,btnAjuda);});
+}
+forcarRepinturaCabecalho();
+});
 window.addEventListener("pageshow",function(){forcarRepinturaCabecalho();});
 </script>
 
@@ -743,7 +764,7 @@ const loginModal=document.getElementById("login-modal"),loginForm=document.getEl
 const currentUserDisplay=document.getElementById("current-user-display"),btnRegistoHeader=document.getElementById("btn-registo-header"),btnAuthToggle=document.getElementById("btn-auth-toggle"),btnConfig=document.getElementById("btn-config"),btnSairApp=document.getElementById("btn-sair-app"),btnReabrirApp=document.getElementById("btn-reabrir-app");
 const configModal=document.getElementById("config-modal"),configModalTitulo=document.getElementById("config-modal-titulo"),closeConfig=document.getElementById("close-config"),userBrowseWrapper=document.getElementById("user-browse-wrapper"),labelUserBrowse=document.getElementById("label-user-browse"),userBrowseContainer=document.getElementById("user-browse-container"),userNomeRealcado=document.getElementById("config-user-nome-realcado"),adminTrabalhosSection=document.getElementById("admin-trabalhos-section"),adminTrabBrowseWrapper=document.getElementById("admin-trab-browse-wrapper"),adminTrabBrowseContainer=document.getElementById("admin-trab-browse-container"),trabNomeRealcado=document.getElementById("config-trab-nome-realcado"),grupoEditTrabNome=document.getElementById("grupo-edit-trab-nome"),editInputTrabNome=document.getElementById("edit-input-trab-nome"),btnApagarUserAtual=document.getElementById("btn-apagar-user-atual"),btnNovoUserModo=document.getElementById("btn-novo-user-modo"),editCodUser=document.getElementById("edit-cod-user"),grupoEditNome=document.getElementById("grupo-edit-nome"),labelEditNome=document.getElementById("label-edit-nome"),editInputNome=document.getElementById("edit-input-nome"),grupoEditCodUser=document.getElementById("grupo-edit-coduser"),editInputCodUser=document.getElementById("edit-input-coduser"),grupoEditPw=document.getElementById("grupo-edit-pw"),labelEditPw=document.getElementById("label-edit-pw"),editPw=document.getElementById("edit-pw"),grupoEditEmail=document.getElementById("grupo-edit-email"),editEmail=document.getElementById("edit-email"),grupoEditTel=document.getElementById("grupo-edit-tel"),editTel=document.getElementById("edit-tel"),registoFeedback=document.getElementById("registo-feedback"),btnSaveUser=document.getElementById("btn-save-user");
 const btnApagarTrabAtual=document.getElementById("btn-apagar-trab-atual"),btnNovoTrabModo=document.getElementById("btn-novo-trab-modo"),editTrabId=document.getElementById("edit-trab-id"),editTrabNome=document.getElementById("edit-trab-nome"),editTrabData=document.getElementById("edit-trab-data"),editTrabLimite=document.getElementById("edit-trab-limite"),editTrabAtivo=document.getElementById("edit-trab-ativo"),btnSaveTrab=document.getElementById("btn-save-trab");
-const contador=document.getElementById("contador"),btnRefreshFotos=document.getElementById("btn-refresh-fotos"),headerProjetaFotografias=document.getElementById("header-projeta-fotografias"),estado=document.getElementById("estado"),ficheiro=document.getElementById("ficheiro"),uploadFicheirosSelecionados=document.getElementById("upload-ficheiros-selecionados"),uploadAvisoLimite=document.getElementById("upload-aviso-limite"),projetor=document.getElementById("projetor"),slide=document.getElementById("slide"),legenda=document.getElementById("legenda"),pausaBtn=document.getElementById("pausa"),galeriaContainer=document.getElementById("galeria-container"),trabalhoCursoContainer=document.getElementById("trabalho-curso-container"),uploadTrabalhoVal=document.getElementById("upload-trabalho-val");
+const contador=document.getElementById("contador"),btnRefreshFotos=document.getElementById("btn-refresh-fotos"),headerProjetaFotografias=document.getElementById("header-projeta-fotografias"),estado=document.getElementById("estado"),ficheiro=document.getElementById("ficheiro"),uploadAvisoLimite=document.getElementById("upload-aviso-limite"),projetor=document.getElementById("projetor"),slide=document.getElementById("slide"),legenda=document.getElementById("legenda"),pausaBtn=document.getElementById("pausa"),galeriaContainer=document.getElementById("galeria-container"),trabalhoCursoContainer=document.getElementById("trabalho-curso-container"),uploadTrabalhoVal=document.getElementById("upload-trabalho-val");
 
 function atualizarContadorFiltro(filtradasCount,totalCount){
 if(!contador)return;
@@ -1405,17 +1426,15 @@ apresentarConfirmacaoAposEscolha(nomeTrab,dataTrab,files,div);
 div.append(inpLinha);
 }
 div.addEventListener("mouseenter",()=>{if(typeof window.onTrabalhoUploadHover==="function")window.onTrabalhoUploadHover(nomeTrab);});
-div.addEventListener("click",()=>{selecionarOpcaoUploadVisual(div);posicionarHelpNoEvento(null,div);});
-div.addEventListener("dblclick",()=>{if(!isDispositivoAppleIOS())solicitarConfirmacaoPartilha(nomeTrab,dataTrab,"selecionar",div);});
+div.addEventListener("click",()=>{selecionarOpcaoUploadVisual(div);});
+div.addEventListener("dblclick",()=>{if(!isDispositivoAppleIOS()&&!isDispositivoAndroid())solicitarConfirmacaoPartilha(nomeTrab,dataTrab,"selecionar",div);});
 div.addEventListener("touchend",(ev)=>handleTouchTap(ev,nomeTrab,dataTrab,div));
 div.addEventListener("keydown",(ev)=>handleTrabalhoKeydown(ev,nomeTrab,dataTrab,div));
-div.addEventListener("mousemove",(ev)=>posicionarHelpNoEvento(ev,div));
-div.addEventListener("touchstart",(ev)=>posicionarHelpNoEvento(ev,div),{passive:true});
-div.addEventListener("mouseleave",()=>{esconderHelp();if(typeof window.onTrabalhoUploadHoverLeave==="function")window.onTrabalhoUploadHoverLeave();});
-div.addEventListener("blur",()=>{esconderHelp();if(typeof window.onTrabalhoUploadHoverLeave==="function")window.onTrabalhoUploadHoverLeave();});
-div.addEventListener("focus",()=>{if(!isConfirmacaoAberta()){selecionarOpcaoUploadVisual(div);posicionarHelpNoEvento(null,div);}});
-div.addEventListener("dragenter",(ev)=>{ev.preventDefault();selecionarOpcaoUploadVisual(div);limparAlvosDragUpload();div.classList.add("drag-alvo");posicionarHelpNoEvento(ev,div);});
-div.addEventListener("dragover",(ev)=>{ev.preventDefault();if(ev.dataTransfer)ev.dataTransfer.dropEffect="copy";selecionarOpcaoUploadVisual(div);if(!div.classList.contains("drag-alvo")){limparAlvosDragUpload();div.classList.add("drag-alvo");}posicionarHelpNoEvento(ev,div);});
+div.addEventListener("mouseleave",()=>{if(typeof window.onTrabalhoUploadHoverLeave==="function")window.onTrabalhoUploadHoverLeave();});
+div.addEventListener("blur",()=>{if(typeof window.onTrabalhoUploadHoverLeave==="function")window.onTrabalhoUploadHoverLeave();});
+div.addEventListener("focus",()=>{if(!isConfirmacaoAberta())selecionarOpcaoUploadVisual(div);});
+div.addEventListener("dragenter",(ev)=>{ev.preventDefault();selecionarOpcaoUploadVisual(div);limparAlvosDragUpload();div.classList.add("drag-alvo");});
+div.addEventListener("dragover",(ev)=>{ev.preventDefault();if(ev.dataTransfer)ev.dataTransfer.dropEffect="copy";selecionarOpcaoUploadVisual(div);if(!div.classList.contains("drag-alvo")){limparAlvosDragUpload();div.classList.add("drag-alvo");}});
 div.addEventListener("dragleave",(ev)=>{if(!div.contains(ev.relatedTarget))div.classList.remove("drag-alvo");});
 div.addEventListener("drop",(ev)=>{ev.preventDefault();ev.stopPropagation();div.classList.remove("drag-alvo");limparAlvosDragUpload();selecionarOpcaoUploadVisual(div);solicitarConfirmacaoPartilha(nomeTrab,dataTrab,"gravar",div,ev.dataTransfer?ev.dataTransfer.files:null);});
 trabalhoCursoContainer.append(div);
@@ -1741,7 +1760,7 @@ const base=(p>0?nome.slice(0,p):nome).normalize("NFD").replace(/[\u0300-\u036f]/
 return`${Date.now()}-${base}${ext||".jpg"}`;
 }
 
-function atualizarNomesSelecionados(lista){uploadFicheirosSelecionados.textContent=(lista&&lista.length)?`Selecionado(s): ${Array.from(lista).map(f=>f.name).join(", ")}`:"";}
+function atualizarNomesSelecionados(_lista){}
 
 async function validarEEnviar(lista){
 if(!usuarioAtual){abrirFluxoLogin(()=>validarEEnviar(lista));return;}
